@@ -1,0 +1,19 @@
+{
+    "version" : "1.0",
+    "configurations" : [
+        {
+            "default" : {
+                "launchtype" : "local"
+            },
+            "h5" : {
+                "launchtype" : "local"
+            },
+            "provider" : "aliyun",
+            "type" : "uniCloud"
+        },
+        {
+            "openVueDevtools" : false,
+            "type" : "uni-app:h5"
+        }
+    ]
+}
