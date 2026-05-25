@@ -1,0 +1,42 @@
+[
+  {
+    "IndexName": "idx_family_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "family_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_created_by",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "created_by",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_family_id_name",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "family_id",
+          "Direction": "1"
+        },
+        {
+          "Name": "name",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  }
+]

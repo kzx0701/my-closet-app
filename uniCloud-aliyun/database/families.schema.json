@@ -1,0 +1,74 @@
+{
+  "bsonType": "object",
+  "required": [
+    "name",
+    "invite_code",
+    "owner_user_id",
+    "status"
+  ],
+  "permission": {
+    "read": "auth.uid != null",
+    "create": "auth.uid != null",
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "家庭ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "家庭名称",
+      "trim": "both",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "invite_code": {
+      "bsonType": "string",
+      "title": "邀请码",
+      "trim": "both",
+      "minLength": 4,
+      "maxLength": 20
+    },
+    "owner_user_id": {
+      "bsonType": "string",
+      "title": "创建人用户ID",
+      "foreignKey": "uni-id-users._id"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态",
+      "defaultValue": "active",
+      "enum": [
+        {
+          "text": "正常",
+          "value": "active"
+        },
+        {
+          "text": "停用",
+          "value": "disabled"
+        }
+      ]
+    },
+    "member_count": {
+      "bsonType": "int",
+      "title": "成员数量",
+      "defaultValue": 1,
+      "minimum": 1
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "updated_at": {
+      "bsonType": "timestamp",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

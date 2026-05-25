@@ -1,0 +1,54 @@
+[
+  {
+    "IndexName": "idx_family_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "family_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_closet_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "closet_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_created_by",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "created_by",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_family_id_created_by",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "family_id",
+          "Direction": "1"
+        },
+        {
+          "Name": "created_by",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  }
+]

@@ -1,0 +1,138 @@
+{
+  "bsonType": "object",
+  "required": [
+    "family_id",
+    "created_by",
+    "name",
+    "category",
+    "season",
+    "status"
+  ],
+  "permission": {
+    "read": "auth.uid != null",
+    "create": "auth.uid != null",
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "衣物ID，系统自动生成"
+    },
+    "family_id": {
+      "bsonType": "string",
+      "title": "家庭ID",
+      "foreignKey": "families._id"
+    },
+    "closet_id": {
+      "bsonType": "string",
+      "title": "衣橱ID",
+      "foreignKey": "closets._id"
+    },
+    "created_by": {
+      "bsonType": "string",
+      "title": "创建人用户ID",
+      "foreignKey": "uni-id-users._id"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "衣物名称",
+      "trim": "both",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "category": {
+      "bsonType": "string",
+      "title": "分类",
+      "enum": [
+        {
+          "text": "上装",
+          "value": "top"
+        },
+        {
+          "text": "下装",
+          "value": "bottom"
+        },
+        {
+          "text": "外套",
+          "value": "outerwear"
+        },
+        {
+          "text": "鞋子",
+          "value": "shoes"
+        },
+        {
+          "text": "配饰",
+          "value": "accessory"
+        }
+      ]
+    },
+    "season": {
+      "bsonType": "string",
+      "title": "季节",
+      "enum": [
+        {
+          "text": "春",
+          "value": "spring"
+        },
+        {
+          "text": "夏",
+          "value": "summer"
+        },
+        {
+          "text": "秋",
+          "value": "autumn"
+        },
+        {
+          "text": "冬",
+          "value": "winter"
+        }
+      ]
+    },
+    "color": {
+      "bsonType": "string",
+      "title": "颜色",
+      "trim": "both",
+      "maxLength": 20
+    },
+    "image_url": {
+      "bsonType": "string",
+      "title": "图片地址",
+      "trim": "both"
+    },
+    "remark": {
+      "bsonType": "string",
+      "title": "备注",
+      "trim": "both",
+      "maxLength": 500
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态",
+      "defaultValue": "active",
+      "enum": [
+        {
+          "text": "正常",
+          "value": "active"
+        },
+        {
+          "text": "停用",
+          "value": "disabled"
+        }
+      ]
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "updated_at": {
+      "bsonType": "timestamp",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

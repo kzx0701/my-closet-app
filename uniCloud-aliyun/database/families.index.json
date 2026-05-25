@@ -1,0 +1,26 @@
+[
+  {
+    "IndexName": "idx_invite_code",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "invite_code",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": true
+    }
+  },
+  {
+    "IndexName": "idx_owner_user_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "owner_user_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  }
+]

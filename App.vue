@@ -1,6 +1,13 @@
 <script>
+import initUniIdPages from "./uni_modules/uni-id-pages/init.js";
+
 export default {
-  onLaunch() {
+  async onLaunch() {
+    try {
+      await initUniIdPages();
+    } catch (error) {
+      console.error("uni-id-pages init failed", error);
+    }
     console.log("App Launch");
   },
   onShow() {

@@ -1,0 +1,77 @@
+{
+  "bsonType": "object",
+  "required": [
+    "family_id",
+    "name",
+    "created_by",
+    "status"
+  ],
+  "permission": {
+    "read": "auth.uid != null",
+    "create": "auth.uid != null",
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "衣橱ID，系统自动生成"
+    },
+    "family_id": {
+      "bsonType": "string",
+      "title": "家庭ID",
+      "foreignKey": "families._id"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "衣橱名称",
+      "trim": "both",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "description": {
+      "bsonType": "string",
+      "title": "衣橱描述",
+      "trim": "both",
+      "maxLength": 200
+    },
+    "created_by": {
+      "bsonType": "string",
+      "title": "创建人用户ID",
+      "foreignKey": "uni-id-users._id"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态",
+      "defaultValue": "active",
+      "enum": [
+        {
+          "text": "正常",
+          "value": "active"
+        },
+        {
+          "text": "停用",
+          "value": "disabled"
+        }
+      ]
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序值",
+      "defaultValue": 0
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "updated_at": {
+      "bsonType": "timestamp",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}
