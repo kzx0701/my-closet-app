@@ -10,4 +10,5 @@ export const ROUTE_TARGETS = {
   login: "login",
   familyGuide: "family-guide",
   home: "home",
+  error: "error",
 };

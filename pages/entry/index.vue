@@ -4,64 +4,69 @@
       <view class="spinner"></view>
       <text class="title">正在检查登录状态</text>
       <text class="desc">{{ statusText }}</text>
+      <button v-if="showRetry" class="retry-btn" @click="routeBySession">重新检查</button>
     </view>
   </view>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
+import { onShow } from "@dcloudio/uni-app";
 import { ROUTE_TARGETS } from "@/common/constants/routes.js";
 import { resolveLaunchTarget } from "@/common/services/session-router.js";
 
-export default {
-  data() {
-    return {
-      statusText: "即将进入应用",
-      isRouting: false,
-    };
-  },
-  onShow() {
-    this.routeBySession();
-  },
-  methods: {
-    async routeBySession() {
-      if (this.isRouting) {
-        return;
-      }
+const statusText = ref("即将进入应用");
+const isRouting = ref(false);
+const showRetry = ref(false);
 
-      this.isRouting = true;
-      this.statusText = "正在准备页面";
+async function routeBySession() {
+  if (isRouting.value) {
+    return;
+  }
 
-      try {
-        const result = await resolveLaunchTarget();
+  isRouting.value = true;
+  showRetry.value = false;
+  statusText.value = "正在准备页面";
 
-        if (result.target === ROUTE_TARGETS.login) {
-          this.statusText = "未登录，前往登录页";
-          return uni.redirectTo({
-            url: result.url,
-          });
-        }
+  try {
+    const result = await resolveLaunchTarget();
 
-        if (result.target === ROUTE_TARGETS.home) {
-          this.statusText = "检测到家庭身份，进入首页";
-        } else {
-          this.statusText = "尚未加入家庭，进入家庭引导";
-        }
+    if (result.target === ROUTE_TARGETS.login) {
+      statusText.value = "未登录，前往登录页";
+      return uni.redirectTo({
+        url: result.url,
+      });
+    }
 
-        return uni.reLaunch({
-          url: result.url,
-        });
-      } catch (error) {
-        console.error("routeBySession failed", error);
-        this.statusText = "状态检测失败，准备重新登录";
-        return uni.redirectTo({
-          url: "/uni_modules/uni-id-pages/pages/login/login-withpwd",
-        });
-      } finally {
-        this.isRouting = false;
-      }
-    },
-  },
-};
+    if (result.target === ROUTE_TARGETS.error) {
+      statusText.value = result.membership?.errorMessage || "状态检查失败，请稍后重试";
+      showRetry.value = true;
+      return;
+    }
+
+    if (result.target === ROUTE_TARGETS.home) {
+      statusText.value = result.hasSkippedFamilyGuide
+        ? "已按个人模式进入首页"
+        : "检测到可直接进入首页";
+    } else {
+      statusText.value = "尚未加入家庭，进入家庭引导";
+    }
+
+    return uni.reLaunch({
+      url: result.url,
+    });
+  } catch (error) {
+    console.error("routeBySession failed", error);
+    statusText.value = "状态检查失败，请重新尝试";
+    showRetry.value = true;
+  } finally {
+    isRouting.value = false;
+  }
+}
+
+onShow(() => {
+  routeBySession();
+});
 </script>
 
 <style>
@@ -102,6 +107,13 @@ export default {
   font-size: 26rpx;
   color: #697267;
   text-align: center;
+}
+
+.retry-btn {
+  margin-top: 28rpx;
+  border-radius: 999rpx;
+  background: #edf1ea;
+  color: #314033;
 }
 
 @keyframes spin {

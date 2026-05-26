@@ -3,16 +3,12 @@
     <text class="eyebrow">家庭协作可选开启</text>
     <text class="title">你还没有加入家庭</text>
     <text class="desc">
-      你可以先创建家庭或加入已有家庭，也可以先跳过，直接使用个人模式管理自己的衣橱和衣物。
+      你可以先创建家庭或加入已有家庭，也可以先跳过，直接以个人模式管理自己的衣橱和衣物。
     </text>
   </view>
 </template>
 
-<script>
-export default {
-  name: "GuideHero",
-};
-</script>
+<script setup></script>
 
 <style>
 .hero {
