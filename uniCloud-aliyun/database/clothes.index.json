@@ -1,5 +1,29 @@
 [
   {
+    "IndexName": "idx_scope_type",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "scope_type",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_scope_owner_user_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "scope_owner_user_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
     "IndexName": "idx_family_id",
     "MgoKeySchema": {
       "MgoIndexKeys": [
@@ -36,9 +60,45 @@
     }
   },
   {
-    "IndexName": "idx_family_id_created_by",
+    "IndexName": "idx_scope_type_scope_owner_user_id",
     "MgoKeySchema": {
       "MgoIndexKeys": [
+        {
+          "Name": "scope_type",
+          "Direction": "1"
+        },
+        {
+          "Name": "scope_owner_user_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_scope_type_family_id",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "scope_type",
+          "Direction": "1"
+        },
+        {
+          "Name": "family_id",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_scope_type_family_id_created_by",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "scope_type",
+          "Direction": "1"
+        },
         {
           "Name": "family_id",
           "Direction": "1"

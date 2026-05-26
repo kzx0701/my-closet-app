@@ -1,7 +1,7 @@
 {
   "bsonType": "object",
   "required": [
-    "family_id",
+    "scope_type",
     "name",
     "created_by",
     "status"
@@ -15,6 +15,25 @@
   "properties": {
     "_id": {
       "description": "衣橱ID，系统自动生成"
+    },
+    "scope_type": {
+      "bsonType": "string",
+      "title": "作用域类型",
+      "enum": [
+        {
+          "text": "个人空间",
+          "value": "personal"
+        },
+        {
+          "text": "家庭空间",
+          "value": "family"
+        }
+      ]
+    },
+    "scope_owner_user_id": {
+      "bsonType": "string",
+      "title": "个人空间归属用户ID",
+      "foreignKey": "uni-id-users._id"
     },
     "family_id": {
       "bsonType": "string",

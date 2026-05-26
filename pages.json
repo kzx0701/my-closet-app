@@ -1,6 +1,12 @@
 {
   "pages": [
     {
+      "path": "pages/entry/index",
+      "style": {
+        "navigationBarTitleText": "启动中"
+      }
+    },
+    {
       "path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
       "style": {
         "navigationBarTitleText": "登录"
@@ -37,7 +43,19 @@
       }
     },
     {
-      "path": "pages/index/index",
+      "path": "pages/family-guide/index",
+      "style": {
+        "navigationBarTitleText": "家庭引导"
+      }
+    },
+    {
+      "path": "pages/family-create/index",
+      "style": {
+        "navigationBarTitleText": "创建家庭"
+      }
+    },
+    {
+      "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "我的衣橱"
       }
