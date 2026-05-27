@@ -47,6 +47,26 @@
       "minLength": 1,
       "maxLength": 30
     },
+    "room_name": {
+      "bsonType": "string",
+      "title": "所属房间名称",
+      "trim": "both",
+      "maxLength": 30
+    },
+    "style_code": {
+      "bsonType": "string",
+      "title": "预设衣柜样式编码",
+      "trim": "both",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "color_code": {
+      "bsonType": "string",
+      "title": "预设衣柜颜色编码",
+      "trim": "both",
+      "minLength": 1,
+      "maxLength": 50
+    },
     "description": {
       "bsonType": "string",
       "title": "衣橱描述",

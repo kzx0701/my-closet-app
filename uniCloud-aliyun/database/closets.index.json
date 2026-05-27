@@ -48,6 +48,42 @@
     }
   },
   {
+    "IndexName": "idx_room_name",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "room_name",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_style_code",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "style_code",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
+    "IndexName": "idx_color_code",
+    "MgoKeySchema": {
+      "MgoIndexKeys": [
+        {
+          "Name": "color_code",
+          "Direction": "1"
+        }
+      ],
+      "MgoIsUnique": false
+    }
+  },
+  {
     "IndexName": "idx_scope_type_scope_owner_user_id",
     "MgoKeySchema": {
       "MgoIndexKeys": [

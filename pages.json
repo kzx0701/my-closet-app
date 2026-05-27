@@ -7,6 +7,18 @@
       }
     },
     {
+      "path": "pages/auth-login/index",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/auth-register/index",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
       "path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
       "style": {
         "navigationBarTitleText": "登录"
@@ -55,6 +67,18 @@
       }
     },
     {
+      "path": "pages/closets/index",
+      "style": {
+        "navigationBarTitleText": "我的衣橱"
+      }
+    },
+    {
+      "path": "pages/closet-create/index",
+      "style": {
+        "navigationBarTitleText": "新建衣橱"
+      }
+    },
+    {
       "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "我的衣橱"
@@ -62,7 +86,7 @@
     }
   ],
   "uniIdRouter": {
-    "loginPage": "uni_modules/uni-id-pages/pages/login/login-withpwd"
+    "loginPage": "pages/auth-login/index"
   },
   "globalStyle": {
     "navigationBarTextStyle": "black",

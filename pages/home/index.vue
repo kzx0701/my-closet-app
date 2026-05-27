@@ -1,5 +1,13 @@
 <template>
   <view class="page">
+    <view class="page-head">
+      <view>
+        <text class="page-eyebrow">HOME</text>
+        <text class="page-title">衣橱首页</text>
+      </view>
+      <button class="logout-btn" @click="handleLogout">退出登录</button>
+    </view>
+
     <scope-status-card
       :title="scopeTitle"
       :desc="scopeDesc"
@@ -74,6 +82,7 @@ import { getCurrentSession } from "@/common/services/auth.js";
 import { ROUTES } from "@/common/constants/routes.js";
 import { getFamilyGuideSkipState } from "@/common/services/family-guide-state.js";
 import { getFamilyMembership } from "@/common/services/family-membership.js";
+import { mutations } from "@/uni_modules/uni-id-pages/common/store.js";
 import HomeQuickActions from "./components/HomeQuickActions.vue";
 import ScopeStatusCard from "./components/ScopeStatusCard.vue";
 
@@ -253,6 +262,12 @@ async function syncScopeStatus() {
 }
 
 function handleQuickAction(item) {
+  if (item.action === "wardrobes") {
+    return uni.navigateTo({
+      url: ROUTES.closets,
+    });
+  }
+
   if (item.action === "create-family") {
     return uni.navigateTo({
       url: ROUTES.familyCreate,
@@ -310,6 +325,20 @@ function handlePanelAction(item) {
   });
 }
 
+function handleLogout() {
+  uni.showModal({
+    title: "退出登录",
+    content: "退出后将回到登录页，是否继续？",
+    success: async (res) => {
+      if (!res.confirm) {
+        return;
+      }
+
+      await mutations.logout();
+    },
+  });
+}
+
 onShow(() => {
   syncScopeStatus();
 });
@@ -322,6 +351,40 @@ onShow(() => {
   background:
     radial-gradient(circle at top, rgba(214, 223, 205, 0.48), transparent 36%),
     linear-gradient(180deg, #f7f4ee 0%, #fcfbf8 38%, #f3efe6 100%);
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26rpx;
+}
+
+.page-eyebrow {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #7c8979;
+}
+
+.page-title {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2b362d;
+}
+
+.logout-btn {
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 28rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.88);
+  color: #556451;
+  font-size: 24rpx;
+  box-shadow: 0 12rpx 26rpx rgba(73, 81, 69, 0.08);
+  border: 2rpx solid rgba(107, 126, 99, 0.1);
 }
 
 .section {

@@ -1,8 +1,11 @@
 export const ROUTES = {
   entry: "/pages/entry/index",
-  login: "/uni_modules/uni-id-pages/pages/login/login-withpwd",
+  login: "/pages/auth-login/index",
+  register: "/pages/auth-register/index",
   familyGuide: "/pages/family-guide/index",
   familyCreate: "/pages/family-create/index",
+  closets: "/pages/closets/index",
+  closetCreate: "/pages/closet-create/index",
   home: "/pages/home/index",
 };
 
