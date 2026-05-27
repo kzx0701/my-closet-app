@@ -1,9 +1,9 @@
 <template>
   <view class="page">
     <view class="page-head">
-      <text class="eyebrow">CREATE CLOSET</text>
-      <text class="title">新建个人衣橱</text>
-      <text class="desc">先选择一个你喜欢的衣柜样式和颜色，再填写名称与房间。</text>
+      <text class="eyebrow">{{ pageEyebrow }}</text>
+      <text class="title">{{ pageTitle }}</text>
+      <text class="desc">{{ pageDesc }}</text>
     </view>
 
     <closet-style-picker v-model="styleCode" :options="styleOptions" />
@@ -17,16 +17,17 @@
       @update:description="description = $event"
     />
 
-    <button class="submit-btn" type="primary" :loading="submitting" @click="submitCreateCloset">
-      创建衣橱
+    <button class="submit-btn" type="primary" :loading="submitting" @click="submitCloset">
+      {{ submitButtonText }}
     </button>
   </view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import { CLOSET_COLOR_OPTIONS, CLOSET_STYLE_OPTIONS } from "@/common/constants/closet-options.js";
-import { createCloset } from "@/common/api/modules/closet.js";
+import { createCloset, getClosetDetail, updateCloset } from "@/common/api/modules/closet.js";
 import ClosetBasicForm from "./components/ClosetBasicForm.vue";
 import ClosetColorPicker from "./components/ClosetColorPicker.vue";
 import ClosetStylePicker from "./components/ClosetStylePicker.vue";
@@ -40,8 +41,45 @@ const name = ref("");
 const roomName = ref("");
 const description = ref("");
 const submitting = ref(false);
+const scopeType = ref("personal");
+const closetId = ref("");
+const isEditMode = computed(() => Boolean(closetId.value));
+const pageEyebrow = computed(() => (isEditMode.value ? "EDIT CLOSET" : "CREATE CLOSET"));
+const pageTitle = computed(() => {
+  if (isEditMode.value) {
+    return scopeType.value === "family" ? "编辑家庭衣橱" : "编辑个人衣橱";
+  }
 
-async function submitCreateCloset() {
+  return scopeType.value === "family" ? "新建家庭衣橱" : "新建个人衣橱";
+});
+const pageDesc = computed(() =>
+  isEditMode.value
+    ? "你可以继续调整衣柜样式、颜色、名称和房间信息。"
+    : scopeType.value === "family"
+      ? "为当前家庭空间新增一个衣橱，后续家庭成员可以一起查看和管理。"
+      : "先选择一个你喜欢的衣柜样式和颜色，再填写名称与房间。"
+);
+const submitButtonText = computed(() => (isEditMode.value ? "保存修改" : "创建衣橱"));
+
+async function loadClosetDetail(targetClosetId) {
+  const result = await getClosetDetail({
+    closetId: targetClosetId,
+  });
+  const closet = result?.closet;
+
+  if (!closet) {
+    throw new Error("衣橱详情不存在");
+  }
+
+  scopeType.value = closet.scope_type === "family" ? "family" : "personal";
+  styleCode.value = closet.style_code || styleOptions[0]?.code || "";
+  colorCode.value = closet.color_code || colorOptions[0]?.code || "";
+  name.value = closet.name || "";
+  roomName.value = closet.room_name || "";
+  description.value = closet.description || "";
+}
+
+async function submitCloset() {
   if (!name.value.trim()) {
     uni.showToast({
       title: "请输入衣橱名称",
@@ -73,16 +111,28 @@ async function submitCreateCloset() {
   submitting.value = true;
 
   try {
-    await createCloset({
-      name: name.value.trim(),
-      roomName: roomName.value.trim(),
-      styleCode: styleCode.value,
-      colorCode: colorCode.value,
-      description: description.value.trim(),
-    });
+    if (isEditMode.value) {
+      await updateCloset({
+        closetId: closetId.value,
+        name: name.value.trim(),
+        roomName: roomName.value.trim(),
+        styleCode: styleCode.value,
+        colorCode: colorCode.value,
+        description: description.value.trim(),
+      });
+    } else {
+      await createCloset({
+        scopeType: scopeType.value,
+        name: name.value.trim(),
+        roomName: roomName.value.trim(),
+        styleCode: styleCode.value,
+        colorCode: colorCode.value,
+        description: description.value.trim(),
+      });
+    }
 
     uni.showToast({
-      title: "衣橱创建成功",
+      title: isEditMode.value ? "衣橱修改成功" : "衣橱创建成功",
       icon: "success",
     });
 
@@ -99,6 +149,21 @@ async function submitCreateCloset() {
     submitting.value = false;
   }
 }
+
+onLoad((options) => {
+  scopeType.value = options?.scopeType === "family" ? "family" : "personal";
+  closetId.value = String(options?.closetId || "").trim();
+
+  if (closetId.value) {
+    loadClosetDetail(closetId.value).catch((error) => {
+      console.error("loadClosetDetail failed", error);
+      uni.showToast({
+        title: error?.message || "衣橱详情加载失败",
+        icon: "none",
+      });
+    });
+  }
+});
 </script>
 
 <style>

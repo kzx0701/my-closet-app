@@ -1,5 +1,14 @@
 const db = uniCloud.database();
+const dbCmd = db.command;
 const closetsTable = db.collection("closets");
+const familyMembersTable = db.collection("family_members");
+const clothesTable = db.collection("clothes");
+const usersTable = db.collection("uni-id-users");
+
+const PERSONAL_SCOPE = "personal";
+const FAMILY_SCOPE = "family";
+const VALID_STYLE_CODES = ["modern-flat", "arched-vintage", "open-rack", "drawer-mix"];
+const VALID_COLOR_CODES = ["oak-beige", "walnut-brown", "mist-white", "sage-green"];
 
 function getUniIdCommonModule() {
   try {
@@ -71,6 +80,225 @@ function assertRequiredCode(value, fieldName, errCode) {
   return normalizedValue;
 }
 
+function assertOptionCode(value, fieldName, errCode, validCodes) {
+  const normalizedValue = assertRequiredCode(value, fieldName, errCode);
+
+  if (!validCodes.includes(normalizedValue)) {
+    const error = new Error(`${fieldName}不在支持范围内`);
+    error.errCode = `${errCode}_INVALID`;
+    throw error;
+  }
+
+  return normalizedValue;
+}
+
+async function getActiveFamilyMembership(uid) {
+  const res = await familyMembersTable
+    .where({
+      user_id: uid,
+      status: "active",
+    })
+    .limit(1)
+    .get();
+
+  return res.data[0] || null;
+}
+
+async function resolveCreateScope(uid, scopeType) {
+  const normalizedScopeType = String(scopeType || PERSONAL_SCOPE).trim();
+
+  if (normalizedScopeType === PERSONAL_SCOPE) {
+    return {
+      scopeType: PERSONAL_SCOPE,
+      scopeOwnerUserId: uid,
+      familyId: "",
+    };
+  }
+
+  if (normalizedScopeType !== FAMILY_SCOPE) {
+    const error = new Error("衣橱作用域不合法");
+    error.errCode = "CLOSET_SCOPE_INVALID";
+    throw error;
+  }
+
+  const membership = await getActiveFamilyMembership(uid);
+
+  if (!membership?.family_id) {
+    const error = new Error("你当前还没有加入家庭");
+    error.errCode = "CLOSET_FAMILY_REQUIRED";
+    throw error;
+  }
+
+  return {
+    scopeType: FAMILY_SCOPE,
+    scopeOwnerUserId: "",
+    familyId: membership.family_id,
+  };
+}
+
+async function getClosetById(closetId) {
+  const res = await closetsTable.doc(closetId).get();
+  return res.data[0] || null;
+}
+
+async function assertClosetManagePermission(uid, closetId) {
+  const closet = await getClosetById(closetId);
+
+  if (!closet || closet.status !== "active") {
+    const error = new Error("衣橱不存在或已不可用");
+    error.errCode = "CLOSET_NOT_FOUND";
+    throw error;
+  }
+
+  if (closet.scope_type === PERSONAL_SCOPE) {
+    if (closet.scope_owner_user_id !== uid) {
+      const error = new Error("你无权操作该个人衣橱");
+      error.errCode = "CLOSET_FORBIDDEN";
+      throw error;
+    }
+
+    return closet;
+  }
+
+  if (closet.scope_type === FAMILY_SCOPE) {
+    const membership = await getActiveFamilyMembership(uid);
+
+    if (!membership?.family_id || membership.family_id !== closet.family_id) {
+      const error = new Error("你无权操作该家庭衣橱");
+      error.errCode = "CLOSET_FORBIDDEN";
+      throw error;
+    }
+
+    return closet;
+  }
+
+  const error = new Error("衣橱作用域不合法");
+  error.errCode = "CLOSET_SCOPE_INVALID";
+  throw error;
+}
+
+function buildCreatorName(userRecord = {}) {
+  const nickname = String(userRecord.nickname || "").trim();
+  const username = String(userRecord.username || "").trim();
+  const mobile = String(userRecord.mobile || "").trim();
+
+  return nickname || username || mobile || "未知成员";
+}
+
+async function attachClosetCreatorNames(closets = []) {
+  if (!closets.length) {
+    return [];
+  }
+
+  const creatorIds = Array.from(new Set(closets.map((item) => item.created_by).filter(Boolean)));
+
+  if (!creatorIds.length) {
+    return closets;
+  }
+
+  const usersRes = await usersTable
+    .where({
+      _id: dbCmd.in(creatorIds),
+    })
+    .field("_id, nickname, username, mobile")
+    .get();
+
+  const userMap = new Map(
+    (usersRes.data || []).map((item) => [
+      item._id,
+      {
+        creator_name: buildCreatorName(item),
+        creator_nickname: String(item.nickname || "").trim(),
+        creator_username: String(item.username || "").trim(),
+      },
+    ])
+  );
+
+  return closets.map((item) => {
+    const creator = userMap.get(item.created_by) || {};
+
+    return {
+      ...item,
+      ...creator,
+    };
+  });
+}
+
+async function getPersonalSummary(uid) {
+  const [closetRes, clothesRes, unassignedRes] = await Promise.all([
+    closetsTable
+      .where({
+        scope_type: PERSONAL_SCOPE,
+        scope_owner_user_id: uid,
+        status: "active",
+      })
+      .count(),
+    clothesTable
+      .where({
+        scope_type: PERSONAL_SCOPE,
+        scope_owner_user_id: uid,
+        status: "active",
+      })
+      .count(),
+    clothesTable
+      .where({
+        scope_type: PERSONAL_SCOPE,
+        scope_owner_user_id: uid,
+        status: "active",
+        closet_id: dbCmd.exists(false),
+      })
+      .count(),
+  ]);
+
+  return {
+    closetCount: closetRes.total || 0,
+    clothesCount: clothesRes.total || 0,
+    unassignedClothesCount: unassignedRes.total || 0,
+  };
+}
+
+async function getFamilySummary(uid) {
+  const membership = await getActiveFamilyMembership(uid);
+
+  if (!membership?.family_id) {
+    const error = new Error("你当前还没有加入家庭");
+    error.errCode = "CLOSET_FAMILY_REQUIRED";
+    throw error;
+  }
+
+  const [closetRes, clothesRes, unassignedRes] = await Promise.all([
+    closetsTable
+      .where({
+        scope_type: FAMILY_SCOPE,
+        family_id: membership.family_id,
+        status: "active",
+      })
+      .count(),
+    clothesTable
+      .where({
+        scope_type: FAMILY_SCOPE,
+        family_id: membership.family_id,
+        status: "active",
+      })
+      .count(),
+    clothesTable
+      .where({
+        scope_type: FAMILY_SCOPE,
+        family_id: membership.family_id,
+        status: "active",
+        closet_id: dbCmd.exists(false),
+      })
+      .count(),
+  ]);
+
+  return {
+    closetCount: closetRes.total || 0,
+    clothesCount: clothesRes.total || 0,
+    unassignedClothesCount: unassignedRes.total || 0,
+    familyId: membership.family_id,
+  };
+}
+
 module.exports = {
   async _before() {
     const token = this.getUniIdToken();
@@ -96,13 +324,15 @@ module.exports = {
     const uid = requireLogin(this);
     const name = assertClosetName(payload.name);
     const roomName = normalizeOptionalText(payload.roomName, 30);
-    const styleCode = assertRequiredCode(payload.styleCode, "衣柜样式", "CLOSET_STYLE_REQUIRED");
-    const colorCode = assertRequiredCode(payload.colorCode, "衣柜颜色", "CLOSET_COLOR_REQUIRED");
+    const styleCode = assertOptionCode(payload.styleCode, "衣柜样式", "CLOSET_STYLE_REQUIRED", VALID_STYLE_CODES);
+    const colorCode = assertOptionCode(payload.colorCode, "衣柜颜色", "CLOSET_COLOR_REQUIRED", VALID_COLOR_CODES);
     const description = normalizeOptionalText(payload.description, 200);
+    const scope = await resolveCreateScope(uid, payload.scopeType);
 
     const createRes = await closetsTable.add({
-      scope_type: "personal",
-      scope_owner_user_id: uid,
+      scope_type: scope.scopeType,
+      scope_owner_user_id: scope.scopeOwnerUserId,
+      family_id: scope.familyId,
       name,
       room_name: roomName,
       style_code: styleCode,
@@ -120,12 +350,83 @@ module.exports = {
     };
   },
 
+  async updateCloset(payload = {}) {
+    const uid = requireLogin(this);
+    const closetId = String(payload.closetId || "").trim();
+
+    if (!closetId) {
+      const error = new Error("缺少衣橱ID");
+      error.errCode = "CLOSET_ID_REQUIRED";
+      throw error;
+    }
+
+    await assertClosetManagePermission(uid, closetId);
+
+    const name = assertClosetName(payload.name);
+    const roomName = normalizeOptionalText(payload.roomName, 30);
+    const styleCode = assertOptionCode(payload.styleCode, "衣柜样式", "CLOSET_STYLE_REQUIRED", VALID_STYLE_CODES);
+    const colorCode = assertOptionCode(payload.colorCode, "衣柜颜色", "CLOSET_COLOR_REQUIRED", VALID_COLOR_CODES);
+    const description = normalizeOptionalText(payload.description, 200);
+
+    await closetsTable.doc(closetId).update({
+      name,
+      room_name: roomName,
+      style_code: styleCode,
+      color_code: colorCode,
+      description,
+    });
+
+    return {
+      closet: await getClosetById(closetId),
+    };
+  },
+
+  async getClosetDetail(payload = {}) {
+    const uid = requireLogin(this);
+    const closetId = String(payload.closetId || "").trim();
+
+    if (!closetId) {
+      const error = new Error("缺少衣橱ID");
+      error.errCode = "CLOSET_ID_REQUIRED";
+      throw error;
+    }
+
+    return {
+      closet: await assertClosetManagePermission(uid, closetId),
+    };
+  },
+
+  async deleteCloset(payload = {}) {
+    const uid = requireLogin(this);
+    const closetId = String(payload.closetId || "").trim();
+
+    if (!closetId) {
+      const error = new Error("缺少衣橱ID");
+      error.errCode = "CLOSET_ID_REQUIRED";
+      throw error;
+    }
+
+    await assertClosetManagePermission(uid, closetId);
+
+    await clothesTable.where({ closet_id: closetId }).update({
+      closet_id: dbCmd.remove(),
+    });
+
+    await closetsTable.doc(closetId).update({
+      status: "disabled",
+    });
+
+    return {
+      success: true,
+    };
+  },
+
   async getPersonalClosetList() {
     const uid = requireLogin(this);
 
     const res = await closetsTable
       .where({
-        scope_type: "personal",
+        scope_type: PERSONAL_SCOPE,
         scope_owner_user_id: uid,
         status: "active",
       })
@@ -136,5 +437,48 @@ module.exports = {
     return {
       list: res.data || [],
     };
+  },
+
+  async getFamilyClosetList() {
+    const uid = requireLogin(this);
+    const membership = await getActiveFamilyMembership(uid);
+
+    if (!membership?.family_id) {
+      const error = new Error("你当前还没有加入家庭");
+      error.errCode = "CLOSET_FAMILY_REQUIRED";
+      throw error;
+    }
+
+    const res = await closetsTable
+      .where({
+        scope_type: FAMILY_SCOPE,
+        family_id: membership.family_id,
+        status: "active",
+      })
+      .orderBy("sort", "asc")
+      .orderBy("created_at", "desc")
+      .get();
+
+    return {
+      list: await attachClosetCreatorNames(res.data || []),
+      familyId: membership.family_id,
+    };
+  },
+
+  async getHomeSummary(payload = {}) {
+    const uid = requireLogin(this);
+    const scopeType = String(payload.scopeType || PERSONAL_SCOPE).trim();
+
+    if (scopeType === FAMILY_SCOPE) {
+      return getFamilySummary(uid);
+    }
+
+    if (scopeType === PERSONAL_SCOPE) {
+      return getPersonalSummary(uid);
+    }
+
+    const error = new Error("首页摘要作用域不合法");
+    error.errCode = "CLOSET_SCOPE_INVALID";
+    throw error;
   },
 };

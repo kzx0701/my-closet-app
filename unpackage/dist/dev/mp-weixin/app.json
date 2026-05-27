@@ -1,0 +1,59 @@
+{
+  "pages": [
+    "pages/entry/index",
+    "pages/auth-login/index",
+    "pages/auth-register/index",
+    "uni_modules/uni-id-pages/pages/login/login-withpwd",
+    "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
+    "uni_modules/uni-id-pages/pages/register/register",
+    "uni_modules/uni-id-pages/pages/register/register-by-email",
+    "uni_modules/uni-id-pages/pages/retrieve/retrieve",
+    "uni_modules/uni-id-pages/pages/userinfo/userinfo",
+    "pages/family-guide/index",
+    "pages/family-create/index",
+    "pages/clothes/index",
+    "pages/closets/index",
+    "pages/closet-create/index",
+    "pages/home/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "我的衣橱",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7a8678",
+    "selectedColor": "#314033",
+    "backgroundColor": "#fbfaf7",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/yun.png",
+        "selectedIconPath": "static/tabbar/yun1.png"
+      },
+      {
+        "pagePath": "pages/closets/index",
+        "text": "衣橱",
+        "iconPath": "static/tabbar/storage.png",
+        "selectedIconPath": "static/tabbar/storage1.png"
+      },
+      {
+        "pagePath": "pages/clothes/index",
+        "text": "衣物",
+        "iconPath": "static/tabbar/obj.png",
+        "selectedIconPath": "static/tabbar/obj1.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/fn.png",
+        "selectedIconPath": "static/tabbar/fn1.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

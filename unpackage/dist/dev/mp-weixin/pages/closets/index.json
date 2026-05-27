@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的衣橱",
+  "usingComponents": {
+    "h5-tab-bar": "../../components/H5TabBar",
+    "closet-empty-state": "./components/ClosetEmptyState",
+    "closet-list-card": "./components/ClosetListCard"
+  }
+}

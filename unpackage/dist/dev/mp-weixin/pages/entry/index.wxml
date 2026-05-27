@@ -1,0 +1,1 @@
+<view class="entry-page"><view class="entry-card"><view class="spinner"></view><text class="title">正在检查登录状态</text><text class="desc">{{a}}</text><button wx:if="{{b}}" class="retry-btn" bindtap="{{c}}">重新检查</button></view></view>

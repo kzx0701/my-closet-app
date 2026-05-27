@@ -1,0 +1,1 @@
+<view class="section"><text class="section-title">选择衣柜样式</text><view class="option-grid"><view wx:for="{{a}}" wx:for-item="item" wx:key="c" class="{{['option-card', item.d && 'active']}}" bindtap="{{item.e}}"><text class="option-name">{{item.a}}</text><text class="option-desc">{{item.b}}</text></view></view></view>

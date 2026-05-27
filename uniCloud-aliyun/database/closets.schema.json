@@ -7,8 +7,8 @@
     "status"
   ],
   "permission": {
-    "read": "auth.uid != null",
-    "create": "auth.uid != null",
+    "read": false,
+    "create": false,
     "update": false,
     "delete": false
   },

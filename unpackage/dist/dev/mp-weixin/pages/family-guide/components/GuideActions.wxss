@@ -1,0 +1,20 @@
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+.primary,
+.secondary,
+.ghost {
+  border-radius: 999rpx;
+  font-size: 30rpx;
+}
+.secondary {
+  background: #edf1ea;
+  color: #314033;
+}
+.ghost {
+  background: transparent;
+  color: #667062;
+}

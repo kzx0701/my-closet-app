@@ -1,0 +1,27 @@
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  padding: 112rpx 34rpx 80rpx;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #4b5c45 0%, #677b61 34%, #eef1e7 34%, #f7f5ef 100%);
+}
+.bg-glow {
+  position: absolute;
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: 50%;
+  filter: blur(18rpx);
+  opacity: 0.22;
+}
+.bg-glow-left {
+  top: 30rpx;
+  left: -80rpx;
+  background: #d5e2b9;
+}
+.bg-glow-right {
+  top: 180rpx;
+  right: -110rpx;
+  background: #f6dca8;
+}

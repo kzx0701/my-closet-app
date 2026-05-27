@@ -62,7 +62,7 @@ function handleSkip() {
     setFamilyGuideSkipState(session.uid, true);
   }
 
-  uni.reLaunch({
+  uni.switchTab({
     url: ROUTES.home,
   });
 }
@@ -113,7 +113,7 @@ async function submitJoinFamily() {
     });
 
     setTimeout(() => {
-      uni.reLaunch({
+      uni.switchTab({
         url: ROUTES.home,
       });
     }, 300);

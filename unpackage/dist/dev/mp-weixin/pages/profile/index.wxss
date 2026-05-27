@@ -1,0 +1,64 @@
+
+.page {
+  min-height: 100vh;
+  padding: 28rpx 28rpx 0;
+  background:
+    radial-gradient(circle at top, rgba(214, 223, 205, 0.42), transparent 34%),
+    linear-gradient(180deg, #f7f4ee 0%, #fcfbf8 38%, #f3efe6 100%);
+}
+.hero-card,
+.entry-card {
+  padding: 30rpx 26rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
+  border: 2rpx solid rgba(107, 126, 99, 0.08);
+}
+.eyebrow {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #7c8979;
+}
+.title {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #2b362d;
+}
+.desc {
+  display: block;
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  line-height: 1.75;
+  color: #687466;
+}
+.section {
+  margin-top: 28rpx;
+}
+.section-title {
+  display: block;
+  margin-bottom: 16rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #314033;
+}
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+.entry-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #314033;
+}
+.entry-desc {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  line-height: 1.72;
+  color: #6f7c6d;
+}

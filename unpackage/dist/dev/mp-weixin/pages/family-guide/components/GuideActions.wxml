@@ -1,0 +1,1 @@
+<view class="actions"><button class="primary" type="primary" bindtap="{{a}}">创建家庭</button><button class="secondary" bindtap="{{b}}">加入家庭</button><button class="ghost" bindtap="{{c}}">先跳过</button></view>

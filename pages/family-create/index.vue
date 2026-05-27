@@ -152,7 +152,7 @@ function copyInviteCode() {
 }
 
 function enterHome() {
-  uni.reLaunch({
+  uni.switchTab({
     url: ROUTES.home,
   });
 }

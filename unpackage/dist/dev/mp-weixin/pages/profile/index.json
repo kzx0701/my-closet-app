@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我的",
+  "usingComponents": {
+    "h5-tab-bar": "../../components/H5TabBar"
+  }
+}

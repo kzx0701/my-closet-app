@@ -1,0 +1,1 @@
+<view class="section"><text class="section-title">选择衣柜颜色</text><view class="color-row"><view wx:for="{{a}}" wx:for-item="item" wx:key="b" class="{{['color-chip', item.c && 'active']}}" bindtap="{{item.d}}"><text class="color-name">{{item.a}}</text></view></view></view>

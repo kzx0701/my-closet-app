@@ -67,6 +67,12 @@
       }
     },
     {
+      "path": "pages/clothes/index",
+      "style": {
+        "navigationBarTitleText": "我的衣物"
+      }
+    },
+    {
       "path": "pages/closets/index",
       "style": {
         "navigationBarTitleText": "我的衣橱"
@@ -83,8 +89,46 @@
       "style": {
         "navigationBarTitleText": "我的衣橱"
       }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
     }
   ],
+  "tabBar": {
+    "color": "#7a8678",
+    "selectedColor": "#314033",
+    "backgroundColor": "#fbfaf7",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/yun.png",
+        "selectedIconPath": "static/tabbar/yun1.png"
+      },
+      {
+        "pagePath": "pages/closets/index",
+        "text": "衣橱",
+        "iconPath": "static/tabbar/storage.png",
+        "selectedIconPath": "static/tabbar/storage1.png"
+      },
+      {
+        "pagePath": "pages/clothes/index",
+        "text": "衣物",
+        "iconPath": "static/tabbar/obj.png",
+        "selectedIconPath": "static/tabbar/obj1.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/fn.png",
+        "selectedIconPath": "static/tabbar/fn1.png"
+      }
+    ]
+  },
   "uniIdRouter": {
     "loginPage": "pages/auth-login/index"
   },

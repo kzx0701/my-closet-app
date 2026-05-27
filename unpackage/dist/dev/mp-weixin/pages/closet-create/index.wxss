@@ -1,0 +1,35 @@
+
+.page {
+  min-height: 100vh;
+  padding: 44rpx 28rpx 88rpx;
+  background:
+    radial-gradient(circle at top, rgba(214, 223, 205, 0.48), transparent 36%),
+    linear-gradient(180deg, #f7f4ee 0%, #fcfbf8 38%, #f3efe6 100%);
+}
+.page-head {
+  margin-bottom: 28rpx;
+}
+.eyebrow {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #7c8979;
+}
+.title {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #2b362d;
+}
+.desc {
+  display: block;
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #6e7b6c;
+}
+.submit-btn {
+  margin-top: 34rpx;
+  border-radius: 999rpx;
+}

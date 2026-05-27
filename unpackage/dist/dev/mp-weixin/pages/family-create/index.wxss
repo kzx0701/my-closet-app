@@ -1,0 +1,95 @@
+
+.page {
+  min-height: 100vh;
+  padding: 88rpx 32rpx 80rpx;
+  background: linear-gradient(180deg, #f4f1e8 0%, #ffffff 55%, #f0ebe0 100%);
+}
+.hero {
+  margin-bottom: 36rpx;
+}
+.eyebrow {
+  display: block;
+  font-size: 24rpx;
+  letter-spacing: 4rpx;
+  color: #7d876f;
+}
+.title {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #2a352b;
+}
+.desc {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: #627061;
+}
+.success-card {
+  padding: 42rpx 34rpx 38rpx;
+  border-radius: 32rpx;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 20rpx 48rpx rgba(47, 56, 47, 0.1);
+}
+.success-eyebrow {
+  display: block;
+  font-size: 24rpx;
+  letter-spacing: 4rpx;
+  color: #7d876f;
+}
+.success-title {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #263225;
+}
+.success-desc {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: #5d695b;
+}
+.invite-card,
+.next-card {
+  margin-top: 30rpx;
+  padding: 28rpx 24rpx;
+  border-radius: 24rpx;
+  background: #f7f5ef;
+}
+.invite-label,
+.next-title {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #4b5648;
+}
+.invite-code {
+  display: block;
+  margin-top: 20rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  letter-spacing: 6rpx;
+  color: #2d3a2f;
+}
+.invite-hint,
+.next-item {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #667062;
+}
+.primary-action,
+.secondary-action {
+  margin-top: 30rpx;
+  border-radius: 999rpx;
+}
+.secondary-action {
+  margin-top: 20rpx;
+  background: #edf1ea;
+  color: #314033;
+}

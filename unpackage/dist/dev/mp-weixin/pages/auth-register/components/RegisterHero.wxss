@@ -1,0 +1,25 @@
+
+.hero {
+  margin-bottom: 36rpx;
+}
+.eyebrow {
+  display: block;
+  font-size: 24rpx;
+  letter-spacing: 5rpx;
+  color: rgba(236, 242, 233, 0.78);
+}
+.title {
+  display: block;
+  margin-top: 22rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+}
+.desc {
+  display: block;
+  margin-top: 20rpx;
+  font-size: 27rpx;
+  line-height: 1.72;
+  color: rgba(247, 249, 244, 0.84);
+}

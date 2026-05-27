@@ -7,6 +7,8 @@ export const ROUTES = {
   closets: "/pages/closets/index",
   closetCreate: "/pages/closet-create/index",
   home: "/pages/home/index",
+  clothes: "/pages/clothes/index",
+  profile: "/pages/profile/index",
 };
 
 export const ROUTE_TARGETS = {

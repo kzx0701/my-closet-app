@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "创建家庭",
+  "usingComponents": {
+    "family-create-form": "./components/FamilyCreateForm"
+  }
+}

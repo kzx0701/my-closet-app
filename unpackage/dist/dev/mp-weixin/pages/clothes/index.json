@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我的衣物",
+  "usingComponents": {
+    "h5-tab-bar": "../../components/H5TabBar"
+  }
+}

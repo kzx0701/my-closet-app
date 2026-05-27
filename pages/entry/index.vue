@@ -52,6 +52,12 @@ async function routeBySession() {
       statusText.value = "尚未加入家庭，进入家庭引导";
     }
 
+    if (result.target === ROUTE_TARGETS.home) {
+      return uni.switchTab({
+        url: result.url,
+      });
+    }
+
     return uni.reLaunch({
       url: result.url,
     });

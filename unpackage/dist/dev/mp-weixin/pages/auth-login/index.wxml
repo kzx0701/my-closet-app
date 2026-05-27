@@ -1,0 +1,1 @@
+<view class="page"><view class="bg-glow bg-glow-left"></view><view class="bg-glow bg-glow-right"></view><login-hero u-i="80540ca6-0" bind:__l="__l"/><login-form-card wx:if="{{e}}" bindsubmit="{{a}}" bindregister="{{b}}" u-i="80540ca6-1" bind:__l="__l" bindupdateUsername="{{c}}" bindupdatePassword="{{d}}" u-p="{{e}}"/></view>

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "新建衣橱",
+  "usingComponents": {
+    "closet-basic-form": "./components/ClosetBasicForm",
+    "closet-color-picker": "./components/ClosetColorPicker",
+    "closet-style-picker": "./components/ClosetStylePicker"
+  }
+}

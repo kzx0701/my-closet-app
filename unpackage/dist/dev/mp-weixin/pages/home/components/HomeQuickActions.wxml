@@ -1,0 +1,1 @@
+<view class="actions"><view wx:for="{{a}}" wx:for-item="item" wx:key="d" class="action-card" bindtap="{{item.e}}"><view class="action-main"><text class="action-title">{{item.a}}</text><text class="action-desc">{{item.b}}</text></view><view class="action-foot"><text class="action-tag">{{item.c}}</text><text class="action-arrow">→</text></view></view></view>

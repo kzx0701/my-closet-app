@@ -26,7 +26,7 @@
     <view class="section">
       <view class="section-head">
         <text class="section-title">当前空间摘要</text>
-        <text class="section-subtitle">后续会接入真实数据</text>
+        <text class="section-subtitle">衣橱与衣物摘要已接入真实数据</text>
       </view>
       <view class="stats-grid">
         <view class="stat-card" v-for="item in summaryItems" :key="item.label">
@@ -72,14 +72,19 @@
         </view>
       </view>
     </view>
+
+    <h5-tab-bar :current-route="ROUTES.home" />
   </view>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { onShow } from "@dcloudio/uni-app";
+import H5TabBar from "@/components/H5TabBar.vue";
+import { getHomeSummary } from "@/common/api/modules/closet.js";
 import { getCurrentSession } from "@/common/services/auth.js";
 import { ROUTES } from "@/common/constants/routes.js";
+import { setClosetScopeState } from "@/common/services/closet-scope-state.js";
 import { getFamilyGuideSkipState } from "@/common/services/family-guide-state.js";
 import { getFamilyMembership } from "@/common/services/family-membership.js";
 import { mutations } from "@/uni_modules/uni-id-pages/common/store.js";
@@ -100,6 +105,12 @@ const isFamilyMode = ref(false);
 const familyRecord = ref(null);
 const membershipRecord = ref(null);
 const hasSkippedFamilyGuide = ref(false);
+const personalClosetCount = ref(0);
+const familyClosetCount = ref(0);
+const personalClothesCount = ref(0);
+const familyClothesCount = ref(0);
+const personalUnassignedClothesCount = ref(0);
+const familyUnassignedClothesCount = ref(0);
 
 function buildPageSections() {
   scopeMetaItems.value = isFamilyMode.value
@@ -128,7 +139,7 @@ function buildPageSections() {
     ? [
         { title: "衣橱管理", desc: "查看和管理当前家庭下的衣橱。", tag: "下一步", action: "wardrobes" },
         { title: "衣物管理", desc: "查看家庭衣物列表与详情。", tag: "下一步", action: "clothes" },
-        { title: "创建衣橱", desc: "为家庭空间新增一个衣橱。", tag: "待接入", action: "create-wardrobe" },
+        { title: "创建衣橱", desc: "为家庭空间新增一个衣橱。", tag: "已可用", action: "create-wardrobe" },
         { title: "添加衣物", desc: "把新的衣物记录到家庭空间。", tag: "待接入", action: "create-clothing" },
       ]
     : [
@@ -140,9 +151,9 @@ function buildPageSections() {
 
   summaryItems.value = isFamilyMode.value
     ? [
-        { value: "0", label: "家庭衣橱", desc: "当前家庭下的衣橱数量" },
-        { value: "0", label: "家庭衣物", desc: "当前家庭下的衣物数量" },
-        { value: "0", label: "未归类衣物", desc: "暂未放入衣橱的衣物" },
+        { value: String(familyClosetCount.value), label: "家庭衣橱", desc: "当前家庭下的衣橱数量" },
+        { value: String(familyClothesCount.value), label: "家庭衣物", desc: "当前家庭下的衣物数量" },
+        { value: String(familyUnassignedClothesCount.value), label: "未归类衣物", desc: "暂未放入衣橱的衣物" },
         {
           value: String(familyRecord.value?.member_count || 1),
           label: "家庭成员",
@@ -150,9 +161,9 @@ function buildPageSections() {
         },
       ]
     : [
-        { value: "0", label: "个人衣橱", desc: "当前个人空间下的衣橱数量" },
-        { value: "0", label: "个人衣物", desc: "当前个人空间下的衣物数量" },
-        { value: "0", label: "未归类衣物", desc: "暂未放入衣橱的衣物" },
+        { value: String(personalClosetCount.value), label: "个人衣橱", desc: "当前个人空间下的衣橱数量" },
+        { value: String(personalClothesCount.value), label: "个人衣物", desc: "当前个人空间下的衣物数量" },
+        { value: String(personalUnassignedClothesCount.value), label: "未归类衣物", desc: "暂未放入衣橱的衣物" },
         { value: "0", label: "待加入家庭", desc: "加入家庭后可开启协作模式" },
       ];
 
@@ -198,6 +209,35 @@ function buildPageSections() {
   ];
 }
 
+async function syncClosetSummary() {
+  try {
+    const summary = await getHomeSummary({
+      scopeType: isFamilyMode.value ? "family" : "personal",
+    });
+
+    if (isFamilyMode.value) {
+      familyClosetCount.value = summary?.closetCount || 0;
+      familyClothesCount.value = summary?.clothesCount || 0;
+      familyUnassignedClothesCount.value = summary?.unassignedClothesCount || 0;
+    } else {
+      personalClosetCount.value = summary?.closetCount || 0;
+      personalClothesCount.value = summary?.clothesCount || 0;
+      personalUnassignedClothesCount.value = summary?.unassignedClothesCount || 0;
+    }
+
+    buildPageSections();
+  } catch (error) {
+    console.error("syncClosetSummary failed", error);
+    personalClosetCount.value = 0;
+    familyClosetCount.value = 0;
+    personalClothesCount.value = 0;
+    familyClothesCount.value = 0;
+    personalUnassignedClothesCount.value = 0;
+    familyUnassignedClothesCount.value = 0;
+    buildPageSections();
+  }
+}
+
 async function syncScopeStatus() {
   const session = getCurrentSession();
 
@@ -209,6 +249,12 @@ async function syncScopeStatus() {
     familyRecord.value = null;
     membershipRecord.value = null;
     hasSkippedFamilyGuide.value = false;
+    personalClosetCount.value = 0;
+    familyClosetCount.value = 0;
+    personalClothesCount.value = 0;
+    familyClothesCount.value = 0;
+    personalUnassignedClothesCount.value = 0;
+    familyUnassignedClothesCount.value = 0;
     buildPageSections();
     return;
   }
@@ -223,6 +269,12 @@ async function syncScopeStatus() {
     familyRecord.value = null;
     membershipRecord.value = null;
     hasSkippedFamilyGuide.value = false;
+    personalClosetCount.value = 0;
+    familyClosetCount.value = 0;
+    personalClothesCount.value = 0;
+    familyClothesCount.value = 0;
+    personalUnassignedClothesCount.value = 0;
+    familyUnassignedClothesCount.value = 0;
     buildPageSections();
     return;
   }
@@ -235,6 +287,12 @@ async function syncScopeStatus() {
     familyRecord.value = null;
     membershipRecord.value = null;
     hasSkippedFamilyGuide.value = false;
+    personalClosetCount.value = 0;
+    familyClosetCount.value = 0;
+    personalClothesCount.value = 0;
+    familyClothesCount.value = 0;
+    personalUnassignedClothesCount.value = 0;
+    familyUnassignedClothesCount.value = 0;
     buildPageSections();
     return;
   }
@@ -249,6 +307,7 @@ async function syncScopeStatus() {
     scopeDesc.value = "你当前正在家庭空间中，后续可以和家人一起管理家庭衣橱与衣物。";
     scopeBadge.value = membershipRecord.value?.role === "admin" ? "管理员" : "家庭成员";
     buildPageSections();
+    await syncClosetSummary();
     return;
   }
 
@@ -259,12 +318,27 @@ async function syncScopeStatus() {
     : "你当前还没有加入家庭，可以先在个人空间里管理自己的衣橱和衣物。";
   scopeBadge.value = hasSkippedFamilyGuide.value ? "已跳过家庭引导" : "个人模式";
   buildPageSections();
+  await syncClosetSummary();
 }
 
 function handleQuickAction(item) {
   if (item.action === "wardrobes") {
-    return uni.navigateTo({
+    const session = getCurrentSession();
+    setClosetScopeState(session?.uid, isFamilyMode.value ? "family" : "personal");
+    return uni.switchTab({
       url: ROUTES.closets,
+    });
+  }
+
+  if (item.action === "clothes") {
+    return uni.switchTab({
+      url: ROUTES.clothes,
+    });
+  }
+
+  if (item.action === "create-wardrobe") {
+    return uni.navigateTo({
+      url: isFamilyMode.value ? `${ROUTES.closetCreate}?scopeType=family` : ROUTES.closetCreate,
     });
   }
 
@@ -287,6 +361,12 @@ function handleQuickAction(item) {
 }
 
 function handlePanelAction(item) {
+  if (item.action === "family-info") {
+    return uni.switchTab({
+      url: ROUTES.profile,
+    });
+  }
+
   if (item.action === "create-family") {
     return uni.navigateTo({
       url: ROUTES.familyCreate,
@@ -347,7 +427,7 @@ onShow(() => {
 <style>
 .page {
   min-height: 100vh;
-  padding: 44rpx 28rpx 88rpx;
+  padding: 44rpx 28rpx 0;
   background:
     radial-gradient(circle at top, rgba(214, 223, 205, 0.48), transparent 36%),
     linear-gradient(180deg, #f7f4ee 0%, #fcfbf8 38%, #f3efe6 100%);

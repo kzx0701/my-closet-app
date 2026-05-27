@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-captcha": "../../../uni_modules/uni-captcha/components/uni-captcha/uni-captcha"
+  }
+}

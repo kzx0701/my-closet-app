@@ -1,15 +1,34 @@
 <template>
   <view class="empty-card">
     <text class="title">还没有衣橱</text>
-    <text class="desc">先创建一个属于你的衣橱，可以选择样式、颜色和房间，后续再往里添加衣物。</text>
-    <button class="create-btn" type="primary" @click="$emit('create')">创建衣橱</button>
+    <text class="desc">{{ descText }}</text>
+    <button v-if="canCreate" class="create-btn" type="primary" @click="$emit('create')">创建衣橱</button>
   </view>
 </template>
 
 <script>
 export default {
   name: "ClosetEmptyState",
+  props: {
+    scopeType: {
+      type: String,
+      default: "personal",
+    },
+    canCreate: {
+      type: Boolean,
+      default: true,
+    },
+  },
   emits: ["create"],
+  computed: {
+    descText() {
+      if (this.scopeType === "family") {
+        return "当前家庭空间还没有衣橱，现在就可以先创建一个，方便家人后续一起管理和整理。";
+      }
+
+      return "先创建一个属于你的衣橱，可以按房间、季节或使用场景来整理，后续再往里添加衣物。";
+    },
+  },
 };
 </script>
 

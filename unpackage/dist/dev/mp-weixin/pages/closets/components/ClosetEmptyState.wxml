@@ -1,0 +1,1 @@
+<view class="empty-card"><text class="title">还没有衣橱</text><text class="desc">{{a}}</text><button wx:if="{{b}}" class="create-btn" type="primary" bindtap="{{c}}">创建衣橱</button></view>
