@@ -3,10 +3,11 @@ import { getCloudObject } from "@/common/api/clients/cloud-object.js";
 const closetCloudObject = getCloudObject("closet-co");
 
 /**
- * 创建个人空间衣橱。
- * 当前一期仅先开放个人空间的预设样式衣橱创建。
+ * 创建衣橱。
+ * 当前已支持按个人空间或家庭空间创建预设样式衣橱。
  *
  * @param {{
+ *   scopeType?: "personal" | "family",
  *   name: string,
  *   roomName?: string,
  *   styleCode: string,

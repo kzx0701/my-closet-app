@@ -120,6 +120,7 @@ async function loadClosets() {
     closets.value = result?.list || [];
   } catch (error) {
     console.error("loadClosets failed", error);
+    closets.value = [];
     uni.showToast({
       title: error?.message || "衣橱列表加载失败",
       icon: "none",

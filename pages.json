@@ -73,6 +73,12 @@
       }
     },
     {
+      "path": "pages/clothes-create/index",
+      "style": {
+        "navigationBarTitleText": "新增衣物"
+      }
+    },
+    {
       "path": "pages/closets/index",
       "style": {
         "navigationBarTitleText": "我的衣橱"

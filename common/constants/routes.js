@@ -8,6 +8,8 @@ export const ROUTES = {
   closetCreate: "/pages/closet-create/index",
   home: "/pages/home/index",
   clothes: "/pages/clothes/index",
+  clothesCreate: "/pages/clothes-create/index",
+  clothesEdit: "/pages/clothes-create/index",
   profile: "/pages/profile/index",
 };
 
