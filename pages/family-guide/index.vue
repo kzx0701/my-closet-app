@@ -129,19 +129,19 @@ async function submitJoinFamily() {
 }
 </script>
 
-<style>
+<style lang="scss">
 .page {
   min-height: 100vh;
   padding: 88rpx 36rpx 80rpx;
-  background: linear-gradient(180deg, #f5f3ee 0%, #ffffff 50%, #f2eee6 100%);
+  background: linear-gradient(180deg, #f5f3ee 0%, $color-bg-card 50%, #f2eee6 100%);
 }
 
 .card {
   margin-top: 48rpx;
   padding: 40rpx 30rpx;
-  border-radius: 30rpx;
+  border-radius: $radius-xl;
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 20rpx 48rpx rgba(43, 49, 43, 0.08);
+  box-shadow: $shadow-card-lg;
 }
 
 .join-card {
@@ -152,27 +152,27 @@ async function submitJoinFamily() {
 
 .join-label {
   display: block;
-  font-size: 28rpx;
+  font-size: $font-size-lg;
   font-weight: 600;
-  color: #314033;
+  color: $color-primary;
 }
 
 .join-input {
   margin-top: 18rpx;
   height: 92rpx;
-  padding: 0 24rpx;
-  border-radius: 20rpx;
-  background: #f2f5ef;
-  font-size: 30rpx;
-  color: #243126;
+  padding: 0 $spacing-lg;
+  border-radius: $radius-sm;
+  background: $color-bg-input;
+  font-size: $font-size-xl;
+  color: $color-text-title;
 }
 
 .join-hint {
   display: block;
-  margin-top: 16rpx;
-  font-size: 24rpx;
+  margin-top: $spacing-md;
+  font-size: $font-size-base;
   line-height: 1.7;
-  color: #6d796d;
+  color: $color-text-secondary;
 }
 
 .join-actions {
@@ -184,11 +184,11 @@ async function submitJoinFamily() {
 .join-submit,
 .join-cancel {
   flex: 1;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
 }
 
 .join-cancel {
-  background: #edf1ea;
-  color: #314033;
+  background: $color-primary-light;
+  color: $color-primary;
 }
 </style>

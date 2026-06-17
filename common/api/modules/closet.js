@@ -33,19 +33,21 @@ export function getClosetDetail(payload) {
 /**
  * 获取当前登录用户个人空间下的衣橱列表。
  *
- * @returns {Promise<{list: object[]}>}
+ * @param {{page?: number, pageSize?: number}} [payload]
+ * @returns {Promise<{list: object[], total: number, page: number, pageSize: number}>}
  */
-export function getPersonalClosetList() {
-  return closetCloudObject.getPersonalClosetList();
+export function getPersonalClosetList(payload) {
+  return closetCloudObject.getPersonalClosetList(payload);
 }
 
 /**
  * 获取当前登录用户所在家庭空间下的衣橱列表。
  *
- * @returns {Promise<{list: object[], familyId?: string}>}
+ * @param {{page?: number, pageSize?: number}} [payload]
+ * @returns {Promise<{list: object[], total: number, page: number, pageSize: number, familyId?: string}>}
  */
-export function getFamilyClosetList() {
-  return closetCloudObject.getFamilyClosetList();
+export function getFamilyClosetList(payload) {
+  return closetCloudObject.getFamilyClosetList(payload);
 }
 
 /**

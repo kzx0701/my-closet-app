@@ -1,0 +1,25 @@
+.u-loadmore.data-v-5817e4cf {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.u-loadmore__content.data-v-5817e4cf {
+  margin: 0 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.u-loadmore__content__icon-wrap.data-v-5817e4cf {
+  margin-right: 8px;
+}
+.u-loadmore__content__text.data-v-5817e4cf {
+  font-size: 14px;
+  color: #606266;
+}
+.u-loadmore__content__dot-text.data-v-5817e4cf {
+  font-size: 15px;
+  color: #909399;
+}

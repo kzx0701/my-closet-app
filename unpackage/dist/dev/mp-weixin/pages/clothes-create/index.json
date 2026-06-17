@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "新增衣物",
+  "usingComponents": {
+    "u-button": "../../node-modules/uview-plus/components/u-button/u-button",
+    "image-uploader": "../../common/components/ImageUploader",
+    "clothes-basic-form": "./components/ClothesBasicForm",
+    "clothes-closet-picker": "./components/ClothesClosetPicker"
+  }
+}

@@ -7,7 +7,7 @@
         :key="item.code"
         class="option-card"
         :class="{ active: modelValue === item.code }"
-        @click="$emit('update:modelValue', item.code)"
+        @click="emit('update:modelValue', item.code)"
       >
         <text class="option-name">{{ item.name }}</text>
         <text class="option-desc">{{ item.desc }}</text>
@@ -16,26 +16,24 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: "ClosetStylePicker",
-  props: {
-    modelValue: {
-      type: String,
-      default: "",
-    },
-    options: {
-      type: Array,
-      default() {
-        return [];
-      },
+<script setup>
+defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  options: {
+    type: Array,
+    default() {
+      return [];
     },
   },
-  emits: ["update:modelValue"],
-};
+});
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
-<style>
+<style lang="scss">
 .section + .section {
   margin-top: 26rpx;
 }
@@ -43,9 +41,9 @@ export default {
 .section-title {
   display: block;
   margin-bottom: 18rpx;
-  font-size: 28rpx;
+  font-size: $font-size-lg;
   font-weight: 700;
-  color: #2d392f;
+  color: $color-text-title;
 }
 
 .option-grid {
@@ -55,29 +53,29 @@ export default {
 }
 
 .option-card {
-  padding: 24rpx 22rpx;
+  padding: $spacing-lg 22rpx;
   border-radius: 22rpx;
   background: #f5f6f1;
   border: 2rpx solid transparent;
 }
 
 .option-card.active {
-  background: #edf4e7;
-  border-color: #7b9571;
+  background: $color-primary-light;
+  border-color: $color-primary;
 }
 
 .option-name {
   display: block;
-  font-size: 28rpx;
+  font-size: $font-size-lg;
   font-weight: 700;
-  color: #253026;
+  color: $color-text-title;
 }
 
 .option-desc {
   display: block;
-  margin-top: 12rpx;
-  font-size: 22rpx;
+  margin-top: $spacing-sm;
+  font-size: $font-size-sm;
   line-height: 1.65;
-  color: #6f7b6d;
+  color: $color-text-secondary;
 }
 </style>

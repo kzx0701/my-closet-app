@@ -1,0 +1,53 @@
+.uploader {
+  margin-top: 24rpx;
+}
+.label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #2a2a24;
+}
+.desc {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #4a4a42;
+}
+.preview {
+  position: relative;
+  margin-top: 16rpx;
+  width: 100%;
+  height: 300rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+.preview-image {
+  width: 100%;
+  height: 100%;
+}
+.preview-remove {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+}
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16rpx;
+  height: 200rpx;
+  border-radius: 24rpx;
+  background: #ebe4d6;
+  border: 2rpx dashed rgba(107, 126, 99, 0.08);
+}
+.upload-text {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #4a4a42;
+}
+.upload-hint {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #8a8a7e;
+}

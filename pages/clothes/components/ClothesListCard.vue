@@ -1,16 +1,22 @@
 <template>
-  <view class="card">
-    <view class="badge-row">
-      <text class="badge">{{ categoryName }}</text>
-      <text class="badge">{{ seasonName }}</text>
-      <text v-if="clothes.color" class="badge">{{ clothes.color }}</text>
+  <view class="card" @click="goDetail">
+    <view v-if="clothes.image_url" class="image-wrap">
+      <image class="image" :src="clothes.image_url" mode="aspectFill" @click.stop="previewImage" />
     </view>
-    <text class="title">{{ clothes.name }}</text>
-    <text class="meta">{{ closetLabel }}</text>
-    <text class="remark">{{ clothes.remark || "当前还没有补充衣物备注。" }}</text>
+    <view class="content">
+      <view class="badge-row">
+        <text class="badge">{{ categoryName }}</text>
+        <text class="badge">{{ seasonName }}</text>
+        <text v-if="clothes.color" class="badge">{{ clothes.color }}</text>
+      </view>
+      <text class="title">{{ clothes.name }}</text>
+      <text class="meta">{{ closetLabel }}</text>
+      <text v-if="showCreator && creatorText" class="creator">{{ creatorText }}</text>
+      <text class="remark">{{ clothes.remark || "当前还没有补充衣物备注。" }}</text>
+    </view>
     <view class="action-row">
-      <button class="action-btn" size="mini" @click="$emit('edit', clothes)">编辑</button>
-      <button class="action-btn danger-btn" size="mini" @click="$emit('delete', clothes)">删除</button>
+      <button class="action-btn" size="mini" @click.stop="$emit('edit', clothes)">编辑</button>
+      <button class="action-btn danger-btn" size="mini" @click.stop="$emit('delete', clothes)">删除</button>
     </view>
   </view>
 </template>
@@ -18,6 +24,7 @@
 <script setup>
 import { computed } from "vue";
 import { CLOTHES_CATEGORY_OPTIONS, CLOTHES_SEASON_OPTIONS } from "@/common/constants/clothes-options.js";
+import { ROUTES } from "@/common/constants/routes.js";
 
 const props = defineProps({
   clothes: {
@@ -25,6 +32,10 @@ const props = defineProps({
     default() {
       return {};
     },
+  },
+  showCreator: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -42,15 +53,55 @@ const closetLabel = computed(() => {
   const closetName = String(props.clothes.closet_name || "").trim();
   return closetName ? `所属衣橱：${closetName}` : "当前未绑定衣橱";
 });
+
+const creatorText = computed(() => {
+  const creatorName = String(props.clothes.creator_name || "").trim();
+  return creatorName ? `创建者：${creatorName}` : "";
+});
+
+function previewImage() {
+  if (props.clothes.image_url) {
+    uni.previewImage({
+      urls: [props.clothes.image_url],
+      current: props.clothes.image_url,
+    });
+  }
+}
+
+function goDetail() {
+  uni.navigateTo({
+    url: `${ROUTES.clothesDetail}?clothesId=${props.clothes._id}`,
+  });
+}
 </script>
 
-<style>
+<style lang="scss">
 .card {
+  display: flex;
+  gap: $spacing-md;
   padding: 30rpx 26rpx;
-  border-radius: 26rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
-  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
-  border: 2rpx solid rgba(107, 126, 99, 0.08);
+  border-radius: $radius-lg;
+  background: $gradient-card;
+  box-shadow: $shadow-card;
+  border: 2rpx solid $color-border;
+}
+
+.image-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  flex-shrink: 0;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
 }
 
 .badge-row {
@@ -60,39 +111,46 @@ const closetLabel = computed(() => {
 }
 
 .badge {
-  padding: 8rpx 16rpx;
-  border-radius: 999rpx;
-  font-size: 20rpx;
-  color: #546251;
-  background: #eef2eb;
+  padding: $spacing-xs 16rpx;
+  border-radius: $radius-pill;
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+  background: $color-bg-tag;
 }
 
 .title {
   display: block;
   margin-top: 18rpx;
-  font-size: 34rpx;
+  font-size: $font-size-xxl;
   font-weight: 700;
-  color: #253026;
+  color: $color-text-title;
 }
 
 .meta {
   display: block;
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  color: #60705d;
+  margin-top: $spacing-sm;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}
+
+.creator {
+  display: block;
+  margin-top: 10rpx;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
 }
 
 .remark {
   display: block;
-  margin-top: 16rpx;
+  margin-top: $spacing-md;
   font-size: 23rpx;
   line-height: 1.7;
-  color: #73806f;
+  color: $color-text-secondary;
 }
 
 .action-row {
   display: flex;
-  gap: 16rpx;
+  gap: $spacing-md;
   margin-top: 22rpx;
 }
 
@@ -100,15 +158,15 @@ const closetLabel = computed(() => {
   min-width: 132rpx;
   height: 62rpx;
   line-height: 62rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  color: #425040;
-  background: #eef2eb;
+  border-radius: $radius-pill;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  background: $color-bg-chip;
   border: none;
 }
 
 .danger-btn {
-  color: #8b4a45;
-  background: #f7ebe8;
+  color: $color-danger;
+  background: $color-danger-bg;
 }
 </style>

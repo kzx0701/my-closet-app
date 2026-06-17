@@ -1,0 +1,81 @@
+.card {
+  display: flex;
+  gap: 16rpx;
+  padding: 30rpx 26rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f4ec 100%);
+  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
+  border: 2rpx solid rgba(107, 126, 99, 0.08);
+}
+.image-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  flex-shrink: 0;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+.image {
+  width: 100%;
+  height: 100%;
+}
+.content {
+  flex: 1;
+  min-width: 0;
+}
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+.badge {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  color: #3a5443;
+  background: #ebe4d6;
+}
+.title {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2a2a24;
+}
+.meta {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #4a4a42;
+}
+.creator {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #4a4a42;
+}
+.remark {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 23rpx;
+  line-height: 1.7;
+  color: #4a4a42;
+}
+.action-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+.action-btn {
+  min-width: 132rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  color: #3a5443;
+  background: #ebe4d6;
+  border: none;
+}
+.danger-btn {
+  color: #8b4a45;
+  background: #f7ebe8;
+}

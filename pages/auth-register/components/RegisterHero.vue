@@ -8,20 +8,17 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: "RegisterHero",
-};
+<script setup>
 </script>
 
-<style>
+<style lang="scss">
 .hero {
   margin-bottom: 36rpx;
 }
 
 .eyebrow {
   display: block;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   letter-spacing: 5rpx;
   color: rgba(236, 242, 233, 0.78);
 }
@@ -32,7 +29,7 @@ export default {
   font-size: 52rpx;
   font-weight: 700;
   line-height: 1.25;
-  color: #ffffff;
+  color: $color-text-inverse;
 }
 
 .desc {

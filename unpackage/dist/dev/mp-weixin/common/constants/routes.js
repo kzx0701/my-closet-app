@@ -9,6 +9,9 @@ const ROUTES = {
   closetCreate: "/pages/closet-create/index",
   home: "/pages/home/index",
   clothes: "/pages/clothes/index",
+  clothesCreate: "/pages/clothes-create/index",
+  clothesDetail: "/pages/clothes-detail/index",
+  clothesEdit: "/pages/clothes-create/index",
   profile: "/pages/profile/index"
 };
 const ROUTE_TARGETS = {

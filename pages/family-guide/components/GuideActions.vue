@@ -10,27 +10,27 @@
 const emit = defineEmits(["create-family", "join-family", "skip"]);
 </script>
 
-<style>
+<style lang="scss">
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: $spacing-lg;
 }
 
 .primary,
 .secondary,
 .ghost {
-  border-radius: 999rpx;
-  font-size: 30rpx;
+  border-radius: $radius-pill;
+  font-size: $font-size-xl;
 }
 
 .secondary {
-  background: #edf1ea;
-  color: #314033;
+  background: $color-primary-light;
+  color: $color-primary;
 }
 
 .ghost {
   background: transparent;
-  color: #667062;
+  color: $color-text-secondary;
 }
 </style>

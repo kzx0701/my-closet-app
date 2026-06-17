@@ -5,8 +5,13 @@ const common_api_modules_closet = require("../../common/api/modules/closet.js");
 const common_services_auth = require("../../common/services/auth.js");
 const common_services_closetScopeState = require("../../common/services/closet-scope-state.js");
 const common_services_familyMembership = require("../../common/services/family-membership.js");
+if (!Array) {
+  const _easycom_u_loadmore2 = common_vendor.resolveComponent("u-loadmore");
+  _easycom_u_loadmore2();
+}
+const _easycom_u_loadmore = () => "../../node-modules/uview-plus/components/u-loadmore/u-loadmore.js";
 if (!Math) {
-  (ClosetEmptyState + ClosetListCard + H5TabBar)();
+  (ClosetEmptyState + ClosetListCard + _easycom_u_loadmore + H5TabBar)();
 }
 const H5TabBar = () => "../../components/H5TabBar.js";
 const ClosetEmptyState = () => "./components/ClosetEmptyState.js";
@@ -15,9 +20,20 @@ const _sfc_main = {
   __name: "index",
   setup(__props) {
     const loading = common_vendor.ref(false);
+    const refreshing = common_vendor.ref(false);
     const closets = common_vendor.ref([]);
     const scopeType = common_vendor.ref("personal");
     const hasFamily = common_vendor.ref(false);
+    const currentPage = common_vendor.ref(1);
+    const pageSize = common_vendor.ref(20);
+    const total = common_vendor.ref(0);
+    const loadMoreStatus = common_vendor.computed(() => {
+      if (loading.value)
+        return "loading";
+      if (closets.value.length >= total.value)
+        return "nomore";
+      return "loadmore";
+    });
     const allowCreate = common_vendor.computed(() => scopeType.value === "personal" || hasFamily.value);
     const showScopeSwitch = common_vendor.computed(() => hasFamily.value);
     const pageEyebrow = common_vendor.computed(() => scopeType.value === "family" ? "FAMILY CLOSETS" : "PERSONAL CLOSETS");
@@ -51,15 +67,36 @@ const _sfc_main = {
       const session = common_services_auth.getCurrentSession();
       scopeType.value = nextScopeType;
       common_services_closetScopeState.setClosetScopeState(session == null ? void 0 : session.uid, nextScopeType);
+      currentPage.value = 1;
       loadClosets();
     }
-    async function loadClosets() {
+    async function onRefresh() {
+      refreshing.value = true;
+      currentPage.value = 1;
+      await loadClosets();
+      refreshing.value = false;
+    }
+    function onLoadMore() {
+      if (loading.value || closets.value.length >= total.value)
+        return;
+      currentPage.value += 1;
+      loadClosets(true);
+    }
+    async function loadClosets(append = false) {
       loading.value = true;
       try {
-        const result = scopeType.value === "family" ? await common_api_modules_closet.getFamilyClosetList() : await common_api_modules_closet.getPersonalClosetList();
-        closets.value = (result == null ? void 0 : result.list) || [];
+        const payload = { page: currentPage.value, pageSize: pageSize.value };
+        const result = scopeType.value === "family" ? await common_api_modules_closet.getFamilyClosetList(payload) : await common_api_modules_closet.getPersonalClosetList(payload);
+        if (append) {
+          closets.value = [...closets.value, ...(result == null ? void 0 : result.list) || []];
+        } else {
+          closets.value = (result == null ? void 0 : result.list) || [];
+        }
+        total.value = (result == null ? void 0 : result.total) || 0;
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/closets/index.vue:122", "loadClosets failed", error);
+        common_vendor.index.__f__("error", "at pages/closets/index.vue:166", "loadClosets failed", error);
+        closets.value = [];
+        total.value = 0;
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "衣橱列表加载失败",
           icon: "none"
@@ -112,7 +149,7 @@ const _sfc_main = {
             });
             loadClosets();
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/closets/index.vue:185", "deleteCloset failed", error);
+            common_vendor.index.__f__("error", "at pages/closets/index.vue:231", "deleteCloset failed", error);
             common_vendor.index.showToast({
               title: (error == null ? void 0 : error.message) || "衣橱删除失败",
               icon: "none"
@@ -143,7 +180,7 @@ const _sfc_main = {
       } : {}, {
         k: !loading.value && closets.value.length === 0
       }, !loading.value && closets.value.length === 0 ? {
-        l: common_vendor.o(goCreateCloset, "8d"),
+        l: common_vendor.o(goCreateCloset, "3d"),
         m: common_vendor.p({
           ["scope-type"]: scopeType.value,
           ["can-create"]: allowCreate.value
@@ -161,7 +198,16 @@ const _sfc_main = {
           };
         })
       }, {
-        o: common_vendor.p({
+        o: closets.value.length > 0
+      }, closets.value.length > 0 ? {
+        p: common_vendor.p({
+          status: loadMoreStatus.value
+        })
+      } : {}, {
+        q: refreshing.value,
+        r: common_vendor.o(onRefresh, "01"),
+        s: common_vendor.o(onLoadMore, "1b"),
+        t: common_vendor.p({
           ["current-route"]: common_vendor.unref(common_constants_routes.ROUTES).closets
         })
       });

@@ -2,6 +2,7 @@
 const common_vendor = require("../vendor.js");
 const common_api_modules_family = require("../api/modules/family.js");
 const UNAUTHORIZED_CODES = [
+  "APP_UNAUTHORIZED",
   "FAMILY_UNAUTHORIZED",
   "uni-id-token-expired",
   "uni-id-check-token-failed",
@@ -27,7 +28,7 @@ async function getFamilyMembership(uid) {
       hasFamily: false,
       membershipRecord: null,
       familyRecord: null,
-      errorCode: "FAMILY_UNAUTHORIZED",
+      errorCode: "APP_UNAUTHORIZED",
       errorMessage: "当前未登录"
     };
   }
@@ -43,7 +44,7 @@ async function getFamilyMembership(uid) {
       errorMessage: ""
     };
   } catch (error) {
-    common_vendor.index.__f__("error", "at common/services/family-membership.js:76", "getFamilyMembership failed", error);
+    common_vendor.index.__f__("error", "at common/services/family-membership.js:77", "getFamilyMembership failed", error);
     const errorCode = (error == null ? void 0 : error.errCode) || (error == null ? void 0 : error.code) || "";
     return {
       status: UNAUTHORIZED_CODES.includes(errorCode) ? "unauthorized" : "failed",

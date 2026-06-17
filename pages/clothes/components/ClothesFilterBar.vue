@@ -2,29 +2,40 @@
   <view class="filter-card">
     <view class="filter-head">
       <text class="filter-title">筛选</text>
-      <button class="reset-btn" @click="$emit('reset')">清空</button>
+      <u-button
+        size="mini"
+        shape="circle"
+        customStyle="background: #eef2eb; border: none; color: #6c786b;"
+        @click="$emit('reset')"
+      >
+        清空
+      </u-button>
     </view>
 
     <view class="filter-group">
       <text class="group-label">衣橱</text>
       <scroll-view class="chip-scroll" scroll-x>
         <view class="chip-row">
-          <button
-            class="chip"
-            :class="{ 'chip-active': filters.closetId === '' }"
+          <u-tag
+            text="全部"
+            :type="filters.closetId === '' ? 'primary' : 'info'"
+            :plain="filters.closetId !== ''"
+            shape="circle"
+            size="mini"
+            :customStyle="filters.closetId === '' ? 'background: #314033; border-color: #314033;' : ''"
             @click="updateFilter('closetId', '')"
-          >
-            全部
-          </button>
-          <button
+          />
+          <u-tag
             v-for="item in closetOptions"
             :key="item._id"
-            class="chip"
-            :class="{ 'chip-active': filters.closetId === item._id }"
+            :text="item.name"
+            :type="filters.closetId === item._id ? 'primary' : 'info'"
+            :plain="filters.closetId !== item._id"
+            shape="circle"
+            size="mini"
+            :customStyle="filters.closetId === item._id ? 'background: #314033; border-color: #314033;' : ''"
             @click="updateFilter('closetId', item._id)"
-          >
-            {{ item.name }}
-          </button>
+          />
         </view>
       </scroll-view>
     </view>
@@ -32,44 +43,52 @@
     <view class="filter-group">
       <text class="group-label">分类</text>
       <view class="chip-row chip-wrap">
-        <button
-          class="chip"
-          :class="{ 'chip-active': filters.category === '' }"
+        <u-tag
+          text="全部"
+          :type="filters.category === '' ? 'primary' : 'info'"
+          :plain="filters.category !== ''"
+          shape="circle"
+          size="mini"
+          :customStyle="filters.category === '' ? 'background: #314033; border-color: #314033;' : ''"
           @click="updateFilter('category', '')"
-        >
-          全部
-        </button>
-        <button
+        />
+        <u-tag
           v-for="item in categoryOptions"
           :key="item.code"
-          class="chip"
-          :class="{ 'chip-active': filters.category === item.code }"
+          :text="item.name"
+          :type="filters.category === item.code ? 'primary' : 'info'"
+          :plain="filters.category !== item.code"
+          shape="circle"
+          size="mini"
+          :customStyle="filters.category === item.code ? 'background: #314033; border-color: #314033;' : ''"
           @click="updateFilter('category', item.code)"
-        >
-          {{ item.name }}
-        </button>
+        />
       </view>
     </view>
 
     <view class="filter-group">
       <text class="group-label">季节</text>
       <view class="chip-row chip-wrap">
-        <button
-          class="chip"
-          :class="{ 'chip-active': filters.season === '' }"
+        <u-tag
+          text="全部"
+          :type="filters.season === '' ? 'primary' : 'info'"
+          :plain="filters.season !== ''"
+          shape="circle"
+          size="mini"
+          :customStyle="filters.season === '' ? 'background: #314033; border-color: #314033;' : ''"
           @click="updateFilter('season', '')"
-        >
-          全部
-        </button>
-        <button
+        />
+        <u-tag
           v-for="item in seasonOptions"
           :key="item.code"
-          class="chip"
-          :class="{ 'chip-active': filters.season === item.code }"
+          :text="item.name"
+          :type="filters.season === item.code ? 'primary' : 'info'"
+          :plain="filters.season !== item.code"
+          shape="circle"
+          size="mini"
+          :customStyle="filters.season === item.code ? 'background: #314033; border-color: #314033;' : ''"
           @click="updateFilter('season', item.code)"
-        >
-          {{ item.name }}
-        </button>
+        />
       </view>
     </view>
   </view>
@@ -139,17 +158,6 @@ function updateFilter(key, value) {
   color: #314033;
 }
 
-.reset-btn {
-  height: 58rpx;
-  line-height: 58rpx;
-  padding: 0 22rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  color: #6c786b;
-  background: #eef2eb;
-  border: none;
-}
-
 .filter-group + .filter-group {
   margin-top: 20rpx;
 }
@@ -172,23 +180,5 @@ function updateFilter(key, value) {
 
 .chip-wrap {
   flex-wrap: wrap;
-}
-
-.chip {
-  min-width: 108rpx;
-  height: 60rpx;
-  line-height: 60rpx;
-  padding: 0 20rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  color: #5d6a5a;
-  background: #eef2eb;
-  border: none;
-}
-
-.chip-active {
-  color: #243026;
-  font-weight: 700;
-  background: #dfe8d8;
 }
 </style>

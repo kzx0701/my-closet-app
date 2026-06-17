@@ -7,11 +7,11 @@ function createCloset(payload) {
 function getClosetDetail(payload) {
   return closetCloudObject.getClosetDetail(payload);
 }
-function getPersonalClosetList() {
-  return closetCloudObject.getPersonalClosetList();
+function getPersonalClosetList(payload) {
+  return closetCloudObject.getPersonalClosetList(payload);
 }
-function getFamilyClosetList() {
-  return closetCloudObject.getFamilyClosetList();
+function getFamilyClosetList(payload) {
+  return closetCloudObject.getFamilyClosetList(payload);
 }
 function updateCloset(payload) {
   return closetCloudObject.updateCloset(payload);

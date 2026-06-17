@@ -26,22 +26,33 @@
       </button>
     </view>
 
-    <closet-empty-state
-      v-if="!loading && closets.length === 0"
-      :scope-type="scopeType"
-      :can-create="allowCreate"
-      @create="goCreateCloset"
-    />
-
-    <view v-else class="list">
-      <closet-list-card
-        v-for="item in closets"
-        :key="item._id"
-        :closet="item"
-        @edit="goEditCloset"
-        @delete="confirmDeleteCloset"
+    <scroll-view
+      class="scroll-area"
+      scroll-y
+      :refresher-enabled="true"
+      :refresher-triggered="refreshing"
+      @refresherrefresh="onRefresh"
+      @scrolltolower="onLoadMore"
+    >
+      <closet-empty-state
+        v-if="!loading && closets.length === 0"
+        :scope-type="scopeType"
+        :can-create="allowCreate"
+        @create="goCreateCloset"
       />
-    </view>
+
+      <view v-else class="list">
+        <closet-list-card
+          v-for="item in closets"
+          :key="item._id"
+          :closet="item"
+          @edit="goEditCloset"
+          @delete="confirmDeleteCloset"
+        />
+      </view>
+
+      <u-loadmore :status="loadMoreStatus" v-if="closets.length > 0" />
+    </scroll-view>
 
     <h5-tab-bar :current-route="ROUTES.closets" />
   </view>
@@ -60,9 +71,19 @@ import ClosetEmptyState from "./components/ClosetEmptyState.vue";
 import ClosetListCard from "./components/ClosetListCard.vue";
 
 const loading = ref(false);
+const refreshing = ref(false);
 const closets = ref([]);
 const scopeType = ref("personal");
 const hasFamily = ref(false);
+const currentPage = ref(1);
+const pageSize = ref(20);
+const total = ref(0);
+
+const loadMoreStatus = computed(() => {
+  if (loading.value) return "loading";
+  if (closets.value.length >= total.value) return "nomore";
+  return "loadmore";
+});
 
 const allowCreate = computed(() => scopeType.value === "personal" || hasFamily.value);
 const showScopeSwitch = computed(() => hasFamily.value);
@@ -109,18 +130,42 @@ function changeScope(nextScopeType) {
   const session = getCurrentSession();
   scopeType.value = nextScopeType;
   setClosetScopeState(session?.uid, nextScopeType);
+  currentPage.value = 1;
   loadClosets();
 }
 
-async function loadClosets() {
+async function onRefresh() {
+  refreshing.value = true;
+  currentPage.value = 1;
+  await loadClosets();
+  refreshing.value = false;
+}
+
+function onLoadMore() {
+  if (loading.value || closets.value.length >= total.value) return;
+  currentPage.value += 1;
+  loadClosets(true);
+}
+
+async function loadClosets(append = false) {
   loading.value = true;
 
   try {
-    const result = scopeType.value === "family" ? await getFamilyClosetList() : await getPersonalClosetList();
-    closets.value = result?.list || [];
+    const payload = { page: currentPage.value, pageSize: pageSize.value };
+    const result = scopeType.value === "family"
+      ? await getFamilyClosetList(payload)
+      : await getPersonalClosetList(payload);
+
+    if (append) {
+      closets.value = [...closets.value, ...(result?.list || [])];
+    } else {
+      closets.value = result?.list || [];
+    }
+    total.value = result?.total || 0;
   } catch (error) {
     console.error("loadClosets failed", error);
     closets.value = [];
+    total.value = 0;
     uni.showToast({
       title: error?.message || "衣橱列表加载失败",
       icon: "none",
@@ -199,88 +244,91 @@ onShow(async () => {
 });
 </script>
 
-<style>
+<style lang="scss">
 .page {
   min-height: 100vh;
-  padding: 44rpx 28rpx 0;
-  background:
-    radial-gradient(circle at top, rgba(214, 223, 205, 0.48), transparent 36%),
-    linear-gradient(180deg, #f7f4ee 0%, #fcfbf8 38%, #f3efe6 100%);
+  padding: $spacing-xxl 28rpx 0;
+  background: $gradient-page-radial, $gradient-page;
 }
 
 .page-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24rpx;
+  gap: $spacing-lg;
   margin-bottom: 30rpx;
 }
 
 .eyebrow {
   display: block;
-  font-size: 22rpx;
+  font-size: $font-size-sm;
   letter-spacing: 4rpx;
-  color: #7c8979;
+  color: $color-text-secondary;
 }
 
 .title {
   display: block;
   margin-top: 10rpx;
-  font-size: 42rpx;
+  font-size: $font-size-hero;
   font-weight: 700;
-  color: #2b362d;
+  color: $color-text-title;
 }
 
 .desc {
   display: block;
   margin-top: 14rpx;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   line-height: 1.7;
-  color: #6e7b6c;
+  color: $color-text-secondary;
 }
 
 .create-btn {
   height: 72rpx;
   line-height: 72rpx;
   padding: 0 30rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: rgba(255, 255, 255, 0.88);
-  color: #556451;
-  font-size: 24rpx;
-  box-shadow: 0 12rpx 26rpx rgba(73, 81, 69, 0.08);
-  border: 2rpx solid rgba(107, 126, 99, 0.1);
+  color: $color-text-secondary;
+  font-size: $font-size-base;
+  box-shadow: $shadow-button;
+  border: 2rpx solid $color-border;
 }
 
 .scope-switch {
   display: flex;
-  gap: 16rpx;
-  margin-bottom: 24rpx;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
   padding: 10rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 12rpx 24rpx rgba(73, 81, 69, 0.06);
+  box-shadow: $shadow-card-sm;
 }
 
 .scope-chip {
   flex: 1;
   height: 72rpx;
   line-height: 72rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: transparent;
-  color: #6c786b;
-  font-size: 24rpx;
+  color: $color-text-secondary;
+  font-size: $font-size-base;
   border: none;
 }
 
 .scope-chip-active {
-  background: #edf1ea;
-  color: #314033;
+  background: $color-primary-light;
+  color: $color-primary;
   font-weight: 600;
+}
+
+.scroll-area {
+  height: calc(100vh - 350rpx);
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  padding-bottom: 20rpx;
 }
 </style>

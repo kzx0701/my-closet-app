@@ -8,20 +8,17 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: "LoginHero",
-};
+<script setup>
 </script>
 
-<style>
+<style lang="scss">
 .hero {
   margin-bottom: 36rpx;
 }
 
 .eyebrow {
   display: block;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   letter-spacing: 6rpx;
   color: rgba(235, 241, 232, 0.78);
 }
@@ -32,7 +29,7 @@ export default {
   font-size: 54rpx;
   font-weight: 700;
   line-height: 1.22;
-  color: #ffffff;
+  color: $color-text-inverse;
 }
 
 .desc {

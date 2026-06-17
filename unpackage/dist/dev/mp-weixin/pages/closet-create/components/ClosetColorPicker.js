@@ -1,7 +1,7 @@
 "use strict";
 const common_vendor = require("../../../common/vendor.js");
 const _sfc_main = {
-  name: "ClosetColorPicker",
+  __name: "ClosetColorPicker",
   props: {
     modelValue: {
       type: String,
@@ -14,20 +14,22 @@ const _sfc_main = {
       }
     }
   },
-  emits: ["update:modelValue"]
-};
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
-    a: common_vendor.f($props.options, (item, k0, i0) => {
+  emits: ["update:modelValue"],
+  setup(__props, { emit: __emit }) {
+    const emit = __emit;
+    return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(item.name),
-        b: item.code,
-        c: $props.modelValue === item.code ? 1 : "",
-        d: common_vendor.o(($event) => _ctx.$emit("update:modelValue", item.code), item.code)
+        a: common_vendor.f(__props.options, (item, k0, i0) => {
+          return {
+            a: common_vendor.t(item.name),
+            b: item.code,
+            c: __props.modelValue === item.code ? 1 : "",
+            d: common_vendor.o(($event) => emit("update:modelValue", item.code), item.code)
+          };
+        })
       };
-    })
-  };
-}
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);
-wx.createComponent(Component);
+    };
+  }
+};
+wx.createComponent(_sfc_main);
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/pages/closet-create/components/ClosetColorPicker.js.map

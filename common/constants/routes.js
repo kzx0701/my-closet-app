@@ -9,6 +9,7 @@ export const ROUTES = {
   home: "/pages/home/index",
   clothes: "/pages/clothes/index",
   clothesCreate: "/pages/clothes-create/index",
+  clothesDetail: "/pages/clothes-detail/index",
   clothesEdit: "/pages/clothes-create/index",
   profile: "/pages/profile/index",
 };

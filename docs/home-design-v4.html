@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MyCloset 首页设计稿 — V4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --forest: #3a5443;
+    --forest-deep: #2d4334;
+    --forest-soft: #4a6755;
+    --sage: #7a9580;
+    --sage-light: #a8bcae;
+    --moss: #5d7553;
+    --oat: #f4efe6;
+    --oat-warm: #f8f4ec;
+    --oat-deep: #ebe4d6;
+    --terra: #b85c3a;
+    --terra-soft: #d4805f;
+    --ink: #2a2a24;
+    --ink-soft: #4a4a42;
+    --ink-mute: #8a8a7e;
+    --line: rgba(58, 84, 67, 0.10);
+    --line-soft: rgba(58, 84, 67, 0.05);
+    --serif: "Fraunces", "Songti SC", "STSong", Georgia, serif;
+    --sans: "Manrope", -apple-system, "PingFang SC", sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); background: #2a2a26; color: var(--ink); -webkit-font-smoothing: antialiased; padding: 60px 40px; display: flex; gap: 48px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+  .canvas-label { flex-basis: 100%; text-align: center; color: rgba(255,255,255,0.4); font-family: var(--mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .phone-label { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .phone { width: 375px; height: 812px; border-radius: 44px; overflow: hidden; position: relative; box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 11px #1a1a1a, 0 0 0 12px #333; }
+  .status-bar { height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 28px; font-size: 15px; font-weight: 600; color: var(--oat-warm); position: relative; z-index: 10; background: var(--forest-deep); }
+  .status-bar-icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar-icons svg { width: 16px; height: 16px; fill: var(--oat-warm); }
+
+  /* 页面容器：只负责滚动，不持有背景 */
+  .page {
+    height: calc(812px - 44px - 83px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    background: var(--oat);
+  }
+  .page::-webkit-scrollbar { display: none; }
+
+  /* 背景层：随内容滚动，高度自适应内容 */
+  .page-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 100%;
+    z-index: 0;
+    background: linear-gradient(180deg,
+      var(--forest-deep) 0%,
+      var(--forest) 12%,
+      var(--forest-soft) 20%,
+      var(--sage) 28%,
+      var(--sage-light) 34%,
+      #c8cebf 38%,
+      var(--oat) 42%,
+      var(--oat) 100%
+    );
+  }
+  .page-bg::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: 0.035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E"); }
+
+  /* 顶部绿色区 */
+  .hero-zone { position: relative; z-index: 2; padding: 0 28px 36px; color: var(--oat-warm); }
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 4px 0 36px; }
+  .greeting { display: flex; flex-direction: column; gap: 3px; }
+  .greeting-hi { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(244, 239, 230, 0.5); }
+  .greeting-name { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--oat-warm); letter-spacing: -0.2px; }
+  .logout-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s ease; }
+  .logout-btn:hover { background: rgba(255,255,255,0.2); }
+  .logout-btn svg { width: 15px; height: 15px; stroke: rgba(244,239,230,0.6); stroke-width: 1.8; fill: none; transition: stroke 0.25s ease; }
+  .logout-btn:hover svg { stroke: var(--oat-warm); }
+  .scope-info { position: relative; }
+  .scope-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(244, 239, 230, 0.55); margin-bottom: 14px; }
+  .scope-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terra-soft); box-shadow: 0 0 8px var(--terra-soft); }
+  .scope-title { font-family: var(--serif); font-size: 34px; font-weight: 400; line-height: 1.1; letter-spacing: -0.8px; color: var(--oat-warm); margin-bottom: 10px; }
+  .scope-title em { font-style: italic; font-weight: 300; color: var(--sage-light); }
+  .scope-desc { font-size: 13px; line-height: 1.7; color: rgba(244, 239, 230, 0.5); max-width: 280px; margin-bottom: 20px; }
+
+  /* 状态元信息行：用分隔点连接的键值对，融入排版，不是按钮 */
+  .scope-meta-inline { display: flex; align-items: baseline; gap: 0; flex-wrap: wrap; }
+  .scope-meta-inline-item { display: inline-flex; align-items: baseline; gap: 5px; }
+  .scope-meta-inline-item + .scope-meta-inline-item::before { content: "·"; margin: 0 10px; color: rgba(244,239,230,0.25); font-size: 13px; }
+  .scope-meta-key { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(244,239,230,0.35); }
+  .scope-meta-val { font-family: var(--serif); font-size: 14px; font-weight: 500; color: rgba(244,239,230,0.85); }
+  .scope-meta-val.accent { color: var(--terra-soft); }
+
+  /* 数据概览（燕麦色背景上，文字清晰） */
+  .stats-zone { position: relative; z-index: 2; padding: 0 28px; }
+  .stats-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 14px; }
+  .stats-row { display: flex; gap: 0; align-items: baseline; }
+  .stat-item { flex: 1; display: flex; flex-direction: column; gap: 4px; position: relative; }
+  .stat-item:not(:last-child)::after { content: ""; position: absolute; right: 0; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+  .stat-value { font-family: var(--serif); font-size: 36px; font-weight: 300; line-height: 1; color: var(--forest-deep); letter-spacing: -1px; }
+  .stat-value.accent { color: var(--terra); }
+  .stat-label { font-size: 11px; font-weight: 600; color: var(--ink-soft); }
+
+  /* 核心操作区 */
+  .actions-zone { position: relative; z-index: 2; padding: 32px 28px 0; display: flex; gap: 12px; }
+  .action-card { flex: 1; border-radius: 18px; cursor: pointer; transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 120px; }
+  .action-card.dark { background: var(--forest); padding: 20px 18px; }
+  .action-card.dark:hover { background: var(--forest-soft); transform: translateY(-3px); box-shadow: 0 14px 32px rgba(58, 84, 67, 0.2); }
+  .action-card.light { background: var(--oat-warm); border: 1px solid var(--line); padding: 20px 18px; }
+  .action-card.light:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 14px 32px rgba(58, 84, 67, 0.08); }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .card-number { font-family: var(--serif); font-size: 44px; font-weight: 300; line-height: 0.9; letter-spacing: -2px; }
+  .action-card.dark .card-number { color: var(--sage-light); }
+  .action-card.light .card-number { color: var(--terra); }
+  .card-number-unit { font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; margin-left: 4px; opacity: 0.5; }
+  .card-icon { width: 20px; height: 20px; stroke-width: 1.5; fill: none; opacity: 0.4; margin-top: 4px; }
+  .action-card.dark .card-icon { stroke: var(--sage-light); }
+  .action-card.light .card-icon { stroke: var(--forest); }
+  .card-bottom { margin-top: 20px; }
+  .card-title { font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.2; margin-bottom: 2px; }
+  .action-card.dark .card-title { color: var(--oat-warm); }
+  .action-card.light .card-title { color: var(--forest-deep); }
+  .card-subtitle { font-size: 11px; line-height: 1.4; }
+  .action-card.dark .card-subtitle { color: rgba(244,239,230,0.5); }
+  .action-card.light .card-subtitle { color: var(--ink-mute); }
+  .card-arrow { position: absolute; bottom: 18px; right: 18px; width: 16px; height: 16px; stroke-width: 1.5; fill: none; opacity: 0.3; transition: opacity 0.3s ease, transform 0.3s ease; }
+  .action-card.dark .card-arrow { stroke: var(--sage-light); }
+  .action-card.light .card-arrow { stroke: var(--forest); }
+  .action-card:hover .card-arrow { opacity: 0.8; transform: translate(2px, -2px); }
+
+  /* 家庭协作区 */
+  .family-zone { position: relative; z-index: 2; padding: 28px 28px 0; }
+  .family-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 14px; }
+  .family-invite-box { padding: 22px; border-radius: 18px; background: var(--oat-warm); border: 1px solid var(--line); }
+  .family-name-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .family-name { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--forest-deep); }
+  .family-role { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--terra); padding: 3px 10px; border: 1px solid rgba(184, 92, 58, 0.25); border-radius: 999px; }
+  .invite-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+  .invite-label { font-size: 12px; color: var(--ink-mute); }
+  .invite-code { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: 4px; color: var(--forest-deep); }
+  .copy-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--oat-deep); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
+  .copy-btn:hover { background: var(--forest); }
+  .copy-btn svg { width: 14px; height: 14px; stroke: var(--forest); stroke-width: 1.8; fill: none; transition: stroke 0.2s ease; }
+  .copy-btn:hover svg { stroke: var(--oat-warm); }
+  .members-row { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .member-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--moss); color: var(--oat-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 12px; font-weight: 600; border: 2px solid var(--oat-warm); }
+  .member-avatar.admin { background: var(--terra); }
+  .member-more { font-size: 11px; color: var(--ink-mute); margin-left: 4px; }
+  .family-empty-box { padding: 26px 22px; border-radius: 18px; background: var(--oat-warm); border: 1px solid var(--line); text-align: center; }
+  .family-empty-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--forest-deep); margin-bottom: 6px; }
+  .family-empty-title em { font-style: italic; color: var(--terra); }
+  .family-empty-desc { font-size: 12px; color: var(--ink-mute); line-height: 1.6; margin-bottom: 16px; }
+  .family-empty-actions { display: flex; gap: 10px; }
+  .btn-primary { flex: 1; height: 40px; border-radius: 20px; background: var(--forest); color: var(--oat-warm); border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; }
+  .btn-primary:hover { background: var(--forest-soft); }
+  .btn-secondary { flex: 1; height: 40px; border-radius: 20px; background: transparent; color: var(--forest-deep); border: 1px solid var(--line); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+  .btn-secondary:hover { background: var(--oat-deep); }
+
+  /* 季节贴士 */
+  .season-tip { margin: 28px 28px 28px; padding: 16px 18px; border-left: 2px solid var(--terra); }
+  .season-tip-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); margin-bottom: 6px; }
+  .season-tip-text { font-family: var(--serif); font-size: 13px; font-weight: 400; line-height: 1.6; color: var(--ink-soft); font-style: italic; }
+
+  /* TabBar：在 .phone 最底部，不随页面滚动 */
+  .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 83px; background: rgba(248, 244, 236, 0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--line-soft); display: flex; justify-content: space-around; align-items: flex-start; padding-top: 10px; z-index: 50; }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .tab-icon { width: 24px; height: 24px; stroke: var(--ink-mute); stroke-width: 1.5; fill: none; transition: stroke 0.2s ease; }
+  .tab.active .tab-icon { stroke: var(--forest); }
+  .tab-text { font-size: 10px; color: var(--ink-mute); font-weight: 500; }
+  .tab.active .tab-text { color: var(--forest); font-weight: 600; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .phone .topbar { animation: fadeUp 0.6s ease 0.1s both; }
+  .phone .scope-info { animation: fadeUp 0.7s ease 0.2s both; }
+  .phone .stats-zone { animation: fadeUp 0.7s ease 0.36s both; }
+  .phone .actions-zone { animation: fadeUp 0.7s ease 0.46s both; }
+  .phone .family-zone { animation: fadeUp 0.7s ease 0.56s both; }
+  .phone .season-tip { animation: fadeUp 0.7s ease 0.66s both; }
+</style>
+</head>
+<body>
+
+<div class="canvas-label">MyCloset · Home — V4 · Color Contrast Fix + TabBar Fixed</div>
+
+<!-- 状态一：个人空间 -->
+<div class="phone-wrap">
+  <span class="phone-label">State A — Personal · 个人空间</span>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-bar-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 14h2v6H1zm4-3h2v9H5zm4-3h2v12H9zm4-3h2v15h-2zm4-3h2v18h-2zm4-3h2v21h-2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+    <div class="page">
+      <div class="page-bg"></div>
+      <div class="hero-zone">
+        <div class="topbar">
+          <div class="greeting">
+            <span class="greeting-hi">Good evening</span>
+            <span class="greeting-name">林小满</span>
+          </div>
+          <div class="logout-btn"><svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M9 5H5v14h4"/></svg></div>
+        </div>
+        <div class="scope-info">
+          <div class="scope-badge"><span class="scope-badge-dot"></span>Personal Space</div>
+          <h1 class="scope-title">个人<em>空间</em></h1>
+          <p class="scope-desc">管理你自己的衣橱和衣物，随时可以创建或加入家庭。</p>
+          <div class="scope-meta-inline">
+            <div class="scope-meta-inline-item">
+              <span class="scope-meta-key">Mode</span>
+              <span class="scope-meta-val">个人模式</span>
+            </div>
+            <div class="scope-meta-inline-item">
+              <span class="scope-meta-key">Family</span>
+              <span class="scope-meta-val">尚未加入</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-zone">
+        <div class="stats-label">Overview · 概览</div>
+        <div class="stats-row">
+          <div class="stat-item"><span class="stat-value">3</span><span class="stat-label">衣橱</span></div>
+          <div class="stat-item"><span class="stat-value accent">28</span><span class="stat-label">衣物</span></div>
+          <div class="stat-item"><span class="stat-value">5</span><span class="stat-label">未归类</span></div>
+        </div>
+      </div>
+      <div class="actions-zone">
+        <div class="action-card dark">
+          <div class="card-top">
+            <div><span class="card-number">3</span><span class="card-number-unit">个</span></div>
+            <svg class="card-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg>
+          </div>
+          <div class="card-bottom"><div class="card-title">我的衣橱</div><div class="card-subtitle">查看和管理</div></div>
+          <svg class="card-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <div class="action-card light">
+          <div class="card-top">
+            <div><span class="card-number">28</span><span class="card-number-unit">件</span></div>
+            <svg class="card-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg>
+          </div>
+          <div class="card-bottom"><div class="card-title">我的衣物</div><div class="card-subtitle">浏览列表</div></div>
+          <svg class="card-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+      </div>
+      <div class="family-zone">
+        <div class="family-label">Family · 家庭协作</div>
+        <div class="family-empty-box">
+          <h3 class="family-empty-title">开启<em>家庭</em>协作</h3>
+          <p class="family-empty-desc">加入后可和家人共享衣橱与衣物，按角色协作管理。</p>
+          <div class="family-empty-actions">
+            <button class="btn-primary">创建家庭</button>
+            <button class="btn-secondary">加入家庭</button>
+          </div>
+        </div>
+      </div>
+      <div class="season-tip">
+        <div class="season-tip-label">Autumn · 秋日提示</div>
+        <p class="season-tip-text">「入秋了，把薄外套翻出来，检查去年的冬装是否还能穿。」</p>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="tab active"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span class="tab-text">首页</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg><span class="tab-text">衣橱</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg><span class="tab-text">衣物</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7"/></svg><span class="tab-text">我的</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 状态二：家庭空间 -->
+<div class="phone-wrap">
+  <span class="phone-label">State B — Family · 家庭空间</span>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-bar-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 14h2v6H1zm4-3h2v9H5zm4-3h2v12H9zm4-3h2v15h-2zm4-3h2v18h-2zm4-3h2v21h-2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+    <div class="page">
+      <div class="page-bg"></div>
+      <div class="hero-zone">
+        <div class="topbar">
+          <div class="greeting">
+            <span class="greeting-hi">Good evening</span>
+            <span class="greeting-name">林小满</span>
+          </div>
+          <div class="logout-btn"><svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M9 5H5v14h4"/></svg></div>
+        </div>
+        <div class="scope-info">
+          <div class="scope-badge"><span class="scope-badge-dot"></span>Family Space · 管理员</div>
+          <h1 class="scope-title">温馨<em>一家</em></h1>
+          <p class="scope-desc">和家人一起管理家庭衣橱与衣物，协作收纳更有序。</p>
+          <div class="scope-meta-inline">
+            <div class="scope-meta-inline-item">
+              <span class="scope-meta-key">Role</span>
+              <span class="scope-meta-val accent">管理员</span>
+            </div>
+            <div class="scope-meta-inline-item">
+              <span class="scope-meta-key">Members</span>
+              <span class="scope-meta-val">3 位成员</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-zone">
+        <div class="stats-label">Overview · 概览</div>
+        <div class="stats-row">
+          <div class="stat-item"><span class="stat-value">5</span><span class="stat-label">衣橱</span></div>
+          <div class="stat-item"><span class="stat-value accent">67</span><span class="stat-label">衣物</span></div>
+          <div class="stat-item"><span class="stat-value">12</span><span class="stat-label">未归类</span></div>
+        </div>
+      </div>
+      <div class="actions-zone">
+        <div class="action-card dark">
+          <div class="card-top">
+            <div><span class="card-number">5</span><span class="card-number-unit">个</span></div>
+            <svg class="card-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg>
+          </div>
+          <div class="card-bottom"><div class="card-title">家庭衣橱</div><div class="card-subtitle">查看和管理</div></div>
+          <svg class="card-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <div class="action-card light">
+          <div class="card-top">
+            <div><span class="card-number">67</span><span class="card-number-unit">件</span></div>
+            <svg class="card-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg>
+          </div>
+          <div class="card-bottom"><div class="card-title">家庭衣物</div><div class="card-subtitle">浏览列表</div></div>
+          <svg class="card-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+      </div>
+      <div class="family-zone">
+        <div class="family-label">Family · 家庭协作</div>
+        <div class="family-invite-box">
+          <div class="family-name-row">
+            <span class="family-name">温馨一家</span>
+            <span class="family-role">Admin</span>
+          </div>
+          <div class="invite-row">
+            <span class="invite-label">邀请码</span>
+            <span class="invite-code">KX7M2P</span>
+            <button class="copy-btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button>
+          </div>
+          <div class="members-row">
+            <div class="member-avatar admin" title="林小满">林</div>
+            <div class="member-avatar" title="林大满">大</div>
+            <div class="member-avatar" title="林小乐">乐</div>
+            <span class="member-more">共 3 人</span>
+          </div>
+        </div>
+      </div>
+      <div class="season-tip">
+        <div class="season-tip-label">Autumn · 秋日提示</div>
+        <p class="season-tip-text">「入秋了，把薄外套翻出来，检查去年的冬装是否还能穿。」</p>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="tab active"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span class="tab-text">首页</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg><span class="tab-text">衣橱</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg><span class="tab-text">衣物</span></div>
+      <div class="tab"><svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7"/></svg><span class="tab-text">我的</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

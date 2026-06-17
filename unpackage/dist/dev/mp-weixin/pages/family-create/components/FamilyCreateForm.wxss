@@ -1,15 +1,14 @@
-
 .form-card {
   padding: 40rpx 32rpx;
   border-radius: 30rpx;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 18rpx 44rpx rgba(47, 56, 47, 0.08);
+  box-shadow: 0 18rpx 40rpx rgba(73, 81, 69, 0.08);
 }
 .label {
   display: block;
   font-size: 28rpx;
   font-weight: 600;
-  color: #314033;
+  color: #3a5443;
 }
 .input {
   margin-top: 20rpx;
@@ -18,7 +17,7 @@
   border-radius: 22rpx;
   background: #f2f5ef;
   font-size: 30rpx;
-  color: #243126;
+  color: #2a2a24;
 }
 .meta-row {
   display: flex;
@@ -31,11 +30,11 @@
   flex: 1;
   font-size: 24rpx;
   line-height: 1.7;
-  color: #6d796d;
+  color: #4a4a42;
 }
 .counter {
   font-size: 22rpx;
-  color: #8c9586;
+  color: #4a4a42;
 }
 .suggestion-block {
   margin-top: 28rpx;
@@ -44,7 +43,7 @@
   display: block;
   font-size: 24rpx;
   font-weight: 600;
-  color: #51604f;
+  color: #3a5443;
 }
 .suggestion-list {
   display: flex;
@@ -55,30 +54,30 @@
 .suggestion-chip {
   padding: 14rpx 22rpx;
   border-radius: 999rpx;
-  background: #eef2eb;
+  background: #ebe4d6;
 }
 .suggestion-text {
   font-size: 24rpx;
-  color: #314033;
+  color: #3a5443;
 }
 .tips-card {
   margin-top: 30rpx;
   padding: 26rpx 24rpx;
   border-radius: 24rpx;
-  background: linear-gradient(180deg, #f6f4ee 0%, #fbfaf7 100%);
+  background: linear-gradient(180deg, #f6f4ee 0%, #f8f4ec 100%);
 }
 .tips-title {
   display: block;
   font-size: 24rpx;
   font-weight: 600;
-  color: #465244;
+  color: #3a5443;
 }
 .tips-item {
   display: block;
   margin-top: 14rpx;
   font-size: 24rpx;
   line-height: 1.65;
-  color: #667062;
+  color: #4a4a42;
 }
 .submit {
   margin-top: 36rpx;

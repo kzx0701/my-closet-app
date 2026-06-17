@@ -4,22 +4,38 @@ const clothesCloudObject = getCloudObject("clothes-co");
 
 /**
  * 获取当前登录用户个人空间下的衣物列表。
- * 当前这一批只开放个人空间衣物查询。
  *
  * @param {{
  *   closetId?: string,
  *   category?: string,
- *   season?: string
+ *   season?: string,
+ *   page?: number,
+ *   pageSize?: number
  * }} [payload]
- * @returns {Promise<{list: object[]}>}
+ * @returns {Promise<{list: object[], total: number, page: number, pageSize: number}>}
  */
 export function getPersonalClothesList(payload) {
   return clothesCloudObject.getPersonalClothesList(payload);
 }
 
 /**
- * 获取一条个人空间衣物详情。
- * 当前用于衣物编辑页回填表单。
+ * 获取当前登录用户所在家庭空间下的衣物列表。
+ *
+ * @param {{
+ *   closetId?: string,
+ *   category?: string,
+ *   season?: string,
+ *   page?: number,
+ *   pageSize?: number
+ * }} [payload]
+ * @returns {Promise<{list: object[], total: number, page: number, pageSize: number, familyId?: string}>}
+ */
+export function getFamilyClothesList(payload) {
+  return clothesCloudObject.getFamilyClothesList(payload);
+}
+
+/**
+ * 获取一条衣物详情。
  *
  * @param {{clothesId: string}} payload
  * @returns {Promise<{clothes: object | null}>}
@@ -29,15 +45,17 @@ export function getClothesDetail(payload) {
 }
 
 /**
- * 创建一条个人空间衣物记录。
- * 当前支持填写名称、分类、季节、颜色、备注，并可选绑定个人衣橱。
+ * 创建一条衣物记录。
+ * 支持个人空间和家庭空间。
  *
  * @param {{
+ *   scopeType?: "personal" | "family",
  *   name: string,
  *   category: string,
  *   season: string,
  *   color?: string,
  *   remark?: string,
+ *   imageUrl?: string,
  *   closetId?: string
  * }} payload
  * @returns {Promise<{clothes: object | null}>}
@@ -47,8 +65,7 @@ export function createClothes(payload) {
 }
 
 /**
- * 更新一条个人空间衣物记录。
- * 当前仅允许修改自己的个人衣物。
+ * 更新一条衣物记录。
  *
  * @param {{
  *   clothesId: string,
@@ -57,6 +74,7 @@ export function createClothes(payload) {
  *   season: string,
  *   color?: string,
  *   remark?: string,
+ *   imageUrl?: string,
  *   closetId?: string
  * }} payload
  * @returns {Promise<{clothes: object | null}>}
@@ -66,7 +84,7 @@ export function updateClothes(payload) {
 }
 
 /**
- * 删除一条个人空间衣物记录。
+ * 删除一条衣物记录。
  *
  * @param {{clothesId: string}} payload
  * @returns {Promise<{success: boolean}>}

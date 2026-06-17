@@ -53,13 +53,13 @@ const creatorText = computed(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
 .card {
   padding: 30rpx 26rpx;
-  border-radius: 26rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
-  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
-  border: 2rpx solid rgba(107, 126, 99, 0.08);
+  border-radius: $radius-lg;
+  background: $gradient-card;
+  box-shadow: $shadow-card;
+  border: 2rpx solid $color-border;
 }
 
 .badge-row {
@@ -69,46 +69,46 @@ const creatorText = computed(() => {
 
 .style-badge,
 .color-badge {
-  padding: 8rpx 16rpx;
-  border-radius: 999rpx;
-  font-size: 20rpx;
-  color: #546251;
-  background: #eef2eb;
+  padding: $spacing-xs 16rpx;
+  border-radius: $radius-pill;
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+  background: $color-bg-tag;
 }
 
 .title {
   display: block;
   margin-top: 18rpx;
-  font-size: 34rpx;
+  font-size: $font-size-xxl;
   font-weight: 700;
-  color: #253026;
+  color: $color-text-title;
 }
 
 .room {
   display: block;
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  color: #60705d;
+  margin-top: $spacing-sm;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
 }
 
 .creator {
   display: block;
   margin-top: 10rpx;
-  font-size: 22rpx;
-  color: #7a8678;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
 }
 
 .desc {
   display: block;
-  margin-top: 16rpx;
+  margin-top: $spacing-md;
   font-size: 23rpx;
   line-height: 1.7;
-  color: #73806f;
+  color: $color-text-secondary;
 }
 
 .action-row {
   display: flex;
-  gap: 16rpx;
+  gap: $spacing-md;
   margin-top: 22rpx;
 }
 
@@ -116,15 +116,15 @@ const creatorText = computed(() => {
   min-width: 132rpx;
   height: 62rpx;
   line-height: 62rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  color: #425040;
-  background: #eef2eb;
+  border-radius: $radius-pill;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  background: $color-bg-chip;
   border: none;
 }
 
 .danger-btn {
-  color: #8b4a45;
-  background: #f7ebe8;
+  color: $color-danger;
+  background: $color-danger-bg;
 }
 </style>

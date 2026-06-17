@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const uni_modules_uniIdPages_common_store = require("../../uni_modules/uni-id-pages/common/store.js");
 const common_constants_routes = require("../../common/constants/routes.js");
+const common_api_modules_auth = require("../../common/api/modules/auth.js");
 if (!Math) {
   (LoginHero + LoginFormCard)();
 }
@@ -10,11 +11,6 @@ const LoginHero = () => "./components/LoginHero.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const uniIdCo = common_vendor._r.importObject("uni-id-co", {
-      errorOptions: {
-        type: "toast"
-      }
-    });
     const username = common_vendor.ref("");
     const password = common_vendor.ref("");
     const submitting = common_vendor.ref(false);
@@ -60,7 +56,7 @@ const _sfc_main = {
       }
       submitting.value = true;
       try {
-        const result = await uniIdCo.login(buildLoginPayload());
+        const result = await common_api_modules_auth.login(buildLoginPayload());
         uni_modules_uniIdPages_common_store.mutations.loginSuccess({
           ...result,
           autoBack: false,
@@ -71,7 +67,7 @@ const _sfc_main = {
           url: nextUrl
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/auth-login/index.vue:100", "custom login failed", error);
+        common_vendor.index.__f__("error", "at pages/auth-login/index.vue:95", "custom login failed", error);
       } finally {
         submitting.value = false;
       }

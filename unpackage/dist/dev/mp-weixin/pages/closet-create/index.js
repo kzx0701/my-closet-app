@@ -2,8 +2,13 @@
 const common_vendor = require("../../common/vendor.js");
 const common_constants_closetOptions = require("../../common/constants/closet-options.js");
 const common_api_modules_closet = require("../../common/api/modules/closet.js");
+if (!Array) {
+  const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
+  _easycom_u_button2();
+}
+const _easycom_u_button = () => "../../node-modules/uview-plus/components/u-button/u-button.js";
 if (!Math) {
-  (ClosetStylePicker + ClosetColorPicker + ClosetBasicForm)();
+  (ClosetStylePicker + ClosetColorPicker + ClosetBasicForm + _easycom_u_button)();
 }
 const ClosetBasicForm = () => "./components/ClosetBasicForm.js";
 const ClosetColorPicker = () => "./components/ClosetColorPicker.js";
@@ -104,7 +109,7 @@ const _sfc_main = {
           common_vendor.index.navigateBack();
         }, 300);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:143", "createCloset failed", error);
+        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:149", "createCloset failed", error);
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "衣橱创建失败",
           icon: "none"
@@ -118,7 +123,7 @@ const _sfc_main = {
       closetId.value = String((options == null ? void 0 : options.closetId) || "").trim();
       if (closetId.value) {
         loadClosetDetail(closetId.value).catch((error) => {
-          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:159", "loadClosetDetail failed", error);
+          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:165", "loadClosetDetail failed", error);
           common_vendor.index.showToast({
             title: (error == null ? void 0 : error.message) || "衣橱详情加载失败",
             icon: "none"
@@ -150,8 +155,13 @@ const _sfc_main = {
           description: description.value
         }),
         l: common_vendor.t(submitButtonText.value),
-        m: submitting.value,
-        n: common_vendor.o(submitCloset, "f3")
+        m: common_vendor.o(submitCloset, "0e"),
+        n: common_vendor.p({
+          type: "primary",
+          shape: "circle",
+          loading: submitting.value,
+          customStyle: "margin-top: 34rpx; background: linear-gradient(135deg, #5a7351 0%, #738c67 100%); border: none;"
+        })
       };
     };
   }

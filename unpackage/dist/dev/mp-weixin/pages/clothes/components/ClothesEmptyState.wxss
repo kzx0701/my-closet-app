@@ -1,0 +1,8 @@
+
+.empty-card {
+  padding: 34rpx 30rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
+  border: 2rpx solid rgba(107, 126, 99, 0.08);
+}

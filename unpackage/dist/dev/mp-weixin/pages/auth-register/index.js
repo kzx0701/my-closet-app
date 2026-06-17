@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const uni_modules_uniIdPages_common_store = require("../../uni_modules/uni-id-pages/common/store.js");
 const common_constants_routes = require("../../common/constants/routes.js");
+const common_api_modules_auth = require("../../common/api/modules/auth.js");
 if (!Math) {
   (RegisterHero + RegisterFormCard)();
 }
@@ -10,11 +11,6 @@ const RegisterHero = () => "./components/RegisterHero.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const uniIdCo = common_vendor._r.importObject("uni-id-co", {
-      errorOptions: {
-        type: "toast"
-      }
-    });
     const registerFormCardRef = common_vendor.ref(null);
     const username = common_vendor.ref("");
     const nickname = common_vendor.ref("");
@@ -86,7 +82,7 @@ const _sfc_main = {
       }
       submitting.value = true;
       try {
-        const result = await uniIdCo.registerUser({
+        const result = await common_api_modules_auth.registerUser({
           username: username.value.trim(),
           nickname: nickname.value.trim(),
           password: password.value,
@@ -101,7 +97,7 @@ const _sfc_main = {
           url: common_constants_routes.ROUTES.entry
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/auth-register/index.vue:143", "custom register failed", error);
+        common_vendor.index.__f__("error", "at pages/auth-register/index.vue:138", "custom register failed", error);
         (_a = registerFormCardRef.value) == null ? void 0 : _a.refreshCaptcha();
       } finally {
         submitting.value = false;

@@ -1,0 +1,1 @@
+<view><slot/><u-toast class="r" u-r="uToastRef" u-i="2f0451d6-0" bind:__l="__l"/><u-modal class="r" u-r="uModalRef" u-i="2f0451d6-1" bind:__l="__l"/></view>

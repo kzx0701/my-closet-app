@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MyCloset 首页设计稿 — V2</title>
+
+<!--
+  V2 修改要点：
+  1. 顶部状态区融入背景：去掉独立卡片，用渐变和留白让状态信息"长"在页面里
+  2. 快捷操作精简：只保留 2 个核心入口（查看衣橱 / 添加衣物），其余下沉
+  3. 数据概览保留但视觉更轻
+  4. 家庭协作区精简
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --forest: #1f3328;
+    --forest-deep: #16241d;
+    --forest-soft: #2d4a37;
+    --moss: #5d7553;
+    --moss-light: #8aa078;
+    --oat: #f4efe6;
+    --oat-warm: #f8f4ec;
+    --oat-deep: #ebe4d6;
+    --terra: #c4633f;
+    --terra-soft: #d4805f;
+    --ink: #1a1a17;
+    --ink-soft: #3d3d37;
+    --ink-mute: #8a8a7e;
+    --line: rgba(31, 51, 40, 0.10);
+    --line-soft: rgba(31, 51, 40, 0.05);
+    --serif: "Fraunces", "Songti SC", "STSong", Georgia, serif;
+    --sans: "Manrope", -apple-system, "PingFang SC", sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: #2a2a26;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding: 60px 40px;
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .canvas-label {
+    flex-basis: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .phone-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+  .phone {
+    width: 375px;
+    height: 812px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 11px #1a1a1a, 0 0 0 12px #333;
+  }
+
+  /* 状态栏 */
+  .status-bar {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 28px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--oat-warm);
+    position: relative;
+    z-index: 10;
+  }
+
+  .status-bar-icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar-icons svg { width: 16px; height: 16px; fill: var(--oat-warm); }
+
+  /* ============ 页面（顶部融入绿色） ============ */
+  .page {
+    height: calc(812px - 44px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    /* 核心改动：顶部森林绿渐变到燕麦色，一体过渡 */
+    background: linear-gradient(180deg,
+      var(--forest-deep) 0%,
+      var(--forest) 18%,
+      var(--forest-soft) 30%,
+      #5d704f 38%,
+      #8a9a78 42%,
+      #c4bca8 46%,
+      var(--oat) 52%,
+      var(--oat) 100%
+    );
+  }
+
+  .page::-webkit-scrollbar { display: none; }
+
+  /* ============ 顶部区域（融入绿色背景） ============ */
+  .hero-zone {
+    position: relative;
+    z-index: 2;
+    padding: 0 28px 36px;
+    color: var(--oat-warm);
+  }
+
+  /* 顶部导航 */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0 40px;
+  }
+
+  .greeting { display: flex; flex-direction: column; gap: 3px; }
+
+  .greeting-hi {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(244, 239, 230, 0.5);
+  }
+
+  .greeting-name {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--oat-warm);
+    letter-spacing: -0.2px;
+  }
+
+  .logout-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+  .logout-btn svg {
+    width: 15px; height: 15px;
+    stroke: rgba(244,239,230,0.6);
+    stroke-width: 1.8; fill: none;
+    transition: stroke 0.25s ease;
+  }
+
+  .logout-btn:hover svg { stroke: var(--oat-warm); }
+
+  /* 状态信息区（不再有卡片边界，直接在绿色背景上） */
+  .scope-info {
+    position: relative;
+  }
+
+  .scope-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(244, 239, 230, 0.55);
+    margin-bottom: 16px;
+  }
+
+  .scope-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terra-soft);
+    box-shadow: 0 0 10px var(--terra-soft);
+  }
+
+  .scope-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    color: var(--oat-warm);
+    margin-bottom: 10px;
+  }
+
+  .scope-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--moss-light);
+  }
+
+  .scope-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(244, 239, 230, 0.5);
+    max-width: 280px;
+    margin-bottom: 24px;
+  }
+
+  /* 角色标签行 */
+  .scope-tags {
+    display: flex;
+    gap: 10px;
+  }
+
+  .scope-tag {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(244,239,230,0.7);
+  }
+
+  .scope-tag.accent {
+    background: rgba(196, 99, 63, 0.15);
+    border-color: rgba(196, 99, 63, 0.3);
+    color: var(--terra-soft);
+  }
+
+  /* ============ 数据区（过渡到浅色背景） ============ */
+  .stats-zone {
+    position: relative;
+    z-index: 2;
+    padding: 0 28px;
+  }
+
+  .stats-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 0;
+    align-items: baseline;
+  }
+
+  .stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+
+  .stat-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .stat-value {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--forest);
+    letter-spacing: -1px;
+  }
+
+  .stat-value.accent { color: var(--terra); }
+  .stat-value.mute { color: var(--ink-mute); font-size: 24px; }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ============ 核心操作区（只保留 2 个） ============ */
+  .actions-zone {
+    position: relative;
+    z-index: 2;
+    padding: 36px 28px 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  .action-card {
+    flex: 1;
+    padding: 22px 20px;
+    border-radius: 20px;
+    background: var(--oat-warm);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .action-card:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 51, 40, 0.08);
+  }
+
+  .action-card.primary {
+    background: var(--forest);
+    border-color: var(--forest);
+  }
+
+  .action-card.primary .action-card-title { color: var(--oat-warm); }
+  .action-card.primary .action-card-desc { color: rgba(244,239,230,0.5); }
+  .action-card.primary:hover { background: var(--forest-soft); }
+
+  .action-card-icon {
+    width: 28px;
+    height: 28px;
+    stroke: var(--forest);
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  .action-card.primary .action-card-icon { stroke: var(--moss-light); }
+
+  .action-card-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--forest);
+    line-height: 1.2;
+  }
+
+  .action-card-desc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.5;
+  }
+
+  /* ============ 家庭协作区 ============ */
+  .family-zone {
+    position: relative;
+    z-index: 2;
+    padding: 32px 28px 0;
+  }
+
+  .family-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 14px;
+  }
+
+  /* 已加入家庭 */
+  .family-invite-box {
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--oat-warm);
+    border: 1px solid var(--line);
+  }
+
+  .family-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .family-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--forest);
+  }
+
+  .family-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--terra);
+    padding: 3px 10px;
+    border: 1px solid rgba(196, 99, 63, 0.25);
+    border-radius: 999px;
+  }
+
+  .invite-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .invite-label {
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  .invite-code {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--forest);
+  }
+
+  .copy-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--oat-deep);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .copy-btn:hover { background: var(--forest); }
+
+  .copy-btn svg {
+    width: 14px; height: 14px;
+    stroke: var(--forest);
+    stroke-width: 1.8; fill: none;
+    transition: stroke 0.2s ease;
+  }
+
+  .copy-btn:hover svg { stroke: var(--oat-warm); }
+
+  .members-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--moss);
+    color: var(--oat-warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--oat-warm);
+  }
+
+  .member-avatar.admin { background: var(--terra); }
+  .member-more {
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-left: 4px;
+  }
+
+  /* 未加入家庭 */
+  .family-empty-box {
+    padding: 28px 24px;
+    border-radius: 20px;
+    background: var(--oat-warm);
+    border: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .family-empty-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--forest);
+    margin-bottom: 6px;
+  }
+
+  .family-empty-title em { font-style: italic; color: var(--terra); }
+
+  .family-empty-desc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .family-empty-actions { display: flex; gap: 10px; }
+
+  .btn-primary {
+    flex: 1;
+    height: 42px;
+    border-radius: 21px;
+    background: var(--forest);
+    color: var(--oat-warm);
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .btn-primary:hover { background: var(--forest-soft); }
+
+  .btn-secondary {
+    flex: 1;
+    height: 42px;
+    border-radius: 21px;
+    background: transparent;
+    color: var(--forest);
+    border: 1px solid var(--line);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover { background: var(--oat-deep); }
+
+  /* ============ 季节贴士 ============ */
+  .season-tip {
+    margin: 32px 28px 0;
+    padding: 18px 20px;
+    border-left: 2px solid var(--terra);
+  }
+
+  .season-tip-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 6px;
+  }
+
+  .season-tip-text {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  /* ============ TabBar ============ */
+  .tabbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 83px;
+    background: rgba(248, 244, 236, 0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 10px;
+    z-index: 20;
+  }
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .tab-icon {
+    width: 24px; height: 24px;
+    stroke: var(--ink-mute);
+    stroke-width: 1.5; fill: none;
+    transition: stroke 0.2s ease;
+  }
+
+  .tab.active .tab-icon { stroke: var(--forest); }
+
+  .tab-text {
+    font-size: 10px;
+    color: var(--ink-mute);
+    font-weight: 500;
+  }
+
+  .tab.active .tab-text { color: var(--forest); font-weight: 600; }
+
+  .bottom-spacer { height: 100px; }
+
+  /* ============ 入场动画 ============ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phone .topbar { animation: fadeUp 0.6s ease 0.1s both; }
+  .phone .scope-info { animation: fadeUp 0.7s ease 0.2s both; }
+  .phone .stats-zone { animation: fadeUp 0.7s ease 0.38s both; }
+  .phone .actions-zone { animation: fadeUp 0.7s ease 0.48s both; }
+  .phone .family-zone { animation: fadeUp 0.7s ease 0.58s both; }
+  .phone .season-tip { animation: fadeUp 0.7s ease 0.68s both; }
+</style>
+</head>
+<body>
+
+<div class="canvas-label">MyCloset · Home — V2 · Refined Minimalism</div>
+
+<!-- ============================================ -->
+<!-- 状态一：个人空间 -->
+<!-- ============================================ -->
+<div class="phone-wrap">
+  <span class="phone-label">State A — Personal · 个人空间</span>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-bar-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 14h2v6H1zm4-3h2v9H5zm4-3h2v12H9zm4-3h2v15h-2zm4-3h2v18h-2zm4-3h2v21h-2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <div class="page">
+      <!-- 顶部融入区 -->
+      <div class="hero-zone">
+        <div class="topbar">
+          <div class="greeting">
+            <span class="greeting-hi">Good evening</span>
+            <span class="greeting-name">林小满</span>
+          </div>
+          <div class="logout-btn">
+            <svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M9 5H5v14h4"/></svg>
+          </div>
+        </div>
+
+        <div class="scope-info">
+          <div class="scope-badge">
+            <span class="scope-badge-dot"></span>
+            Personal Space
+          </div>
+          <h1 class="scope-title">个人<em>空间</em></h1>
+          <p class="scope-desc">管理你自己的衣橱和衣物，随时可以创建或加入家庭。</p>
+          <div class="scope-tags">
+            <span class="scope-tag">个人模式</span>
+            <span class="scope-tag">尚未加入家庭</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据概览 -->
+      <div class="stats-zone">
+        <div class="stats-label">Overview · 概览</div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-value">3</span>
+            <span class="stat-label">衣橱</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value accent">28</span>
+            <span class="stat-label">衣物</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">5</span>
+            <span class="stat-label">未归类</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心操作（只保留 2 个） -->
+      <div class="actions-zone">
+        <div class="action-card primary">
+          <svg class="action-card-icon" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M5 7v12h14V7"/></svg>
+          <span class="action-card-title">我的衣橱</span>
+          <span class="action-card-desc">查看和管理衣橱</span>
+        </div>
+        <div class="action-card">
+          <svg class="action-card-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="9" y="2" width="6" height="4" rx="1"/></svg>
+          <span class="action-card-title">我的衣物</span>
+          <span class="action-card-desc">浏览衣物列表</span>
+        </div>
+      </div>
+
+      <!-- 家庭协作区（未加入） -->
+      <div class="family-zone">
+        <div class="family-label">Family · 家庭协作</div>
+        <div class="family-empty-box">
+          <h3 class="family-empty-title">开启<em>家庭</em>协作</h3>
+          <p class="family-empty-desc">加入后可和家人共享衣橱与衣物，按角色协作管理。</p>
+          <div class="family-empty-actions">
+            <button class="btn-primary">创建家庭</button>
+            <button class="btn-secondary">加入家庭</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 季节贴士 -->
+      <div class="season-tip">
+        <div class="season-tip-label">Autumn · 秋日提示</div>
+        <p class="season-tip-text">「入秋了，把薄外套翻出来，检查去年的冬装是否还能穿。」</p>
+      </div>
+
+      <div class="bottom-spacer"></div>
+
+      <!-- TabBar -->
+      <div class="tabbar">
+        <div class="tab active">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+          <span class="tab-text">首页</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg>
+          <span class="tab-text">衣橱</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg>
+          <span class="tab-text">衣物</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7"/></svg>
+          <span class="tab-text">我的</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 状态二：家庭空间 -->
+<!-- ============================================ -->
+<div class="phone-wrap">
+  <span class="phone-label">State B — Family · 家庭空间</span>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-bar-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 14h2v6H1zm4-3h2v9H5zm4-3h2v12H9zm4-3h2v15h-2zm4-3h2v18h-2zm4-3h2v21h-2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <div class="page">
+      <!-- 顶部融入区 -->
+      <div class="hero-zone">
+        <div class="topbar">
+          <div class="greeting">
+            <span class="greeting-hi">Good evening</span>
+            <span class="greeting-name">林小满</span>
+          </div>
+          <div class="logout-btn">
+            <svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M9 5H5v14h4"/></svg>
+          </div>
+        </div>
+
+        <div class="scope-info">
+          <div class="scope-badge">
+            <span class="scope-badge-dot"></span>
+            Family Space · 管理员
+          </div>
+          <h1 class="scope-title">温馨<em>一家</em></h1>
+          <p class="scope-desc">和家人一起管理家庭衣橱与衣物，协作收纳更有序。</p>
+          <div class="scope-tags">
+            <span class="scope-tag accent">管理员</span>
+            <span class="scope-tag">3 位成员</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据概览 -->
+      <div class="stats-zone">
+        <div class="stats-label">Overview · 概览</div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-value">5</span>
+            <span class="stat-label">衣橱</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value accent">67</span>
+            <span class="stat-label">衣物</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">12</span>
+            <span class="stat-label">未归类</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心操作（只保留 2 个） -->
+      <div class="actions-zone">
+        <div class="action-card primary">
+          <svg class="action-card-icon" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M5 7v12h14V7"/></svg>
+          <span class="action-card-title">家庭衣橱</span>
+          <span class="action-card-desc">查看和管理衣橱</span>
+        </div>
+        <div class="action-card">
+          <svg class="action-card-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="9" y="2" width="6" height="4" rx="1"/></svg>
+          <span class="action-card-title">家庭衣物</span>
+          <span class="action-card-desc">浏览衣物列表</span>
+        </div>
+      </div>
+
+      <!-- 家庭协作区（已加入） -->
+      <div class="family-zone">
+        <div class="family-label">Family · 家庭协作</div>
+        <div class="family-invite-box">
+          <div class="family-name-row">
+            <span class="family-name">温馨一家</span>
+            <span class="family-role">Admin</span>
+          </div>
+          <div class="invite-row">
+            <span class="invite-label">邀请码</span>
+            <span class="invite-code">KX7M2P</span>
+            <button class="copy-btn">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+            </button>
+          </div>
+          <div class="members-row">
+            <div class="member-avatar admin" title="林小满">林</div>
+            <div class="member-avatar" title="林大满">大</div>
+            <div class="member-avatar" title="林小乐">乐</div>
+            <span class="member-more">共 3 人</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 季节贴士 -->
+      <div class="season-tip">
+        <div class="season-tip-label">Autumn · 秋日提示</div>
+        <p class="season-tip-text">「入秋了，把薄外套翻出来，检查去年的冬装是否还能穿。」</p>
+      </div>
+
+      <div class="bottom-spacer"></div>
+
+      <!-- TabBar -->
+      <div class="tabbar">
+        <div class="tab active">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+          <span class="tab-text">首页</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M5 7v12h14V7M3 7h18"/></svg>
+          <span class="tab-text">衣橱</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 4h6v4H9z"/></svg>
+          <span class="tab-text">衣物</span>
+        </div>
+        <div class="tab">
+          <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7"/></svg>
+          <span class="tab-text">我的</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

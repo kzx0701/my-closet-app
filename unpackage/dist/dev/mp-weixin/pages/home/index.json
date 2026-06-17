@@ -1,8 +1,6 @@
 {
   "navigationBarTitleText": "我的衣橱",
   "usingComponents": {
-    "h5-tab-bar": "../../components/H5TabBar",
-    "home-quick-actions": "./components/HomeQuickActions",
-    "scope-status-card": "./components/ScopeStatusCard"
+    "h5-tab-bar": "../../components/H5TabBar"
   }
 }

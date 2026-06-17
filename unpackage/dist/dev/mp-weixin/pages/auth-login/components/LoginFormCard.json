@@ -1,4 +1,7 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "u-input": "../../../node-modules/uview-plus/components/u-input/u-input",
+    "u-button": "../../../node-modules/uview-plus/components/u-button/u-button"
+  }
 }

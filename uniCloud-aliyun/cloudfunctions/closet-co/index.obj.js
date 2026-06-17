@@ -4,35 +4,14 @@ const closetsTable = db.collection("closets");
 const familyMembersTable = db.collection("family_members");
 const clothesTable = db.collection("clothes");
 const usersTable = db.collection("uni-id-users");
+const { authBefore, requireLogin } = require("../common/app-common");
 
 const PERSONAL_SCOPE = "personal";
 const FAMILY_SCOPE = "family";
 const VALID_STYLE_CODES = ["modern-flat", "arched-vintage", "open-rack", "drawer-mix"];
 const VALID_COLOR_CODES = ["oak-beige", "walnut-brown", "mist-white", "sage-green"];
-
-function getUniIdCommonModule() {
-  try {
-    return require("uni-id-common");
-  } catch (error) {
-    if (error?.code !== "MODULE_NOT_FOUND") {
-      throw error;
-    }
-
-    return require("../../../uni_modules/uni-id-common/uniCloud/cloudfunctions/common/uni-id-common");
-  }
-}
-
-function requireLogin(context) {
-  const uid = context.authInfo?.uid;
-
-  if (!uid) {
-    const error = new Error("当前未登录");
-    error.errCode = "CLOSET_UNAUTHORIZED";
-    throw error;
-  }
-
-  return uid;
-}
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
 
 function assertClosetName(name) {
   const normalizedName = String(name || "").trim();
@@ -300,25 +279,7 @@ async function getFamilySummary(uid) {
 }
 
 module.exports = {
-  async _before() {
-    const token = this.getUniIdToken();
-
-    if (!token) {
-      this.authInfo = null;
-      return;
-    }
-
-    const uniIdCommon = getUniIdCommonModule().createInstance({
-      clientInfo: this.getClientInfo(),
-    });
-    const authResult = await uniIdCommon.checkToken(token);
-
-    if (authResult.errCode) {
-      throw authResult;
-    }
-
-    this.authInfo = authResult;
-  },
+  _before: authBefore,
 
   async createCloset(payload = {}) {
     const uid = requireLogin(this);
@@ -374,6 +335,7 @@ module.exports = {
       style_code: styleCode,
       color_code: colorCode,
       description,
+      updated_at: new Date(),
     });
 
     return {
@@ -410,10 +372,12 @@ module.exports = {
 
     await clothesTable.where({ closet_id: closetId }).update({
       closet_id: dbCmd.remove(),
+      updated_at: new Date(),
     });
 
     await closetsTable.doc(closetId).update({
       status: "disabled",
+      updated_at: new Date(),
     });
 
     return {
@@ -421,25 +385,42 @@ module.exports = {
     };
   },
 
-  async getPersonalClosetList() {
+  async getPersonalClosetList(payload = {}) {
     const uid = requireLogin(this);
+    const page = Math.max(1, Number(payload.page) || 1);
+    const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
+    const skip = (page - 1) * pageSize;
 
-    const res = await closetsTable
-      .where({
-        scope_type: PERSONAL_SCOPE,
-        scope_owner_user_id: uid,
-        status: "active",
-      })
-      .orderBy("sort", "asc")
-      .orderBy("created_at", "desc")
-      .get();
+    const [listRes, countRes] = await Promise.all([
+      closetsTable
+        .where({
+          scope_type: PERSONAL_SCOPE,
+          scope_owner_user_id: uid,
+          status: "active",
+        })
+        .orderBy("sort", "asc")
+        .orderBy("created_at", "desc")
+        .skip(skip)
+        .limit(pageSize)
+        .get(),
+      closetsTable
+        .where({
+          scope_type: PERSONAL_SCOPE,
+          scope_owner_user_id: uid,
+          status: "active",
+        })
+        .count(),
+    ]);
 
     return {
-      list: res.data || [],
+      list: listRes.data || [],
+      total: countRes.total || 0,
+      page,
+      pageSize,
     };
   },
 
-  async getFamilyClosetList() {
+  async getFamilyClosetList(payload = {}) {
     const uid = requireLogin(this);
     const membership = await getActiveFamilyMembership(uid);
 
@@ -449,18 +430,34 @@ module.exports = {
       throw error;
     }
 
-    const res = await closetsTable
-      .where({
-        scope_type: FAMILY_SCOPE,
-        family_id: membership.family_id,
-        status: "active",
-      })
-      .orderBy("sort", "asc")
-      .orderBy("created_at", "desc")
-      .get();
+    const page = Math.max(1, Number(payload.page) || 1);
+    const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
+    const skip = (page - 1) * pageSize;
+
+    const where = {
+      scope_type: FAMILY_SCOPE,
+      family_id: membership.family_id,
+      status: "active",
+    };
+
+    const [listRes, countRes] = await Promise.all([
+      closetsTable
+        .where(where)
+        .orderBy("sort", "asc")
+        .orderBy("created_at", "desc")
+        .skip(skip)
+        .limit(pageSize)
+        .get(),
+      closetsTable
+        .where(where)
+        .count(),
+    ]);
 
     return {
-      list: await attachClosetCreatorNames(res.data || []),
+      list: await attachClosetCreatorNames(listRes.data || []),
+      total: countRes.total || 0,
+      page,
+      pageSize,
       familyId: membership.family_id,
     };
   },

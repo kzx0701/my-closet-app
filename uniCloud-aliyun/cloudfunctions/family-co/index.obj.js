@@ -2,42 +2,7 @@ const db = uniCloud.database();
 const dbCmd = db.command;
 const familiesTable = db.collection("families");
 const familyMembersTable = db.collection("family_members");
-
-/**
- * 获取 uni-id-common 模块。
- * 正式云环境优先使用标准 common 模块；本地调试缺少依赖时，回退到项目内 uni_modules 中的实现。
- *
- * @returns {object} uni-id-common module
- */
-function getUniIdCommonModule() {
-  try {
-    return require("uni-id-common");
-  } catch (error) {
-    if (error?.code !== "MODULE_NOT_FOUND") {
-      throw error;
-    }
-
-    return require("../../../uni_modules/uni-id-common/uniCloud/cloudfunctions/common/uni-id-common");
-  }
-}
-
-/**
- * 确保当前请求已经登录，并返回当前用户 uid。
- *
- * @param {object} context 云对象上下文
- * @returns {string} 当前登录用户 uid
- */
-function requireLogin(context) {
-  const uid = context.authInfo?.uid;
-
-  if (!uid) {
-    const error = new Error("当前未登录");
-    error.errCode = "FAMILY_UNAUTHORIZED";
-    throw error;
-  }
-
-  return uid;
-}
+const { authBefore, requireLogin } = require("../common/app-common");
 
 /**
  * 校验家庭名称是否合法。
@@ -165,27 +130,9 @@ async function getFamilyByInviteCode(inviteCode) {
 module.exports = {
   /**
    * 云对象前置钩子。
-   * 这里统一完成 token 校验，并把鉴权结果挂到 this.authInfo，供后续接口复用。
+   * 使用 app-common 公共模块完成 token 校验。
    */
-  async _before() {
-    const token = this.getUniIdToken();
-
-    if (!token) {
-      this.authInfo = null;
-      return;
-    }
-
-    const uniIdCommon = getUniIdCommonModule().createInstance({
-      clientInfo: this.getClientInfo(),
-    });
-    const authResult = await uniIdCommon.checkToken(token);
-
-    if (authResult.errCode) {
-      throw authResult;
-    }
-
-    this.authInfo = authResult;
-  },
+  _before: authBefore,
 
   /**
    * 创建家庭。
@@ -276,6 +223,7 @@ module.exports = {
 
     await familiesTable.doc(family._id).update({
       member_count: dbCmd.inc(1),
+      updated_at: new Date(),
     });
 
     return {
@@ -322,5 +270,167 @@ module.exports = {
       family,
       membership,
     };
+  },
+
+  /**
+   * 查询当前家庭的成员列表。
+   * 返回成员基本信息（昵称、用户名、角色、加入时间）。
+   *
+   * @returns {Promise<{members: object[]}>}
+   */
+  async getFamilyMembers() {
+    const uid = requireLogin(this);
+    const membership = await getMembershipByUserId(uid);
+
+    if (!membership?.family_id) {
+      const error = new Error("你当前还没有加入家庭");
+      error.errCode = "FAMILY_REQUIRED";
+      throw error;
+    }
+
+    const membersRes = await familyMembersTable
+      .where({
+        family_id: membership.family_id,
+        status: "active",
+      })
+      .get();
+
+    const members = membersRes.data || [];
+
+    if (!members.length) {
+      return { members: [] };
+    }
+
+    const userIds = members.map((m) => m.user_id).filter(Boolean);
+
+    const usersRes = await db.collection("uni-id-users")
+      .where({
+        _id: dbCmd.in(userIds),
+      })
+      .field("_id, nickname, username, avatar_file")
+      .get();
+
+    const userMap = new Map(
+      (usersRes.data || []).map((u) => [u._id, u])
+    );
+
+    const enrichedMembers = members.map((m) => {
+      const user = userMap.get(m.user_id) || {};
+      return {
+        user_id: m.user_id,
+        role: m.role,
+        joined_at: m.joined_at,
+        nickname: user.nickname || "",
+        username: user.username || "",
+        avatar: user.avatar_file?.url || "",
+      };
+    });
+
+    return { members: enrichedMembers };
+  },
+
+  /**
+   * 退出当前家庭。
+   * 管理员不能退出（需要先转让或解散）。
+   * 退出后，该用户的所有个人空间数据保留，家庭空间数据不再可见。
+   *
+   * @returns {Promise<{success: boolean}>}
+   */
+  async leaveFamily() {
+    const uid = requireLogin(this);
+    const membership = await getMembershipByUserId(uid);
+
+    if (!membership?.family_id) {
+      const error = new Error("你当前还没有加入家庭");
+      error.errCode = "FAMILY_REQUIRED";
+      throw error;
+    }
+
+    if (membership.role === "admin") {
+      const error = new Error("管理员不能退出家庭，请先转让管理员或解散家庭");
+      error.errCode = "FAMILY_ADMIN_CANNOT_LEAVE";
+      throw error;
+    }
+
+    await familyMembersTable.doc(membership._id).update({
+      status: "left",
+      left_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    await familiesTable.doc(membership.family_id).update({
+      member_count: dbCmd.inc(-1),
+      updated_at: new Date(),
+    });
+
+    return { success: true };
+  },
+
+  /**
+   * 移除家庭成员（仅管理员可用）。
+   * 管理员不能移除自己。
+   *
+   * @param {{userId: string}} payload 要移除的用户 ID
+   * @returns {Promise<{success: boolean}>}
+   */
+  async removeFamilyMember({ userId } = {}) {
+    const uid = requireLogin(this);
+    const membership = await getMembershipByUserId(uid);
+
+    if (!membership?.family_id) {
+      const error = new Error("你当前还没有加入家庭");
+      error.errCode = "FAMILY_REQUIRED";
+      throw error;
+    }
+
+    if (membership.role !== "admin") {
+      const error = new Error("只有管理员可以移除成员");
+      error.errCode = "FAMILY_NOT_ADMIN";
+      throw error;
+    }
+
+    const targetUserId = String(userId || "").trim();
+
+    if (!targetUserId) {
+      const error = new Error("缺少要移除的用户 ID");
+      error.errCode = "FAMILY_USER_ID_REQUIRED";
+      throw error;
+    }
+
+    if (targetUserId === uid) {
+      const error = new Error("管理员不能移除自己");
+      error.errCode = "FAMILY_CANNOT_REMOVE_SELF";
+      throw error;
+    }
+
+    const targetMembership = await familyMembersTable
+      .where({
+        family_id: membership.family_id,
+        user_id: targetUserId,
+        status: "active",
+      })
+      .limit(1)
+      .get();
+
+    const targetMember = targetMembership.data[0];
+
+    if (!targetMember) {
+      const error = new Error("该成员不存在或已不在家庭中");
+      error.errCode = "FAMILY_MEMBER_NOT_FOUND";
+      throw error;
+    }
+
+    await familyMembersTable.doc(targetMember._id).update({
+      status: "removed",
+      removed_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    await familiesTable.doc(membership.family_id).update({
+      member_count: dbCmd.inc(-1),
+      updated_at: new Date(),
+    });
+
+    return { success: true };
   },
 };

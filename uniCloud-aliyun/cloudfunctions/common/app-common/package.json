@@ -1,0 +1,12 @@
+{
+    "name": "app-common",
+    "version": "1.0.0",
+    "description": "应用公共模块，提供云对象共享的鉴权能力",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

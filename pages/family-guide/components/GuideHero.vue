@@ -10,16 +10,16 @@
 
 <script setup></script>
 
-<style>
+<style lang="scss">
 .hero {
   display: flex;
   flex-direction: column;
 }
 
 .eyebrow {
-  font-size: 24rpx;
+  font-size: $font-size-base;
   font-weight: 600;
-  color: #73806b;
+  color: $color-text-secondary;
   letter-spacing: 2rpx;
 }
 
@@ -28,13 +28,13 @@
   font-size: 48rpx;
   font-weight: 700;
   line-height: 1.25;
-  color: #2d3a2f;
+  color: $color-text-title;
 }
 
 .desc {
   margin-top: 22rpx;
-  font-size: 28rpx;
+  font-size: $font-size-lg;
   line-height: 1.75;
-  color: #626c61;
+  color: $color-text-secondary;
 }
 </style>

@@ -1,4 +1,3 @@
-
 .section + .section {
   margin-top: 26rpx;
 }
@@ -7,7 +6,7 @@
   margin-bottom: 18rpx;
   font-size: 28rpx;
   font-weight: 700;
-  color: #2d392f;
+  color: #2a2a24;
 }
 .color-row {
   display: flex;
@@ -21,10 +20,10 @@
   border: 2rpx solid transparent;
 }
 .color-chip.active {
-  background: #edf4e7;
-  border-color: #7b9571;
+  background: #edf1ea;
+  border-color: #3a5443;
 }
 .color-name {
   font-size: 24rpx;
-  color: #4f5e4d;
+  color: #3a5443;
 }

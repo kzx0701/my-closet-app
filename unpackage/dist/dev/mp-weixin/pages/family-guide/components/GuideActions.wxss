@@ -1,4 +1,3 @@
-
 .actions {
   display: flex;
   flex-direction: column;
@@ -12,9 +11,9 @@
 }
 .secondary {
   background: #edf1ea;
-  color: #314033;
+  color: #3a5443;
 }
 .ghost {
   background: transparent;
-  color: #667062;
+  color: #4a4a42;
 }

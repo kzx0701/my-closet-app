@@ -20,14 +20,9 @@ import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { mutations } from "@/uni_modules/uni-id-pages/common/store.js";
 import { ROUTES } from "@/common/constants/routes.js";
+import { login } from "@/common/api/modules/auth.js";
 import LoginFormCard from "./components/LoginFormCard.vue";
 import LoginHero from "./components/LoginHero.vue";
-
-const uniIdCo = uniCloud.importObject("uni-id-co", {
-  errorOptions: {
-    type: "toast",
-  },
-});
 
 const username = ref("");
 const password = ref("");
@@ -84,7 +79,7 @@ async function submitLogin() {
   submitting.value = true;
 
   try {
-    const result = await uniIdCo.login(buildLoginPayload());
+    const result = await login(buildLoginPayload());
 
     mutations.loginSuccess({
       ...result,

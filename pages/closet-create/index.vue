@@ -17,9 +17,15 @@
       @update:description="description = $event"
     />
 
-    <button class="submit-btn" type="primary" :loading="submitting" @click="submitCloset">
+    <u-button
+      type="primary"
+      shape="circle"
+      :loading="submitting"
+      customStyle="margin-top: 34rpx; background: linear-gradient(135deg, #5a7351 0%, #738c67 100%); border: none;"
+      @click="submitCloset"
+    >
       {{ submitButtonText }}
-    </button>
+    </u-button>
   </view>
 </template>
 

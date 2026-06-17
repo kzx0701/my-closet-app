@@ -15,34 +15,60 @@ if (!Math) {
   "./pages/family-guide/index.js";
   "./pages/family-create/index.js";
   "./pages/clothes/index.js";
+  "./pages/clothes-create/index.js";
+  "./pages/clothes-detail/index.js";
   "./pages/closets/index.js";
   "./pages/closet-create/index.js";
   "./pages/home/index.js";
   "./pages/profile/index.js";
 }
+if (!Array) {
+  const _easycom_u_toast = common_vendor.resolveComponent("u-toast");
+  const _easycom_u_modal = common_vendor.resolveComponent("u-modal");
+  (_easycom_u_toast + _easycom_u_modal)();
+}
+if (!Math) {
+  (common_vendor._easycom_u_toast + common_vendor._easycom_u_modal)();
+}
 const _sfc_main = {
   __name: "App",
   setup(__props) {
+    const uToastRef = common_vendor.ref(null);
+    const uModalRef = common_vendor.ref(null);
     common_vendor.onLaunch(async () => {
       try {
         await uni_modules_uniIdPages_init.initUniIdPages();
       } catch (error) {
-        common_vendor.index.__f__("error", "at App.vue:9", "uni-id-pages init failed", error);
+        common_vendor.index.__f__("error", "at App.vue:21", "uni-id-pages init failed", error);
       }
-      common_vendor.index.__f__("log", "at App.vue:11", "App Launch");
     });
     common_vendor.onShow(() => {
-      common_vendor.index.__f__("log", "at App.vue:15", "App Show");
     });
     common_vendor.onHide(() => {
-      common_vendor.index.__f__("log", "at App.vue:19", "App Hide");
     });
-    return () => {
+    common_vendor.index.$u.toast = (options) => {
+      var _a;
+      (_a = uToastRef.value) == null ? void 0 : _a.show(options);
+    };
+    common_vendor.index.$u.modal = (options) => {
+      var _a;
+      return (_a = uModalRef.value) == null ? void 0 : _a.show(options);
+    };
+    return (_ctx, _cache) => {
+      return {
+        a: common_vendor.sr(uToastRef, "2f0451d6-0", {
+          "k": "uToastRef"
+        }),
+        b: common_vendor.sr(uModalRef, "2f0451d6-1", {
+          "k": "uModalRef"
+        })
+      };
     };
   }
 };
 function createApp() {
   const app = common_vendor.createSSRApp(_sfc_main);
+  app.use(common_vendor.uviewPlus);
   return {
     app
   };

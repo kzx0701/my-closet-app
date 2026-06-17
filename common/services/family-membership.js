@@ -1,6 +1,7 @@
 import { fetchCurrentFamily } from "@/common/api/modules/family.js";
 
 const UNAUTHORIZED_CODES = [
+  "APP_UNAUTHORIZED",
   "FAMILY_UNAUTHORIZED",
   "uni-id-token-expired",
   "uni-id-check-token-failed",
@@ -55,7 +56,7 @@ export async function getFamilyMembership(uid) {
       hasFamily: false,
       membershipRecord: null,
       familyRecord: null,
-      errorCode: "FAMILY_UNAUTHORIZED",
+      errorCode: "APP_UNAUTHORIZED",
       errorMessage: "当前未登录",
     };
   }

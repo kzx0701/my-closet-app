@@ -3,93 +3,72 @@
     <text class="label">绑定衣橱</text>
     <text class="desc">可以先不绑定，后续整理时再放入具体衣橱。</text>
 
-    <view class="option-list">
-      <button
-        class="option-btn"
-        :class="{ 'option-btn-active': modelValue === '' }"
-        @click="$emit('update:modelValue', '')"
+    <u-cell-group :border="false" customStyle="margin-top: 22rpx;">
+      <u-cell
+        title="暂不绑定衣橱"
+        :border="false"
+        :customStyle="modelValue === '' ? 'background: $color-bg-chip-active; border-radius: $radius-sm;' : ''"
+        @click="emit('update:modelValue', '')"
       >
-        暂不绑定衣橱
-      </button>
-      <button
+        <template #right-icon>
+          <u-icon v-if="modelValue === ''" name="checkmark-circle-fill" color="$color-primary" size="40" />
+        </template>
+      </u-cell>
+      <u-cell
         v-for="item in options"
         :key="item._id"
-        class="option-btn"
-        :class="{ 'option-btn-active': modelValue === item._id }"
-        @click="$emit('update:modelValue', item._id)"
+        :title="item.name"
+        :border="false"
+        :customStyle="modelValue === item._id ? 'background: $color-bg-chip-active; border-radius: $radius-sm;' : ''"
+        @click="emit('update:modelValue', item._id)"
       >
-        {{ item.name }}
-      </button>
-    </view>
+        <template #right-icon>
+          <u-icon v-if="modelValue === item._id" name="checkmark-circle-fill" color="$color-primary" size="40" />
+        </template>
+      </u-cell>
+    </u-cell-group>
   </view>
 </template>
 
-<script>
-export default {
-  name: "ClothesClosetPicker",
-  props: {
-    modelValue: {
-      type: String,
-      default: "",
-    },
-    options: {
-      type: Array,
-      default() {
-        return [];
-      },
+<script setup>
+defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  options: {
+    type: Array,
+    default() {
+      return [];
     },
   },
-  emits: ["update:modelValue"],
-};
+});
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
-<style>
+<style lang="scss">
 .picker-card {
-  margin-top: 24rpx;
+  margin-top: $spacing-lg;
   padding: 30rpx 26rpx;
-  border-radius: 26rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
-  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
-  border: 2rpx solid rgba(107, 126, 99, 0.08);
+  border-radius: $radius-lg;
+  background: $gradient-card;
+  box-shadow: $shadow-card;
+  border: 2rpx solid $color-border;
 }
 
 .label {
   display: block;
-  font-size: 26rpx;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: #2d392f;
+  color: $color-text-title;
 }
 
 .desc {
   display: block;
-  margin-top: 12rpx;
+  margin-top: $spacing-sm;
   font-size: 23rpx;
   line-height: 1.7;
-  color: #6f7c6d;
-}
-
-.option-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14rpx;
-  margin-top: 22rpx;
-}
-
-.option-btn {
-  min-height: 78rpx;
-  line-height: 1.4;
-  padding: 18rpx 22rpx;
-  border-radius: 20rpx;
-  text-align: left;
-  font-size: 24rpx;
-  color: #556451;
-  background: #eef2eb;
-  border: none;
-}
-
-.option-btn-active {
-  color: #243026;
-  font-weight: 700;
-  background: #dfe8d8;
+  color: $color-text-secondary;
 }
 </style>

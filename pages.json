@@ -1,4 +1,10 @@
 {
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"
+    }
+  },
   "pages": [
     {
       "path": "pages/entry/index",
@@ -79,6 +85,12 @@
       }
     },
     {
+      "path": "pages/clothes-detail/index",
+      "style": {
+        "navigationBarTitleText": "衣物详情"
+      }
+    },
+    {
       "path": "pages/closets/index",
       "style": {
         "navigationBarTitleText": "我的衣橱"
@@ -141,7 +153,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "我的衣橱",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#f7f4ee",
+    "backgroundColor": "#f7f4ee"
   }
 }

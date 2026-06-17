@@ -12,6 +12,8 @@
     "pages/family-guide/index",
     "pages/family-create/index",
     "pages/clothes/index",
+    "pages/clothes-create/index",
+    "pages/clothes-detail/index",
     "pages/closets/index",
     "pages/closet-create/index",
     "pages/home/index",
@@ -20,8 +22,8 @@
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "我的衣橱",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#f7f4ee",
+    "backgroundColor": "#f7f4ee"
   },
   "tabBar": {
     "color": "#7a8678",

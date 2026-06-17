@@ -1,76 +1,173 @@
-/**
- * 这里是uni-app内置的常用样式变量
- *
- * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
- * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
- *
- */
+@import "uview-plus/theme.scss";
 
-/**
- * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
- *
- * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
- */
+// ============================================================================
+// 设计 Token - 统一主题配置
+// ============================================================================
+// 修改以下变量即可全局切换主题风格，无需逐个组件修改。
+// ============================================================================
 
-/* 颜色变量 */
+// --- 主色调 ---
+$color-primary: #3a5443;
+$color-primary-light: #edf1ea;
+$color-primary-dark: #2d4334;
+$color-primary-soft: #4a6755;
 
-/* 行为相关颜色 */
-$uni-color-primary: #007aff;
-$uni-color-success: #4cd964;
-$uni-color-warning: #f0ad4e;
-$uni-color-error: #dd524d;
+// --- 鼠尾草绿（渐变过渡色） ---
+$color-sage: #7a9580;
+$color-sage-light: #a8bcae;
+$color-moss: #5d7553;
 
-/* 文字基本颜色 */
-$uni-text-color:#333;//基本色
-$uni-text-color-inverse:#fff;//反色
-$uni-text-color-grey:#999;//辅助灰色，如加载更多的提示信息
-$uni-text-color-placeholder: #808080;
-$uni-text-color-disable:#c0c0c0;
+// --- 赤陶橙（点缀色） ---
+$color-terra: #b85c3a;
+$color-terra-soft: #d4805f;
 
-/* 背景颜色 */
-$uni-bg-color:#ffffff;
-$uni-bg-color-grey:#f8f8f8;
-$uni-bg-color-hover:#f1f1f1;//点击状态颜色
-$uni-bg-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
+// --- 功能色 ---
+$color-success: #4cd964;
+$color-warning: #f0ad4e;
+$color-error: #dd524d;
+$color-info: #909399;
 
-/* 边框颜色 */
-$uni-border-color:#c8c7cc;
+// --- 文字色 ---
+$color-text-title: #2a2a24;
+$color-text-primary: #3a5443;
+$color-text-secondary: #4a4a42;
+$color-text-placeholder: #8a8a7e;
+$color-text-disabled: #c0c0c0;
+$color-text-inverse: #f8f4ec;
 
-/* 尺寸变量 */
+// --- 背景色 ---
+$color-bg-page: #f4efe6;
+$color-bg-card: #ffffff;
+$color-bg-card-end: #f8f4ec;
+$color-bg-input: #f2f5ef;
+$color-bg-chip: #ebe4d6;
+$color-bg-chip-active: #dfe8d8;
+$color-bg-tag: #ebe4d6;
+$color-bg-success: #f3f6ef;
 
-/* 文字尺寸 */
-$uni-font-size-sm:24rpx;
-$uni-font-size-base:28rpx;
-$uni-font-size-lg:32rpx;
+// --- 边框色 ---
+$color-border: rgba(107, 126, 99, 0.08);
+$color-border-hover: rgba(107, 126, 99, 0.12);
 
-/* 图片尺寸 */
-$uni-img-size-sm:40rpx;
-$uni-img-size-base:52rpx;
-$uni-img-size-lg:80rpx;
+// --- 阴影 ---
+$shadow-card: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
+$shadow-card-sm: 0 14rpx 30rpx rgba(73, 81, 69, 0.06);
+$shadow-card-lg: 0 18rpx 40rpx rgba(73, 81, 69, 0.08);
+$shadow-button: 0 12rpx 26rpx rgba(73, 81, 69, 0.08);
 
-/* Border Radius */
+// --- 渐变 ---
+$gradient-button: linear-gradient(135deg, #5a7351 0%, #738c67 100%);
+$gradient-page: linear-gradient(180deg, $color-bg-page 0%, $color-bg-card-end 38%, #f3efe6 100%);
+$gradient-page-radial: radial-gradient(circle at top, rgba(214, 223, 205, 0.48), transparent 36%);
+$gradient-card: linear-gradient(180deg, $color-bg-card 0%, $color-bg-card-end 100%);
+$gradient-tips: linear-gradient(180deg, #f6f4ee 0%, $color-bg-card-end 100%);
+
+// 首页顶部绿色渐变（深森林绿 → 燕麦色，42%处完全过渡）
+$gradient-hero: linear-gradient(180deg,
+  $color-primary-dark 0%,
+  $color-primary 12%,
+  $color-primary-soft 20%,
+  $color-sage 28%,
+  $color-sage-light 34%,
+  #c8cebf 38%,
+  $color-bg-page 42%,
+  $color-bg-page 100%
+);
+
+// --- 圆角 ---
+$radius-sm: 20rpx;
+$radius-md: 24rpx;
+$radius-lg: 28rpx;
+$radius-xl: 30rpx;
+$radius-pill: 999rpx;
+
+// --- 间距 ---
+$spacing-xs: 8rpx;
+$spacing-sm: 12rpx;
+$spacing-md: 16rpx;
+$spacing-lg: 24rpx;
+$spacing-xl: 30rpx;
+$spacing-xxl: 44rpx;
+
+// --- 字号 ---
+$font-size-xs: 20rpx;
+$font-size-sm: 22rpx;
+$font-size-base: 24rpx;
+$font-size-md: 26rpx;
+$font-size-lg: 28rpx;
+$font-size-xl: 30rpx;
+$font-size-xxl: 34rpx;
+$font-size-hero: 42rpx;
+
+// --- 错误/危险色 ---
+$color-danger: #8b4a45;
+$color-danger-bg: #f7ebe8;
+
+// --- 渐变暖色（Hero 装饰） ---
+$gradient-hero-left: #d5e2b9;
+$gradient-hero-right: #f6dca8;
+
+// ============================================================================
+// uView Plus 主题定制
+// ============================================================================
+$u-primary: $color-primary;
+$u-primary-light: $color-primary-light;
+$u-primary-dark: $color-primary-dark;
+$u-success: $color-success;
+$u-warning: $color-warning;
+$u-error: $color-error;
+$u-info: $color-info;
+$u-main-color: $color-primary;
+$u-content-color: #606266;
+$u-tips-color: $color-info;
+
+// ============================================================================
+// uni-app 内置变量覆盖
+// ============================================================================
+$uni-color-primary: $color-primary;
+$uni-color-success: $color-success;
+$uni-color-warning: $color-warning;
+$uni-color-error: $color-error;
+
+$uni-text-color: #333;
+$uni-text-color-inverse: $color-text-inverse;
+$uni-text-color-grey: #999;
+$uni-text-color-placeholder: $color-text-placeholder;
+$uni-text-color-disable: $color-text-disabled;
+
+$uni-bg-color: $color-bg-card;
+$uni-bg-color-grey: #f8f8f8;
+$uni-bg-color-hover: #f1f1f1;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+$uni-border-color: #c8c7cc;
+
+$uni-font-size-sm: $font-size-sm;
+$uni-font-size-base: $font-size-base;
+$uni-font-size-lg: $font-size-lg;
+
+$uni-img-size-sm: 40rpx;
+$uni-img-size-base: 52rpx;
+$uni-img-size-lg: 80rpx;
+
 $uni-border-radius-sm: 4rpx;
 $uni-border-radius-base: 6rpx;
 $uni-border-radius-lg: 12rpx;
 $uni-border-radius-circle: 50%;
 
-/* 水平间距 */
 $uni-spacing-row-sm: 10px;
 $uni-spacing-row-base: 20rpx;
 $uni-spacing-row-lg: 30rpx;
 
-/* 垂直间距 */
-$uni-spacing-col-sm: 8rpx;
-$uni-spacing-col-base: 16rpx;
-$uni-spacing-col-lg: 24rpx;
+$uni-spacing-col-sm: $spacing-xs;
+$uni-spacing-col-base: $spacing-md;
+$uni-spacing-col-lg: $spacing-lg;
 
-/* 透明度 */
-$uni-opacity-disabled: 0.3; // 组件禁用态的透明度
+$uni-opacity-disabled: 0.3;
 
-/* 文章场景相关 */
-$uni-color-title: #2C405A; // 文章标题颜色
-$uni-font-size-title:40rpx;
-$uni-color-subtitle: #555555; // 二级标题颜色
-$uni-font-size-subtitle:36rpx;
-$uni-color-paragraph: #3F536E; // 文章段落颜色
-$uni-font-size-paragraph:30rpx;
+$uni-color-title: $color-text-title;
+$uni-font-size-title: 40rpx;
+$uni-color-subtitle: #555555;
+$uni-font-size-subtitle: 36rpx;
+$uni-color-paragraph: #3F536E;
+$uni-font-size-paragraph: 30rpx;

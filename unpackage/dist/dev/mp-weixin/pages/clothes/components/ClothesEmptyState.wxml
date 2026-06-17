@@ -1,0 +1,1 @@
+<view class="empty-card"><u-empty wx:if="{{c}}" u-s="{{['bottom']}}" u-i="6dca1660-0" bind:__l="__l" u-p="{{c}}"><u-button u-s="{{['d']}}" bindclick="{{a}}" u-i="6dca1660-1,6dca1660-0" bind:__l="__l" u-p="{{b}}" slot="bottom"> 新增第一件衣物 </u-button></u-empty></view>

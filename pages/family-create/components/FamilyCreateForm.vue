@@ -68,29 +68,29 @@ function handleInput(event) {
 }
 </script>
 
-<style>
+<style lang="scss">
 .form-card {
   padding: 40rpx 32rpx;
-  border-radius: 30rpx;
+  border-radius: $radius-xl;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 18rpx 44rpx rgba(47, 56, 47, 0.08);
+  box-shadow: $shadow-card-lg;
 }
 
 .label {
   display: block;
-  font-size: 28rpx;
+  font-size: $font-size-lg;
   font-weight: 600;
-  color: #314033;
+  color: $color-primary;
 }
 
 .input {
   margin-top: 20rpx;
   height: 94rpx;
-  padding: 0 24rpx;
+  padding: 0 $spacing-lg;
   border-radius: 22rpx;
-  background: #f2f5ef;
-  font-size: 30rpx;
-  color: #243126;
+  background: $color-bg-input;
+  font-size: $font-size-xl;
+  color: $color-text-title;
 }
 
 .meta-row {
@@ -98,19 +98,19 @@ function handleInput(event) {
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 18rpx;
-  gap: 16rpx;
+  gap: $spacing-md;
 }
 
 .hint {
   flex: 1;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   line-height: 1.7;
-  color: #6d796d;
+  color: $color-text-secondary;
 }
 
 .counter {
-  font-size: 22rpx;
-  color: #8c9586;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
 }
 
 .suggestion-block {
@@ -119,53 +119,53 @@ function handleInput(event) {
 
 .suggestion-title {
   display: block;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   font-weight: 600;
-  color: #51604f;
+  color: $color-text-primary;
 }
 
 .suggestion-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
-  margin-top: 16rpx;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
 }
 
 .suggestion-chip {
   padding: 14rpx 22rpx;
-  border-radius: 999rpx;
-  background: #eef2eb;
+  border-radius: $radius-pill;
+  background: $color-bg-chip;
 }
 
 .suggestion-text {
-  font-size: 24rpx;
-  color: #314033;
+  font-size: $font-size-base;
+  color: $color-primary;
 }
 
 .tips-card {
   margin-top: 30rpx;
-  padding: 26rpx 24rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(180deg, #f6f4ee 0%, #fbfaf7 100%);
+  padding: 26rpx $spacing-lg;
+  border-radius: $radius-md;
+  background: $gradient-tips;
 }
 
 .tips-title {
   display: block;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   font-weight: 600;
-  color: #465244;
+  color: $color-text-primary;
 }
 
 .tips-item {
   display: block;
   margin-top: 14rpx;
-  font-size: 24rpx;
+  font-size: $font-size-base;
   line-height: 1.65;
-  color: #667062;
+  color: $color-text-secondary;
 }
 
 .submit {
   margin-top: 36rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
 }
 </style>

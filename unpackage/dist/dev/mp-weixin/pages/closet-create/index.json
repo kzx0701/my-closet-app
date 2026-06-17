@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "新建衣橱",
   "usingComponents": {
+    "u-button": "../../node-modules/uview-plus/components/u-button/u-button",
     "closet-basic-form": "./components/ClosetBasicForm",
     "closet-color-picker": "./components/ClosetColorPicker",
     "closet-style-picker": "./components/ClosetStylePicker"

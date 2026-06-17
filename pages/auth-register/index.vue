@@ -23,14 +23,9 @@
 import { ref } from "vue";
 import { mutations } from "@/uni_modules/uni-id-pages/common/store.js";
 import { ROUTES } from "@/common/constants/routes.js";
+import { registerUser } from "@/common/api/modules/auth.js";
 import RegisterFormCard from "./components/RegisterFormCard.vue";
 import RegisterHero from "./components/RegisterHero.vue";
-
-const uniIdCo = uniCloud.importObject("uni-id-co", {
-  errorOptions: {
-    type: "toast",
-  },
-});
 
 const registerFormCardRef = ref(null);
 const username = ref("");
@@ -123,7 +118,7 @@ async function submitRegister() {
   submitting.value = true;
 
   try {
-    const result = await uniIdCo.registerUser({
+    const result = await registerUser({
       username: username.value.trim(),
       nickname: nickname.value.trim(),
       password: password.value,
