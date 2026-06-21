@@ -7,9 +7,10 @@ async function resolveLaunchTarget() {
   const session = common_services_auth.getCurrentSession();
   if (!session.hasLogin) {
     return {
-      target: common_constants_routes.ROUTE_TARGETS.login,
-      url: common_constants_routes.ROUTES.login,
-      session
+      target: common_constants_routes.ROUTE_TARGETS.home,
+      url: common_constants_routes.ROUTES.home,
+      session,
+      guest: true
     };
   }
   const membership = await common_services_familyMembership.getFamilyMembership(session.uid);
@@ -24,10 +25,13 @@ async function resolveLaunchTarget() {
   }
   if (membership.status === "failed") {
     return {
-      target: common_constants_routes.ROUTE_TARGETS.error,
-      url: common_constants_routes.ROUTES.entry,
+      target: common_constants_routes.ROUTE_TARGETS.home,
+      url: common_constants_routes.ROUTES.home,
       session,
-      membership
+      membership,
+      hasSkippedFamilyGuide,
+      degraded: true
+      // 标记为降级模式
     };
   }
   if (membership.hasFamily) {

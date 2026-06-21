@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "衣橱详情",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-loadmore": "../../node-modules/uview-plus/components/u-loadmore/u-loadmore",
+    "scope-badge": "../../components/ScopeBadge",
+    "clothes-list-card": "../clothes/components/ClothesListCard"
+  }
+}

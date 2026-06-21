@@ -1,184 +1,132 @@
 <template>
-  <view class="filter-card">
-    <view class="filter-head">
-      <text class="filter-title">筛选</text>
-      <u-button
-        size="mini"
-        shape="circle"
-        customStyle="background: #eef2eb; border: none; color: #6c786b;"
-        @click="$emit('reset')"
-      >
-        清空
-      </u-button>
-    </view>
-
-    <view class="filter-group">
-      <text class="group-label">衣橱</text>
-      <scroll-view class="chip-scroll" scroll-x>
-        <view class="chip-row">
-          <u-tag
-            text="全部"
-            :type="filters.closetId === '' ? 'primary' : 'info'"
-            :plain="filters.closetId !== ''"
-            shape="circle"
-            size="mini"
-            :customStyle="filters.closetId === '' ? 'background: #314033; border-color: #314033;' : ''"
-            @click="updateFilter('closetId', '')"
-          />
-          <u-tag
-            v-for="item in closetOptions"
-            :key="item._id"
-            :text="item.name"
-            :type="filters.closetId === item._id ? 'primary' : 'info'"
-            :plain="filters.closetId !== item._id"
-            shape="circle"
-            size="mini"
-            :customStyle="filters.closetId === item._id ? 'background: #314033; border-color: #314033;' : ''"
-            @click="updateFilter('closetId', item._id)"
-          />
-        </view>
-      </scroll-view>
-    </view>
-
-    <view class="filter-group">
-      <text class="group-label">分类</text>
-      <view class="chip-row chip-wrap">
-        <u-tag
-          text="全部"
-          :type="filters.category === '' ? 'primary' : 'info'"
-          :plain="filters.category !== ''"
-          shape="circle"
-          size="mini"
-          :customStyle="filters.category === '' ? 'background: #314033; border-color: #314033;' : ''"
-          @click="updateFilter('category', '')"
-        />
-        <u-tag
+  <view class="filter-bar">
+    <scroll-view class="filter-scroll" scroll-x :show-scrollbar="false">
+      <view class="filter-chips">
+        <view
           v-for="item in categoryOptions"
           :key="item.code"
-          :text="item.name"
-          :type="filters.category === item.code ? 'primary' : 'info'"
-          :plain="filters.category !== item.code"
-          shape="circle"
-          size="mini"
-          :customStyle="filters.category === item.code ? 'background: #314033; border-color: #314033;' : ''"
-          @click="updateFilter('category', item.code)"
-        />
+          class="filter-chip"
+          :class="{ 'filter-chip-active': activeCategory === item.code }"
+          hover-class="filter-chip-hover"
+          :hover-stay-time="100"
+          @click="selectCategory(item.code)"
+        >
+          <text class="filter-chip-text">{{ item.name }}</text>
+        </view>
       </view>
-    </view>
+    </scroll-view>
 
-    <view class="filter-group">
-      <text class="group-label">季节</text>
-      <view class="chip-row chip-wrap">
-        <u-tag
-          text="全部"
-          :type="filters.season === '' ? 'primary' : 'info'"
-          :plain="filters.season !== ''"
-          shape="circle"
-          size="mini"
-          :customStyle="filters.season === '' ? 'background: #314033; border-color: #314033;' : ''"
-          @click="updateFilter('season', '')"
-        />
-        <u-tag
+    <!-- 季节筛选 -->
+    <scroll-view class="filter-scroll season-scroll" scroll-x :show-scrollbar="false">
+      <view class="filter-chips">
+        <view
           v-for="item in seasonOptions"
           :key="item.code"
-          :text="item.name"
-          :type="filters.season === item.code ? 'primary' : 'info'"
-          :plain="filters.season !== item.code"
-          shape="circle"
-          size="mini"
-          :customStyle="filters.season === item.code ? 'background: #314033; border-color: #314033;' : ''"
-          @click="updateFilter('season', item.code)"
-        />
+          class="filter-chip"
+          :class="{ 'filter-chip-active': activeSeason === item.code }"
+          hover-class="filter-chip-hover"
+          :hover-stay-time="100"
+          @click="selectSeason(item.code)"
+        >
+          <text class="filter-chip-text">{{ item.name }}</text>
+        </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
 <script setup>
+import { CLOTHES_CATEGORY_OPTIONS, CLOTHES_SEASON_OPTIONS } from "@/common/constants/clothes-options.js";
+
 const props = defineProps({
-  filters: {
-    type: Object,
-    default() {
-      return {
-        closetId: "",
-        category: "",
-        season: "",
-      };
-    },
+  activeCategory: {
+    type: String,
+    default: "all",
   },
-  closetOptions: {
-    type: Array,
-    default() {
-      return [];
-    },
-  },
-  categoryOptions: {
-    type: Array,
-    default() {
-      return [];
-    },
-  },
-  seasonOptions: {
-    type: Array,
-    default() {
-      return [];
-    },
+  activeSeason: {
+    type: String,
+    default: "all",
   },
 });
 
-const emit = defineEmits(["update:filters", "reset"]);
+const emit = defineEmits(["update:activeCategory", "update:activeSeason"]);
 
-function updateFilter(key, value) {
-  emit("update:filters", {
-    ...props.filters,
-    [key]: value,
-  });
+const categoryOptions = [
+  { code: "all", name: "全部" },
+  ...CLOTHES_CATEGORY_OPTIONS,
+];
+
+const seasonOptions = [
+  { code: "all", name: "全部季节" },
+  ...CLOTHES_SEASON_OPTIONS,
+];
+
+function selectCategory(code) {
+  if (code === props.activeCategory) return;
+  emit("update:activeCategory", code);
+}
+
+function selectSeason(code) {
+  if (code === props.activeSeason) return;
+  emit("update:activeSeason", code);
 }
 </script>
 
-<style>
-.filter-card {
-  margin-bottom: 24rpx;
-  padding: 26rpx 24rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
-  box-shadow: 0 14rpx 30rpx rgba(73, 81, 69, 0.06);
-  border: 2rpx solid rgba(107, 126, 99, 0.08);
+<style lang="scss" scoped>
+.filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(244, 239, 230, 0.92);
+  backdrop-filter: blur(12px);
+  padding: 16px 28px;
 }
 
-.filter-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.filter-title {
-  font-size: 26rpx;
-  font-weight: 700;
-  color: #314033;
-}
-
-.filter-group + .filter-group {
-  margin-top: 20rpx;
-}
-
-.group-label {
-  display: block;
-  margin-bottom: 12rpx;
-  font-size: 23rpx;
-  color: #6f7c6d;
-}
-
-.chip-scroll {
+.filter-scroll {
+  width: 100%;
   white-space: nowrap;
 }
 
-.chip-row {
-  display: flex;
-  gap: 14rpx;
+.season-scroll {
+  margin-top: 12px;
 }
 
-.chip-wrap {
-  flex-wrap: wrap;
+.filter-chips {
+  display: inline-flex;
+  gap: 10px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 72rpx;
+  padding: 0 28rpx;
+  border-radius: $radius-btn;
+  background: transparent;
+  border: 1px solid $color-border;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.filter-chip-active {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.filter-chip-hover {
+  opacity: 0.85;
+}
+
+.filter-chip-text {
+  font-family: $font-sans;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.filter-chip-active .filter-chip-text {
+  color: $color-text-inverse;
 }
 </style>

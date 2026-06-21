@@ -32,5 +32,6 @@ const _sfc_main = {
     };
   }
 };
-wx.createComponent(_sfc_main);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-15caaac3"]]);
+wx.createComponent(Component);
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/pages/closet-create/components/ClosetStylePicker.js.map

@@ -1,11 +1,10 @@
-
-.h5-tabbar-wrap {
+.h5-tabbar-wrap.data-v-dc680df8 {
   display: block;
 }
-.h5-tabbar-safe {
+.h5-tabbar-safe.data-v-dc680df8 {
   height: 132rpx;
 }
-.h5-tabbar {
+.h5-tabbar.data-v-dc680df8 {
   position: fixed;
   left: 0;
   right: 0;
@@ -13,13 +12,13 @@
   z-index: 999;
   display: flex;
   padding: 14rpx 18rpx calc(14rpx + env(safe-area-inset-bottom));
-  background: rgba(251, 250, 247, 0.96);
+  background: rgba(248, 244, 236, 0.95);
   -webkit-backdrop-filter: blur(18rpx);
           backdrop-filter: blur(18rpx);
   box-shadow: 0 -10rpx 30rpx rgba(73, 81, 69, 0.08);
   border-top: 1rpx solid rgba(107, 126, 99, 0.12);
 }
-.h5-tabbar-item {
+.h5-tabbar-item.data-v-dc680df8 {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -27,17 +26,21 @@
   justify-content: center;
   gap: 8rpx;
   padding: 8rpx 0;
+  transition: background 0.2s ease;
 }
-.h5-tabbar-item-active .h5-tabbar-text {
-  color: #314033;
+.h5-tabbar-item-active .h5-tabbar-text.data-v-dc680df8 {
+  color: #3a5443;
   font-weight: 600;
 }
-.h5-tabbar-icon {
+.h5-tabbar-icon.data-v-dc680df8 {
   width: 44rpx;
   height: 44rpx;
+  transition: color 0.2s ease;
 }
-.h5-tabbar-text {
+.h5-tabbar-text.data-v-dc680df8 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 20rpx;
   color: #7a8678;
   line-height: 1;
+  transition: color 0.2s ease, font-weight 0.2s ease;
 }

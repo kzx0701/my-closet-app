@@ -46,8 +46,10 @@ $color-bg-tag: #ebe4d6;
 $color-bg-success: #f3f6ef;
 
 // --- 边框色 ---
-$color-border: rgba(107, 126, 99, 0.08);
-$color-border-hover: rgba(107, 126, 99, 0.12);
+$color-border: rgba(58, 84, 67, 0.10);
+$color-border-soft: rgba(58, 84, 67, 0.05);
+$color-border-hover: rgba(58, 84, 67, 0.12);
+$color-border-dark: rgba(244, 239, 230, 0.12);
 
 // --- 阴影 ---
 $shadow-card: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
@@ -106,6 +108,27 @@ $color-danger-bg: #f7ebe8;
 // --- 渐变暖色（Hero 装饰） ---
 $gradient-hero-left: #d5e2b9;
 $gradient-hero-right: #f6dca8;
+
+// --- 字体家族 ---
+$font-serif: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+$font-sans: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+$font-mono: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+$font-kai: "Kaiti SC", "STKaiti", "KaiTi", "PingFang SC", "PingFangSC", "Microsoft YaHei", sans-serif;
+
+// --- 反色文字透明度 ---
+$inverse-85: rgba(244, 239, 230, 0.85);
+$inverse-55: rgba(244, 239, 230, 0.55);
+$inverse-50: rgba(244, 239, 230, 0.50);
+$inverse-35: rgba(244, 239, 230, 0.35);
+$inverse-25: rgba(244, 239, 230, 0.25);
+$inverse-12: rgba(244, 239, 230, 0.12);
+
+// --- 按钮圆角（20px = 40rpx） ---
+$radius-btn: 40rpx;
+$radius-card: 36rpx;
+
+// --- 底部固定栏渐变遮罩 ---
+$gradient-bottom-bar: linear-gradient(180deg, rgba(244, 239, 230, 0) 0%, #f4efe6 30%);
 
 // ============================================================================
 // uView Plus 主题定制

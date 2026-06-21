@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MyCloset · 虚拟形象换装</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #f4efe6; --card: #ffffff; --primary: #2d4334; --accent: #b85c3a;
+  --text: #2a2018; --muted: #8a7a6a; --border: #e5ddd0; --shadow: 0 2px 12px rgba(45,67,52,0.08);
+}
+body {
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+  display: flex; justify-content: center; align-items: flex-start; padding: 16px;
+}
+.phone {
+  width: 100%; max-width: 390px; background: var(--card); border-radius: 28px;
+  box-shadow: var(--shadow); overflow: hidden; min-height: 780px;
+  display: flex; flex-direction: column;
+}
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 10px; border-bottom: 1px solid var(--border);
+}
+.app-title { font-size: 18px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+.app-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.header-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.stage {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding: 12px 0 8px;
+  background: linear-gradient(180deg, #faf6ee 0%, #f4efe6 100%);
+}
+.avatar-wrap {
+  position: relative; width: 260px; aspect-ratio: 912 / 1216;
+  filter: drop-shadow(0 4px 12px rgba(45,67,52,0.12));
+}
+.avatar-wrap img {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  transition: opacity 0.18s ease;
+}
+.avatar-wrap svg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; transition: opacity 0.18s ease;
+}
+.avatar-wrap.switching img, .avatar-wrap.switching svg { opacity: 0.2; }
+.config-bar {
+  display: flex; gap: 6px; padding: 8px 16px 4px; flex-wrap: wrap; justify-content: center;
+}
+.config-chip {
+  font-size: 10px; padding: 3px 8px; border-radius: 10px;
+  background: var(--primary); color: #fff; font-weight: 500; white-space: nowrap;
+}
+.config-chip.accent { background: var(--accent); }
+.panel { padding: 12px 16px 20px; }
+.gender-toggle {
+  display: flex; gap: 0; background: #f0ebe2; border-radius: 12px; padding: 3px; margin-bottom: 14px;
+}
+.gender-btn {
+  flex: 1; padding: 8px; border: none; background: transparent; border-radius: 9px;
+  font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.gender-btn.active { background: var(--card); color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.cat-tabs { display: flex; gap: 0; margin-bottom: 14px; border-bottom: 1px solid var(--border); }
+.cat-tab {
+  flex: 1; padding: 8px 4px; border: none; background: transparent;
+  font-size: 12px; color: var(--muted); cursor: pointer; position: relative; font-weight: 500;
+}
+.cat-tab.active { color: var(--primary); font-weight: 700; }
+.cat-tab.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 25%; right: 25%; height: 2px;
+  background: var(--accent); border-radius: 1px;
+}
+.styles { display: flex; gap: 10px; }
+.style-card {
+  flex: 1; border: 2px solid var(--border); border-radius: 14px; padding: 12px 8px;
+  text-align: center; cursor: pointer; transition: all 0.2s; background: #faf8f4;
+}
+.style-card.active { border-color: var(--accent); background: #fdf6f0; }
+.style-card:active { transform: scale(0.97); }
+.style-swatch {
+  width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 6px;
+  border: 2px solid rgba(0,0,0,0.06); position: relative; overflow: hidden;
+}
+.style-swatch::after {
+  content: ''; position: absolute; top: 15%; left: 20%; width: 30%; height: 25%;
+  border-radius: 50%; background: rgba(255,255,255,0.25);
+}
+.style-name { font-size: 11px; color: var(--text); font-weight: 500; }
+.style-card.active .style-name { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header class="app-header">
+    <div>
+      <div class="app-title">MyCloset</div>
+      <div class="app-sub">虚拟形象 · 换装搭配</div>
+    </div>
+    <div class="header-dot"></div>
+  </header>
+
+  <div class="stage">
+    <div class="avatar-wrap" id="avatar-wrap">
+      <img id="body-img" src="assets/body-female.png" alt="avatar">
+      <svg id="clothing-svg" viewBox="0 0 912 1216" xmlns="http://www.w3.org/2000/svg">
+        <defs id="svg-defs"></defs>
+        <g id="layer-shoes"></g>
+        <g id="layer-bottom"></g>
+        <g id="layer-top"></g>
+      </svg>
+    </div>
+    <div class="config-bar" id="config-bar"></div>
+  </div>
+
+  <div class="panel">
+    <div class="gender-toggle">
+      <button class="gender-btn active" data-gender="female" onclick="switchGender('female')">女生</button>
+      <button class="gender-btn" data-gender="male" onclick="switchGender('male')">男生</button>
+    </div>
+    <div class="cat-tabs" id="cat-tabs">
+      <button class="cat-tab active" data-cat="hair" onclick="switchCategory('hair')">发型</button>
+      <button class="cat-tab" data-cat="top" onclick="switchCategory('top')">上装</button>
+      <button class="cat-tab" data-cat="bottom" onclick="switchCategory('bottom')">下装</button>
+      <button class="cat-tab" data-cat="shoes" onclick="switchCategory('shoes')">鞋子</button>
+    </div>
+    <div class="styles" id="styles"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  身体图片 (AI生成 → 透明PNG)
+// ============================================================
+const BODY_IMG = {
+  'female-long':  'assets/body-female.png',
+  'female-bob':   'assets/body-female-bob.png',
+  'male-short':   'assets/body-male.png',
+  'male-parted':  'assets/body-male-parted.png',
+};
+Object.values(BODY_IMG).forEach(s => { const i = new Image(); i.src = s; });
+
+// ============================================================
+//  每张身体图像的精确测量数据 (基于像素分析)
+//  坐标系: 912×1216, 与身体PNG完全对齐
+// ============================================================
+const BODY_DATA = {
+  'female-long': {
+    shoulderY: 543, shoulderL: 280, shoulderR: 632,
+    waistY: 690, waistL: 346, waistR: 566,
+    hipY: 742, hipL: 326, hipR: 586,
+    crotchY: 820,
+    kneeY: 974, kneeL: 372, kneeR: 539,
+    ankleY: 1084, ankleL: 392, ankleR: 520,
+    feetY: 1154, feetL: 394, feetR: 518,
+    centerX: 456
+  },
+  'female-bob': {
+    shoulderY: 543, shoulderL: 280, shoulderR: 632,
+    waistY: 692, waistL: 346, waistR: 566,
+    hipY: 743, hipL: 326, hipR: 586,
+    crotchY: 820,
+    kneeY: 979, kneeL: 363, kneeR: 550,
+    ankleY: 1088, ankleL: 379, ankleR: 534,
+    feetY: 1159, feetL: 386, feetR: 527,
+    centerX: 456
+  },
+  'male-short': {
+    shoulderY: 545, shoulderL: 265, shoulderR: 645,
+    waistY: 802, waistL: 341, waistR: 571,
+    hipY: 853, hipL: 321, hipR: 591,
+    crotchY: 930,
+    kneeY: 1002, kneeL: 347, kneeR: 562,
+    ankleY: 1090, ankleL: 332, ankleR: 578,
+    feetY: 1151, feetL: 352, feetR: 578,
+    centerX: 456
+  },
+  'male-parted': {
+    shoulderY: 549, shoulderL: 265, shoulderR: 645,
+    waistY: 839, waistL: 341, waistR: 571,
+    hipY: 887, hipL: 321, hipR: 591,
+    crotchY: 960,
+    kneeY: 1022, kneeL: 349, kneeR: 562,
+    ankleY: 1098, ankleL: 329, ankleR: 582,
+    feetY: 1168, feetL: 388, feetR: 506,
+    centerX: 456
+  }
+};
+
+// 获取当前身体图像的测量数据
+function getMeas() {
+  const key = `${state.gender}-${state.config[state.gender].hair}`;
+  return BODY_DATA[key];
+}
+
+// ============================================================
+//  SVG 渐变定义
+// ============================================================
+const SVG_DEFS = `
+  <linearGradient id="g-f-tee" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#c66a48"/><stop offset="1" stop-color="#a04e30"/>
+  </linearGradient>
+  <linearGradient id="g-f-shirt" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#8aaa7e"/><stop offset="1" stop-color="#688a5e"/>
+  </linearGradient>
+  <linearGradient id="g-f-jeans" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#4a6a82"/><stop offset="1" stop-color="#324a62"/>
+  </linearGradient>
+  <linearGradient id="g-f-skirt" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3a5344"/><stop offset="1" stop-color="#243a2a"/>
+  </linearGradient>
+  <linearGradient id="g-m-tee" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3a5344"/><stop offset="1" stop-color="#1d331e"/>
+  </linearGradient>
+  <linearGradient id="g-m-hoodie" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#c66a48"/><stop offset="1" stop-color="#a04e30"/>
+  </linearGradient>
+  <linearGradient id="g-m-jeans" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#4a6a82"/><stop offset="1" stop-color="#324a62"/>
+  </linearGradient>
+  <linearGradient id="g-m-cargo" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#c8b080"/><stop offset="1" stop-color="#a89060"/>
+  </linearGradient>
+`;
+
+// ============================================================
+//  SVG 衣物生成器 - 基于身体测量数据动态生成
+// ============================================================
+
+// --- 女装上装 ---
+function genFemaleTee(m) {
+  const top = m.shoulderY - 12;
+  const bot = m.waistY + 5; // 贴合背心下摆
+  const sL = m.shoulderL - 8, sR = m.shoulderR + 8;
+  const wL = m.waistL - 12, wR = m.waistR + 12;
+  const cx = m.centerX;
+  const neckW = 28, neckD = 22;
+  const sleeveBot = m.shoulderY + 95;
+  // 腰部中间控制点（衣物在腰部略微内收，贴合身体曲线）
+  const midY = (m.shoulderY + m.waistY) / 2 + 10;
+  const midL = (sL + wL) / 2 + 4;
+  const midR = (sR + wR) / 2 - 4;
+  return `
+    <path d="M ${sL},${top+8} Q ${sL},${top} ${sL+10},${top}
+             L ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             L ${sR-10},${top} Q ${sR},${top} ${sR},${top+8}
+             Q ${midR},${midY} ${wR},${bot} L ${wL},${bot}
+             Q ${midL},${midY} ${sL},${top+8} Z"
+          fill="url(#g-f-tee)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${sL},${top+8} L ${sL-22},${sleeveBot} Q ${sL-18},${sleeveBot+8} ${sL-5},${sleeveBot+5}
+             L ${sL+15},${sleeveBot-15} L ${sL+20},${top+18} Z"
+          fill="url(#g-f-tee)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${sR},${top+8} L ${sR+22},${sleeveBot} Q ${sR+18},${sleeveBot+8} ${sR+5},${sleeveBot+5}
+             L ${sR-15},${sleeveBot-15} L ${sR-20},${top+18} Z"
+          fill="url(#g-f-tee)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${sL-22},${sleeveBot} Q ${sL-18},${sleeveBot+8} ${sL-5},${sleeveBot+5} L ${sL-3},${sleeveBot-2} L ${sL-20},${sleeveBot+2} Z" fill="#8a3e20" opacity="0.5"/>
+    <path d="M ${sR+22},${sleeveBot} Q ${sR+18},${sleeveBot+8} ${sR+5},${sleeveBot+5} L ${sR+3},${sleeveBot-2} L ${sR+20},${sleeveBot+2} Z" fill="#8a3e20" opacity="0.5"/>
+    <path d="M ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top} L ${cx+neckW-4},${top-2} Q ${cx},${top+neckD-6} ${cx-neckW+4},${top-2} Z" fill="#8a3e20" opacity="0.4"/>
+    <rect x="${wL}" y="${bot-10}" width="${wR-wL}" height="10" rx="2" fill="#8a3e20" opacity="0.25"/>
+  `;
+}
+
+function genFemaleShirt(m) {
+  const top = m.shoulderY - 12;
+  const bot = m.waistY + 5;
+  const sL = m.shoulderL - 8, sR = m.shoulderR + 8;
+  const wL = m.waistL - 12, wR = m.waistR + 12;
+  const cx = m.centerX;
+  const neckW = 30, neckD = 25;
+  const sleeveBot = m.shoulderY + 95;
+  const midY = (m.shoulderY + m.waistY) / 2 + 10;
+  const midL = (sL + wL) / 2 + 4;
+  const midR = (sR + wR) / 2 - 4;
+  return `
+    <path d="M ${sL},${top+8} Q ${sL},${top} ${sL+10},${top}
+             L ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             L ${sR-10},${top} Q ${sR},${top} ${sR},${top+8}
+             Q ${midR},${midY} ${wR},${bot} L ${wL},${bot}
+             Q ${midL},${midY} ${sL},${top+8} Z"
+          fill="url(#g-f-shirt)" stroke="#4e6e44" stroke-width="1.5"/>
+    <path d="M ${sL},${top+8} L ${sL-22},${sleeveBot} Q ${sL-18},${sleeveBot+8} ${sL-5},${sleeveBot+5}
+             L ${sL+15},${sleeveBot-15} L ${sL+20},${top+18} Z"
+          fill="url(#g-f-shirt)" stroke="#4e6e44" stroke-width="1.5"/>
+    <path d="M ${sR},${top+8} L ${sR+22},${sleeveBot} Q ${sR+18},${sleeveBot+8} ${sR+5},${sleeveBot+5}
+             L ${sR-15},${sleeveBot-15} L ${sR-20},${top+18} Z"
+          fill="url(#g-f-shirt)" stroke="#4e6e44" stroke-width="1.5"/>
+    <path d="M ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             L ${cx+neckW-3},${top+3} L ${cx+12},${top+neckD-4} L ${cx},${top+neckD-8}
+             L ${cx-12},${top+neckD-4} L ${cx-neckW+3},${top+3} Z"
+          fill="#5e7e54" stroke="#4e6e44" stroke-width="1"/>
+    <circle cx="${cx}" cy="${top+neckD+30}" r="3" fill="#4e6e44"/>
+    <circle cx="${cx}" cy="${top+neckD+75}" r="3" fill="#4e6e44"/>
+    <circle cx="${cx}" cy="${top+neckD+120}" r="3" fill="#4e6e44"/>
+    <line x1="${cx}" y1="${top+neckD}" x2="${cx}" y2="${bot-5}" stroke="#4e6e44" stroke-width="1" opacity="0.35"/>
+    <path d="M ${sL-22},${sleeveBot} Q ${sL-18},${sleeveBot+8} ${sL-5},${sleeveBot+5} L ${sL-3},${sleeveBot-2} L ${sL-20},${sleeveBot+2} Z" fill="#5e7e54" opacity="0.6"/>
+    <path d="M ${sR+22},${sleeveBot} Q ${sR+18},${sleeveBot+8} ${sR+5},${sleeveBot+5} L ${sR+3},${sleeveBot-2} L ${sR+20},${sleeveBot+2} Z" fill="#5e7e54" opacity="0.6"/>
+    <rect x="${wL}" y="${bot-10}" width="${wR-wL}" height="10" rx="2" fill="#4e6e44" opacity="0.25"/>
+  `;
+}
+
+// --- 女装下装 ---
+function genFemalePants(m) {
+  const top = m.waistY - 15; // 重叠上装
+  const bandH = 16;
+  const bot = m.ankleY - 22; // 露出鞋子
+  const wL = m.waistL - 15, wR = m.waistR + 15;
+  const cx = m.centerX;
+  const ankleL = m.ankleL + 3, ankleR = m.ankleR - 3;
+  const kneeL = m.kneeL - 10, kneeR = m.kneeR + 10;
+  // 臀部控制点（裤腿从臀部到大腿的自然外扩）
+  const hipL = m.hipL - 8, hipR = m.hipR + 8;
+  const crotchL = cx - 3, crotchR = cx + 3;
+  return `
+    <rect x="${wL}" y="${top}" width="${wR-wL}" height="${bandH}" rx="3" fill="#2a4055"/>
+    <path d="M ${wL+2},${top+bandH}
+             Q ${hipL},${m.hipY} ${kneeL},${m.kneeY}
+             Q ${ankleL+5},${(m.kneeY+m.ankleY)/2} ${ankleL},${bot}
+             L ${crotchL},${bot}
+             Q ${crotchL-2},${(m.crotchY+m.ankleY)/2} ${crotchL},${m.crotchY}
+             L ${crotchL},${top+bandH} Z"
+          fill="url(#g-f-jeans)" stroke="#2a4055" stroke-width="1.5"/>
+    <path d="M ${wR-2},${top+bandH}
+             Q ${hipR},${m.hipY} ${kneeR},${m.kneeY}
+             Q ${ankleR-5},${(m.kneeY+m.ankleY)/2} ${ankleR},${bot}
+             L ${crotchR},${bot}
+             Q ${crotchR+2},${(m.crotchY+m.ankleY)/2} ${crotchR},${m.crotchY}
+             L ${crotchR},${top+bandH} Z"
+          fill="url(#g-f-jeans)" stroke="#2a4055" stroke-width="1.5"/>
+    <line x1="${cx}" y1="${top+bandH}" x2="${cx}" y2="${bot}" stroke="#2a4055" stroke-width="1.5" opacity="0.4"/>
+    <path d="M ${wL+8},${top+bandH+8} Q ${wL+18},${top+bandH+22} ${wL+30},${top+bandH+18}" stroke="#2a4055" stroke-width="1.5" fill="none" opacity="0.35"/>
+    <path d="M ${wR-8},${top+bandH+8} Q ${wR-18},${top+bandH+22} ${wR-30},${top+bandH+18}" stroke="#2a4055" stroke-width="1.5" fill="none" opacity="0.35"/>
+    <ellipse cx="${(wL+cx)/2}" cy="${m.kneeY}" rx="22" ry="8" fill="#2a4055" opacity="0.1"/>
+    <ellipse cx="${(wR+cx)/2}" cy="${m.kneeY}" rx="22" ry="8" fill="#2a4055" opacity="0.1"/>
+    <rect x="${ankleL}" y="${bot-12}" width="${cx-ankleL-2}" height="12" rx="2" fill="#2a4055" opacity="0.35"/>
+    <rect x="${cx+2}" y="${bot-12}" width="${ankleR-cx-2}" height="12" rx="2" fill="#2a4055" opacity="0.35"/>
+  `;
+}
+
+function genFemaleSkirt(m) {
+  const top = m.waistY - 15;
+  const bandH = 14;
+  const bot = m.kneeY + 20;
+  const wL = m.waistL - 15, wR = m.waistR + 15;
+  const hemL = m.hipL - 35, hemR = m.hipR + 35;
+  const cx = m.centerX;
+  // 臀部控制点 - 裙子从腰部到臀部的自然外扩曲线
+  const hipCtrlL = m.hipL - 5, hipCtrlR = m.hipR + 5;
+  const hipCtrlY = m.hipY - 10;
+  return `
+    <rect x="${wL}" y="${top}" width="${wR-wL}" height="${bandH}" rx="3" fill="#1a2820"/>
+    <path d="M ${wL+2},${top+bandH}
+             Q ${hipCtrlL},${hipCtrlY} ${hemL},${bot}
+             L ${hemR},${bot}
+             Q ${hipCtrlR},${hipCtrlY} ${wR-2},${top+bandH} Z"
+          fill="url(#g-f-skirt)" stroke="#1a2820" stroke-width="1.5"/>
+    <line x1="${wL+20}" y1="${top+bandH+4}" x2="${hemL+15}" y2="${bot-4}" stroke="#1a2820" stroke-width="1" opacity="0.2"/>
+    <line x1="${cx-20}" y1="${top+bandH+4}" x2="${cx-15}" y2="${bot-4}" stroke="#1a2820" stroke-width="1" opacity="0.2"/>
+    <line x1="${cx}" y1="${top+bandH+4}" x2="${cx}" y2="${bot-4}" stroke="#1a2820" stroke-width="1" opacity="0.2"/>
+    <line x1="${cx+20}" y1="${top+bandH+4}" x2="${cx+15}" y2="${bot-4}" stroke="#1a2820" stroke-width="1" opacity="0.2"/>
+    <line x1="${wR-20}" y1="${top+bandH+4}" x2="${hemR-15}" y2="${bot-4}" stroke="#1a2820" stroke-width="1" opacity="0.2"/>
+    <path d="M ${hemL},${bot} L ${hemR},${bot} L ${hemR-3},${bot+8} L ${hemL+3},${bot+8} Z" fill="#1a2820" opacity="0.35"/>
+    <path d="M ${cx-8},${top+bandH+4} Q ${cx-5},${(top+bot)/2} ${cx-3},${bot-8}" stroke="#5a7a64" stroke-width="2" fill="none" opacity="0.15"/>
+  `;
+}
+
+// --- 女装鞋子 ---
+function genFemaleSneakers(m) {
+  const top = m.ankleY - 25;
+  const bot = m.feetY + 8;
+  const cx = m.centerX;
+  const feetL = m.feetL - 12, feetR = m.feetR + 12;
+  const leftC = (feetL + cx - 3) / 2;
+  const rightC = (cx + 3 + feetR) / 2;
+  return `
+    <path d="M ${feetL},${top+15} Q ${feetL-5},${top+8} ${feetL+8},${top+5}
+             L ${cx-8},${top+5} Q ${cx-3},${top+12} ${cx-5},${top+22}
+             L ${cx-5},${bot-15} Q ${cx},${bot-5} ${leftC+15},${bot-2}
+             L ${leftC+15},${bot} Q ${feetL+5},${bot+2} ${feetL-2},${bot-8}
+             Q ${feetL-8},${bot-20} ${feetL},${top+15} Z"
+          fill="#ffffff" stroke="#cccccc" stroke-width="1.5"/>
+    <path d="M ${cx+5},${top+15} Q ${cx+3},${top+8} ${cx+8},${top+5}
+             L ${feetR-8},${top+5} Q ${feetR+5},${top+8} ${feetR},${top+22}
+             L ${feetR},${bot-15} Q ${feetR-5},${bot-5} ${rightC-15},${bot-2}
+             L ${rightC-15},${bot} Q ${feetR-5},${bot+2} ${feetR+2},${bot-8}
+             Q ${feetR+8},${bot-20} ${feetR},${top+15} Z"
+          fill="#ffffff" stroke="#cccccc" stroke-width="1.5"/>
+    <path d="M ${feetL-2},${bot-10} Q ${feetL+5},${bot+2} ${leftC+15},${bot} L ${leftC+15},${bot-4} Q ${feetL+5},${bot-2} ${feetL-2},${bot-14} Z" fill="#333333" opacity="0.7"/>
+    <path d="M ${feetR+2},${bot-10} Q ${feetR-5},${bot+2} ${rightC-15},${bot} L ${rightC-15},${bot-4} Q ${feetR-5},${bot-2} ${feetR+2},${bot-14} Z" fill="#333333" opacity="0.7"/>
+    <path d="M ${feetL+8},${top+18} L ${cx-12},${top+22} M ${feetL+12},${top+28} L ${cx-8},${top+32} M ${feetL+16},${top+38} L ${cx-4},${top+42}" stroke="#b85c3a" stroke-width="1.5" fill="none"/>
+    <path d="M ${cx+8},${top+18} L ${feetR-12},${top+22} M ${cx+12},${top+28} L ${feetR-8},${top+32} M ${cx+16},${top+38} L ${feetR-4},${top+42}" stroke="#b85c3a" stroke-width="1.5" fill="none"/>
+    <path d="M ${feetL+5},${top+38} Q ${leftC},${top+36} ${cx-5},${top+40}" stroke="#b85c3a" stroke-width="2.5" fill="none"/>
+    <path d="M ${cx+5},${top+38} Q ${rightC},${top+36} ${feetR-5},${top+40}" stroke="#b85c3a" stroke-width="2.5" fill="none"/>
+  `;
+}
+
+function genFemaleBoots(m) {
+  const top = m.ankleY - 60;
+  const bot = m.feetY + 8;
+  const cx = m.centerX;
+  const feetL = m.feetL - 10, feetR = m.feetR + 10;
+  return `
+    <path d="M ${feetL},${top} Q ${feetL-3},${top-5} ${feetL+8},${top-8}
+             L ${cx-8},${top-8} Q ${cx-3},${top} ${cx-5},${top+15}
+             L ${cx-5},${bot-15} Q ${cx},${bot-5} ${cx-30+cx-feetL},${bot-2}
+             L ${cx-30+cx-feetL},${bot} Q ${feetL+5},${bot+2} ${feetL-2},${bot-8}
+             Q ${feetL-8},${bot-30} ${feetL},${top} Z"
+          fill="#4a3525" stroke="#2a1a10" stroke-width="1.5"/>
+    <path d="M ${cx+5},${top} Q ${cx+3},${top-5} ${cx+8},${top-8}
+             L ${feetR-8},${top-8} Q ${feetR+3},${top-5} ${feetR},${top+15}
+             L ${feetR},${bot-15} Q ${feetR-5},${bot-5} ${feetR-(feetR-cx)-30+feetR-cx},${bot-2}
+             L ${feetR-(feetR-cx)-30+feetR-cx},${bot} Q ${feetR-5},${bot+2} ${feetR+2},${bot-8}
+             Q ${feetR+8},${bot-30} ${feetR},${top} Z"
+          fill="#4a3525" stroke="#2a1a10" stroke-width="1.5"/>
+    <path d="M ${feetL-2},${bot-10} Q ${feetL+5},${bot+2} ${cx-25},${bot} L ${cx-25},${bot-4} Q ${feetL+5},${bot-2} ${feetL-2},${bot-14} Z" fill="#1a0a00" opacity="0.8"/>
+    <path d="M ${feetR+2},${bot-10} Q ${feetR-5},${bot+2} ${cx+25},${bot} L ${cx+25},${bot-4} Q ${feetR-5},${bot-2} ${feetR+2},${bot-14} Z" fill="#1a0a00" opacity="0.8"/>
+    <path d="M ${feetL},${top-5} Q ${feetL-3},${top-8} ${feetL+8},${top-8} L ${cx-8},${top-8} Q ${cx-3},${top} ${cx-5},${top+5} L ${cx-8},${top+3} L ${feetL+5},${top+3} Z" fill="#6a5535" opacity="0.6"/>
+    <path d="M ${cx+5},${top-5} Q ${cx+3},${top-8} ${cx+8},${top-8} L ${feetR-8},${top-8} Q ${feetR+3},${top-5} ${feetR},${top+5} L ${feetR-5},${top+3} L ${cx+8},${top+3} Z" fill="#6a5535" opacity="0.6"/>
+    <rect x="${feetL-2}" y="${top+25}" width="${cx-feetL}" height="6" rx="1" fill="#2a1a10" opacity="0.5"/>
+    <rect x="${cx+2}" y="${top+25}" width="${feetR-cx}" height="6" rx="1" fill="#2a1a10" opacity="0.5"/>
+    <circle cx="${cx-15}" cy="${top+28}" r="2.5" fill="#c9a86a"/>
+    <circle cx="${cx+15}" cy="${top+28}" r="2.5" fill="#c9a86a"/>
+  `;
+}
+
+// --- 男装上装 ---
+function genMaleTee(m) {
+  const top = m.shoulderY - 12;
+  const bot = m.waistY + 5;
+  const sL = m.shoulderL - 8, sR = m.shoulderR + 8;
+  const wL = m.waistL - 15, wR = m.waistR + 15;
+  const cx = m.centerX;
+  const neckW = 32, neckD = 20;
+  const sleeveBot = m.shoulderY + 100;
+  // 腰部中间控制点（男性身体也有轻微的腰部曲线）
+  const midY = (m.shoulderY + m.waistY) / 2 + 10;
+  const midL = (sL + wL) / 2 + 2;
+  const midR = (sR + wR) / 2 - 2;
+  return `
+    <path d="M ${sL},${top+8} Q ${sL},${top} ${sL+10},${top}
+             L ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             L ${sR-10},${top} Q ${sR},${top} ${sR},${top+8}
+             Q ${midR},${midY} ${wR},${bot} L ${wL},${bot}
+             Q ${midL},${midY} ${sL},${top+8} Z"
+          fill="url(#g-m-tee)" stroke="#1a2820" stroke-width="1.5"/>
+    <path d="M ${sL},${top+8} L ${sL-18},${sleeveBot} Q ${sL-12},${sleeveBot+8} ${sL},${sleeveBot+5}
+             L ${sL+18},${sleeveBot-18} L ${sL+22},${top+18} Z"
+          fill="url(#g-m-tee)" stroke="#1a2820" stroke-width="1.5"/>
+    <path d="M ${sR},${top+8} L ${sR+18},${sleeveBot} Q ${sR+12},${sleeveBot+8} ${sR},${sleeveBot+5}
+             L ${sR-18},${sleeveBot-18} L ${sR-22},${top+18} Z"
+          fill="url(#g-m-tee)" stroke="#1a2820" stroke-width="1.5"/>
+    <path d="M ${sL-18},${sleeveBot} Q ${sL-12},${sleeveBot+8} ${sL},${sleeveBot+5} L ${sL+2},${sleeveBot-2} L ${sL-14},${sleeveBot+2} Z" fill="#1a2820" opacity="0.5"/>
+    <path d="M ${sR+18},${sleeveBot} Q ${sR+12},${sleeveBot+8} ${sR},${sleeveBot+5} L ${sR-2},${sleeveBot-2} L ${sR+14},${sleeveBot+2} Z" fill="#1a2820" opacity="0.5"/>
+    <path d="M ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top} L ${cx+neckW-4},${top-2} Q ${cx},${top+neckD-6} ${cx-neckW+4},${top-2} Z" fill="#1a2820" opacity="0.4"/>
+    <rect x="${wL}" y="${bot-10}" width="${wR-wL}" height="10" rx="2" fill="#1a2820" opacity="0.25"/>
+  `;
+}
+
+function genMaleHoodie(m) {
+  const top = m.shoulderY - 12;
+  const bot = m.waistY + 10;
+  const sL = m.shoulderL - 8, sR = m.shoulderR + 8;
+  const wL = m.waistL - 15, wR = m.waistR + 15;
+  const cx = m.centerX;
+  const neckW = 34, neckD = 28;
+  const sleeveBot = m.shoulderY + 100;
+  const midY = (m.shoulderY + m.waistY) / 2 + 10;
+  const midL = (sL + wL) / 2 + 2;
+  const midR = (sR + wR) / 2 - 2;
+  return `
+    <path d="M ${sL},${top+8} Q ${sL},${top} ${sL+10},${top}
+             L ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             L ${sR-10},${top} Q ${sR},${top} ${sR},${top+8}
+             Q ${midR},${midY} ${wR},${bot} L ${wL},${bot}
+             Q ${midL},${midY} ${sL},${top+8} Z"
+          fill="url(#g-m-hoodie)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${sL},${top+8} L ${sL-18},${sleeveBot} Q ${sL-12},${sleeveBot+8} ${sL},${sleeveBot+5}
+             L ${sL+18},${sleeveBot-18} L ${sL+22},${top+18} Z"
+          fill="url(#g-m-hoodie)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${sR},${top+8} L ${sR+18},${sleeveBot} Q ${sR+12},${sleeveBot+8} ${sR},${sleeveBot+5}
+             L ${sR-18},${sleeveBot-18} L ${sR-22},${top+18} Z"
+          fill="url(#g-m-hoodie)" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${cx-neckW},${top} Q ${cx},${top+neckD} ${cx+neckW},${top}
+             Q ${cx+neckW-8},${top-25} ${cx},${top-30}
+             Q ${cx-neckW+8},${top-25} ${cx-neckW},${top} Z"
+          fill="#a04e30" stroke="#8a3e20" stroke-width="1.5"/>
+    <path d="M ${cx-neckW+4},${top+2} Q ${cx},${top+neckD-4} ${cx+neckW-4},${top+2}
+             L ${cx+neckW-8},${top-2} Q ${cx},${top+neckD-12} ${cx-neckW+8},${top-2} Z"
+          fill="#8a3e20" opacity="0.3"/>
+    <line x1="${cx-18}" y1="${top+neckD+5}" x2="${cx-20}" y2="${top+neckD+50}" stroke="#8a3e20" stroke-width="2"/>
+    <line x1="${cx+18}" y1="${top+neckD+5}" x2="${cx+20}" y2="${top+neckD+50}" stroke="#8a3e20" stroke-width="2"/>
+    <circle cx="${cx-20}" cy="${top+neckD+52}" r="3" fill="#8a3e20"/>
+    <circle cx="${cx+20}" cy="${top+neckD+52}" r="3" fill="#8a3e20"/>
+    <path d="M ${cx-50},${top+neckD+70} Q ${cx},${top+neckD+85} ${cx+50},${top+neckD+70} L ${cx+45},${top+neckD+120} Q ${cx},${top+neckD+130} ${cx-45},${top+neckD+120} Z"
+          fill="#a04e30" stroke="#8a3e20" stroke-width="1" opacity="0.5"/>
+    <path d="M ${sL-18},${sleeveBot} Q ${sL-12},${sleeveBot+8} ${sL},${sleeveBot+5} L ${sL+2},${sleeveBot-2} L ${sL-14},${sleeveBot+2} Z" fill="#8a3e20" opacity="0.6"/>
+    <path d="M ${sR+18},${sleeveBot} Q ${sR+12},${sleeveBot+8} ${sR},${sleeveBot+5} L ${sR-2},${sleeveBot-2} L ${sR+14},${sleeveBot+2} Z" fill="#8a3e20" opacity="0.6"/>
+    <rect x="${wL}" y="${bot-11}" width="${wR-wL}" height="11" rx="2" fill="#8a3e20" opacity="0.35"/>
+  `;
+}
+
+// --- 男装下装 ---
+function genMalePants(m) {
+  const top = m.waistY - 15;
+  const bandH = 18;
+  const bot = m.ankleY - 22; // 露出鞋子
+  const wL = m.waistL - 18, wR = m.waistR + 18;
+  const cx = m.centerX;
+  const ankleL = m.ankleL + 5, ankleR = m.ankleR - 5;
+  const kneeL = m.kneeL - 10, kneeR = m.kneeR + 10;
+  const hipL = m.hipL - 8, hipR = m.hipR + 8;
+  const crotchL = cx - 3, crotchR = cx + 3;
+  return `
+    <rect x="${wL}" y="${top}" width="${wR-wL}" height="${bandH}" rx="3" fill="#2a4055"/>
+    <path d="M ${wL+2},${top+bandH}
+             Q ${hipL},${m.hipY} ${kneeL},${m.kneeY}
+             Q ${ankleL+5},${(m.kneeY+m.ankleY)/2} ${ankleL},${bot}
+             L ${crotchL},${bot}
+             Q ${crotchL-2},${(m.crotchY+m.ankleY)/2} ${crotchL},${m.crotchY}
+             L ${crotchL},${top+bandH} Z"
+          fill="url(#g-m-jeans)" stroke="#2a4055" stroke-width="1.5"/>
+    <path d="M ${wR-2},${top+bandH}
+             Q ${hipR},${m.hipY} ${kneeR},${m.kneeY}
+             Q ${ankleR-5},${(m.kneeY+m.ankleY)/2} ${ankleR},${bot}
+             L ${crotchR},${bot}
+             Q ${crotchR+2},${(m.crotchY+m.ankleY)/2} ${crotchR},${m.crotchY}
+             L ${crotchR},${top+bandH} Z"
+          fill="url(#g-m-jeans)" stroke="#2a4055" stroke-width="1.5"/>
+    <line x1="${cx}" y1="${top+bandH}" x2="${cx}" y2="${bot}" stroke="#2a4055" stroke-width="1.5" opacity="0.4"/>
+    <path d="M ${wL+10},${top+bandH+8} Q ${wL+22},${top+bandH+25} ${wL+38},${top+bandH+20}" stroke="#2a4055" stroke-width="1.5" fill="none" opacity="0.35"/>
+    <path d="M ${wR-10},${top+bandH+8} Q ${wR-22},${top+bandH+25} ${wR-38},${top+bandH+20}" stroke="#2a4055" stroke-width="1.5" fill="none" opacity="0.35"/>
+    <ellipse cx="${(wL+cx)/2}" cy="${m.kneeY}" rx="26" ry="9" fill="#2a4055" opacity="0.1"/>
+    <ellipse cx="${(wR+cx)/2}" cy="${m.kneeY}" rx="26" ry="9" fill="#2a4055" opacity="0.1"/>
+    <rect x="${ankleL}" y="${bot-12}" width="${cx-ankleL-2}" height="12" rx="2" fill="#2a4055" opacity="0.35"/>
+    <rect x="${cx+2}" y="${bot-12}" width="${ankleR-cx-2}" height="12" rx="2" fill="#2a4055" opacity="0.35"/>
+  `;
+}
+
+function genMaleCargo(m) {
+  const top = m.waistY - 15;
+  const bandH = 18;
+  const bot = m.ankleY - 22; // 露出鞋子
+  const wL = m.waistL - 18, wR = m.waistR + 18;
+  const cx = m.centerX;
+  const ankleL = m.ankleL + 5, ankleR = m.ankleR - 5;
+  const kneeL = m.kneeL - 10, kneeR = m.kneeR + 10;
+  const hipL = m.hipL - 8, hipR = m.hipR + 8;
+  const crotchL = cx - 3, crotchR = cx + 3;
+  return `
+    <rect x="${wL}" y="${top}" width="${wR-wL}" height="${bandH}" rx="3" fill="#9a8255"/>
+    <path d="M ${wL+2},${top+bandH}
+             Q ${hipL},${m.hipY} ${kneeL},${m.kneeY}
+             Q ${ankleL+5},${(m.kneeY+m.ankleY)/2} ${ankleL},${bot}
+             L ${crotchL},${bot}
+             Q ${crotchL-2},${(m.crotchY+m.ankleY)/2} ${crotchL},${m.crotchY}
+             L ${crotchL},${top+bandH} Z"
+          fill="url(#g-m-cargo)" stroke="#8a7045" stroke-width="1.5"/>
+    <path d="M ${wR-2},${top+bandH}
+             Q ${hipR},${m.hipY} ${kneeR},${m.kneeY}
+             Q ${ankleR-5},${(m.kneeY+m.ankleY)/2} ${ankleR},${bot}
+             L ${crotchR},${bot}
+             Q ${crotchR+2},${(m.crotchY+m.ankleY)/2} ${crotchR},${m.crotchY}
+             L ${crotchR},${top+bandH} Z"
+          fill="url(#g-m-cargo)" stroke="#8a7045" stroke-width="1.5"/>
+    <line x1="${cx}" y1="${top+bandH}" x2="${cx}" y2="${bot}" stroke="#8a7045" stroke-width="1.5" opacity="0.35"/>
+    <rect x="${wL+8}" y="${m.kneeY-60}" width="55" height="40" rx="4" fill="#a89060" stroke="#8a7045" stroke-width="1" opacity="0.7"/>
+    <rect x="${wR-63}" y="${m.kneeY-60}" width="55" height="40" rx="4" fill="#a89060" stroke="#8a7045" stroke-width="1" opacity="0.7"/>
+    <path d="M ${wL+8},${m.kneeY-60} L ${wL+63},${m.kneeY-60} L ${wL+61},${m.kneeY-54} L ${wL+10},${m.kneeY-54} Z" fill="#8a7045" opacity="0.5"/>
+    <path d="M ${wR-63},${m.kneeY-60} L ${wR-8},${m.kneeY-60} L ${wR-10},${m.kneeY-54} L ${wR-61},${m.kneeY-54} Z" fill="#8a7045" opacity="0.5"/>
+    <circle cx="${wL+35}" cy="${m.kneeY-48}" r="2" fill="#8a7045"/>
+    <circle cx="${wR-35}" cy="${m.kneeY-48}" r="2" fill="#8a7045"/>
+    <ellipse cx="${(wL+cx)/2}" cy="${m.kneeY}" rx="28" ry="12" fill="#a89060" opacity="0.35"/>
+    <ellipse cx="${(wR+cx)/2}" cy="${m.kneeY}" rx="28" ry="12" fill="#a89060" opacity="0.35"/>
+    <rect x="${ankleL}" y="${bot-22}" width="${cx-ankleL-2}" height="10" rx="2" fill="#8a7045" opacity="0.5"/>
+    <rect x="${cx+2}" y="${bot-22}" width="${ankleR-cx-2}" height="10" rx="2" fill="#8a7045" opacity="0.5"/>
+  `;
+}
+
+// --- 男装鞋子 ---
+function genMaleSneakers(m) {
+  const top = m.ankleY - 25;
+  const bot = m.feetY + 8;
+  const cx = m.centerX;
+  const feetL = m.feetL - 15, feetR = m.feetR + 15;
+  const leftC = (feetL + cx - 3) / 2;
+  const rightC = (cx + 3 + feetR) / 2;
+  return `
+    <path d="M ${feetL},${top+15} Q ${feetL-5},${top+8} ${feetL+10},${top+5}
+             L ${cx-10},${top+5} Q ${cx-3},${top+12} ${cx-5},${top+22}
+             L ${cx-5},${bot-15} Q ${cx},${bot-5} ${leftC+18},${bot-2}
+             L ${leftC+18},${bot} Q ${feetL+8},${bot+2} ${feetL-2},${bot-8}
+             Q ${feetL-8},${bot-20} ${feetL},${top+15} Z"
+          fill="#ffffff" stroke="#cccccc" stroke-width="1.5"/>
+    <path d="M ${cx+5},${top+15} Q ${cx+3},${top+8} ${cx+10},${top+5}
+             L ${feetR-10},${top+5} Q ${feetR+5},${top+8} ${feetR},${top+22}
+             L ${feetR},${bot-15} Q ${feetR-5},${bot-5} ${rightC-18},${bot-2}
+             L ${rightC-18},${bot} Q ${feetR-8},${bot+2} ${feetR+2},${bot-8}
+             Q ${feetR+8},${bot-20} ${feetR},${top+15} Z"
+          fill="#ffffff" stroke="#cccccc" stroke-width="1.5"/>
+    <path d="M ${feetL-2},${bot-10} Q ${feetL+8},${bot+2} ${leftC+18},${bot} L ${leftC+18},${bot-4} Q ${feetL+8},${bot-2} ${feetL-2},${bot-14} Z" fill="#333333" opacity="0.7"/>
+    <path d="M ${feetR+2},${bot-10} Q ${feetR-8},${bot+2} ${rightC-18},${bot} L ${rightC-18},${bot-4} Q ${feetR-8},${bot-2} ${feetR+2},${bot-14} Z" fill="#333333" opacity="0.7"/>
+    <path d="M ${feetL+10},${top+18} L ${cx-15},${top+22} M ${feetL+14},${top+28} L ${cx-11},${top+32} M ${feetL+18},${top+38} L ${cx-7},${top+42}" stroke="#2d4334" stroke-width="1.5" fill="none"/>
+    <path d="M ${cx+10},${top+18} L ${feetR-15},${top+22} M ${cx+14},${top+28} L ${feetR-11},${top+32} M ${cx+18},${top+38} L ${feetR-7},${top+42}" stroke="#2d4334" stroke-width="1.5" fill="none"/>
+    <path d="M ${feetL+8},${top+38} Q ${leftC},${top+36} ${cx-5},${top+40}" stroke="#2d4334" stroke-width="2.5" fill="none"/>
+    <path d="M ${cx+5},${top+38} Q ${rightC},${top+36} ${feetR-8},${top+40}" stroke="#2d4334" stroke-width="2.5" fill="none"/>
+  `;
+}
+
+function genMaleCanvas(m) {
+  const top = m.ankleY - 25;
+  const bot = m.feetY + 8;
+  const cx = m.centerX;
+  const feetL = m.feetL - 15, feetR = m.feetR + 15;
+  return `
+    <path d="M ${feetL},${top+15} Q ${feetL-5},${top+8} ${feetL+10},${top+5}
+             L ${cx-10},${top+5} Q ${cx-3},${top+12} ${cx-5},${top+22}
+             L ${cx-5},${bot-15} Q ${cx},${bot-5} ${cx-25},${bot-2}
+             L ${cx-25},${bot} Q ${feetL+8},${bot+2} ${feetL-2},${bot-8}
+             Q ${feetL-8},${bot-20} ${feetL},${top+15} Z"
+          fill="#e8dcc8" stroke="#b8a888" stroke-width="1.5"/>
+    <path d="M ${cx+5},${top+15} Q ${cx+3},${top+8} ${cx+10},${top+5}
+             L ${feetR-10},${top+5} Q ${feetR+5},${top+8} ${feetR},${top+22}
+             L ${feetR},${bot-15} Q ${feetR-5},${bot-5} ${feetR-25},${bot-2}
+             L ${feetR-25},${bot} Q ${feetR-8},${bot+2} ${feetR+2},${bot-8}
+             Q ${feetR+8},${bot-20} ${feetR},${top+15} Z"
+          fill="#e8dcc8" stroke="#b8a888" stroke-width="1.5"/>
+    <path d="M ${feetL-2},${bot-10} Q ${feetL+8},${bot+2} ${cx-25},${bot} L ${cx-25},${bot-4} Q ${feetL+8},${bot-2} ${feetL-2},${bot-14} Z" fill="#d8c8a8" stroke="#b8a888" stroke-width="1"/>
+    <path d="M ${feetR+2},${bot-10} Q ${feetR-8},${bot+2} ${feetR-25},${bot} L ${feetR-25},${bot-4} Q ${feetR-8},${bot-2} ${feetR+2},${bot-14} Z" fill="#d8c8a8" stroke="#b8a888" stroke-width="1"/>
+    <path d="M ${feetL-2},${top+22} Q ${feetL-5},${bot-15} ${cx-22},${bot-5} L ${cx-22},${top+22} Z" fill="#f0e8d8" stroke="#b8a888" stroke-width="1"/>
+    <path d="M ${feetR+2},${top+22} Q ${feetR+5},${bot-15} ${feetR-22},${bot-5} L ${feetR-22},${top+22} Z" fill="#f0e8d8" stroke="#b8a888" stroke-width="1"/>
+    <circle cx="${feetL+12}" cy="${top+16}" r="1.5" fill="#b8a888"/><circle cx="${feetL+12}" cy="${top+26}" r="1.5" fill="#b8a888"/>
+    <circle cx="${cx-12}" cy="${top+14}" r="1.5" fill="#b8a888"/><circle cx="${cx-12}" cy="${top+24}" r="1.5" fill="#b8a888"/>
+    <circle cx="${cx+12}" cy="${top+16}" r="1.5" fill="#b8a888"/><circle cx="${cx+12}" cy="${top+26}" r="1.5" fill="#b8a888"/>
+    <circle cx="${feetR-12}" cy="${top+14}" r="1.5" fill="#b8a888"/><circle cx="${feetR-12}" cy="${top+24}" r="1.5" fill="#b8a888"/>
+    <path d="M ${feetL+12},${top+16} L ${cx-12},${top+14} M ${feetL+12},${top+26} L ${cx-12},${top+24}" stroke="#c8b898" stroke-width="1.5" fill="none"/>
+    <path d="M ${cx+12},${top+16} L ${feetR-12},${top+14} M ${cx+12},${top+26} L ${feetR-12},${top+24}" stroke="#c8b898" stroke-width="1.5" fill="none"/>
+  `;
+}
+
+// ============================================================
+//  衣物定义 - 使用生成器函数
+// ============================================================
+const FEMALE = {
+  top: {
+    tee:   { label: 'T恤·赤陶', color: '#b85c3a', gen: genFemaleTee },
+    shirt: { label: '衬衫·鼠尾草', color: '#7a9a6e', gen: genFemaleShirt },
+  },
+  bottom: {
+    pants: { label: '牛仔裤', color: '#3d5a72', gen: genFemalePants },
+    skirt: { label: '半裙·墨绿', color: '#2d4334', gen: genFemaleSkirt },
+  },
+  shoes: {
+    sneakers: { label: '运动鞋', color: '#ffffff', gen: genFemaleSneakers },
+    boots:    { label: '短靴', color: '#4a3525', gen: genFemaleBoots },
+  }
+};
+
+const MALE = {
+  top: {
+    tee:    { label: 'T恤·墨绿', color: '#2d4334', gen: genMaleTee },
+    hoodie: { label: '卫衣·赤陶', color: '#b85c3a', gen: genMaleHoodie },
+  },
+  bottom: {
+    pants: { label: '牛仔裤', color: '#3d5a72', gen: genMalePants },
+    cargo: { label: '工装裤·卡其', color: '#b8a070', gen: genMaleCargo },
+  },
+  shoes: {
+    sneakers: { label: '运动鞋', color: '#ffffff', gen: genMaleSneakers },
+    canvas:   { label: '帆布鞋', color: '#e8dcc8', gen: genMaleCanvas },
+  }
+};
+
+const HAIR = {
+  female: [
+    { id: 'long', label: '长发', color: '#5a3e28' },
+    { id: 'bob',  label: '波波', color: '#5a3e28' },
+  ],
+  male: [
+    { id: 'short',  label: '短发', color: '#2a2520' },
+    { id: 'parted', label: '分头', color: '#2a2520' },
+  ],
+};
+
+// ============================================================
+//  状态管理
+// ============================================================
+const state = {
+  gender: 'female',
+  category: 'hair',
+  config: {
+    female: { hair: 'long', top: 'tee', bottom: 'pants', shoes: 'sneakers' },
+    male:   { hair: 'short', top: 'tee', bottom: 'pants', shoes: 'sneakers' },
+  },
+};
+
+function getClothing() { return state.gender === 'female' ? FEMALE : MALE; }
+
+// ============================================================
+//  渲染函数
+// ============================================================
+function renderBody() {
+  const wrap = document.getElementById('avatar-wrap');
+  const img = document.getElementById('body-img');
+  const key = `${state.gender}-${state.config[state.gender].hair}`;
+  wrap.classList.add('switching');
+  setTimeout(() => {
+    img.src = BODY_IMG[key];
+    wrap.classList.remove('switching');
+  }, 160);
+}
+
+function renderClothing() {
+  const wrap = document.getElementById('avatar-wrap');
+  const c = getClothing();
+  const cfg = state.config[state.gender];
+  const m = getMeas();
+  wrap.classList.add('switching');
+  setTimeout(() => {
+    document.getElementById('svg-defs').innerHTML = SVG_DEFS;
+    document.getElementById('layer-shoes').innerHTML  = c.shoes[cfg.shoes].gen(m);
+    document.getElementById('layer-bottom').innerHTML = c.bottom[cfg.bottom].gen(m);
+    document.getElementById('layer-top').innerHTML    = c.top[cfg.top].gen(m);
+    wrap.classList.remove('switching');
+  }, 160);
+}
+
+function renderAll() {
+  renderBody();
+  renderClothing();
+  renderOptions();
+  updateConfigBar();
+}
+
+function renderOptions() {
+  const container = document.getElementById('styles');
+  const cat = state.category;
+  if (cat === 'hair') {
+    const list = HAIR[state.gender];
+    const current = state.config[state.gender].hair;
+    container.innerHTML = list.map(h => `
+      <div class="style-card ${h.id === current ? 'active' : ''}" onclick="selectPart('hair','${h.id}')">
+        <div class="style-swatch" style="background:${h.color}"></div>
+        <div class="style-name">${h.label}</div>
+      </div>`).join('');
+  } else {
+    const items = getClothing()[cat];
+    const current = state.config[state.gender][cat];
+    container.innerHTML = Object.entries(items).map(([id, item]) => `
+      <div class="style-card ${id === current ? 'active' : ''}" onclick="selectPart('${cat}','${id}')">
+        <div class="style-swatch" style="background:${item.color}"></div>
+        <div class="style-name">${item.label}</div>
+      </div>`).join('');
+  }
+}
+
+function updateConfigBar() {
+  const cfg = state.config[state.gender];
+  const c = getClothing();
+  const hairLabel = HAIR[state.gender].find(h => h.id === cfg.hair).label;
+  const chips = [
+    { text: state.gender === 'female' ? '♀ 女生' : '♂ 男生', accent: true },
+    { text: hairLabel },
+    { text: c.top[cfg.top].label },
+    { text: c.bottom[cfg.bottom].label },
+    { text: c.shoes[cfg.shoes].label },
+  ];
+  document.getElementById('config-bar').innerHTML =
+    chips.map(ch => `<span class="config-chip ${ch.accent ? 'accent' : ''}">${ch.text}</span>`).join('');
+}
+
+// ============================================================
+//  事件处理
+// ============================================================
+function switchGender(g) {
+  if (state.gender === g) return;
+  state.gender = g;
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('active', b.dataset.gender === g));
+  renderAll();
+}
+
+function switchCategory(cat) {
+  state.category = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  renderOptions();
+}
+
+function selectPart(cat, id) {
+  state.config[state.gender][cat] = id;
+  if (cat === 'hair') { renderBody(); renderClothing(); }
+  else renderClothing();
+  renderOptions();
+  updateConfigBar();
+}
+
+// ============================================================
+//  初始化
+// ============================================================
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的衣橱 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+<style>
+  .closets-hero { padding: 100px 28px 24px; position: relative; z-index: 2; color: var(--color-text-inverse); }
+  .closets-hero .scope-title { margin-bottom: 10px; }
+  .closets-hero .scope-desc { margin-bottom: 16px; max-width: 260px; }
+  .closets-stats { display: flex; gap: 24px; }
+  .closets-stats .stat-value { color: var(--inverse-85); font-size: 26px; }
+  .closets-stats .stat-value.accent { color: var(--color-terra-soft); }
+  .closets-stats .stat-label { color: var(--inverse-55); }
+  .closets-stats .stat-divider { width: 1px; background: var(--inverse-25); align-self: stretch; }
+  .closet-list { padding: 8px 28px 120px; position: relative; z-index: 2; }
+  .closet-list .closet-card { margin-bottom: 12px; }
+
+  /* 新建衣橱卡片 */
+  .closet-card-add {
+    background: transparent;
+    border: 1.5px dashed var(--color-border);
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 20px;
+  }
+  .closet-card-add:hover {
+    background: var(--color-bg-chip);
+    border-color: var(--color-sage);
+    transform: none;
+    box-shadow: none;
+  }
+  .closet-card-add .add-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--color-bg-chip);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+  }
+  .closet-card-add:hover .add-icon { background: var(--color-primary); }
+  .closet-card-add .add-icon svg {
+    width: 20px; height: 20px;
+    stroke: var(--color-text-secondary);
+    transition: stroke 0.2s ease;
+  }
+  .closet-card-add:hover .add-icon svg { stroke: var(--color-text-inverse); }
+  .closet-card-add .add-text { flex: 1; }
+  .closet-card-add .add-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    margin-bottom: 2px;
+  }
+  .closet-card-add .add-sub {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-placeholder);
+  }
+  .fab {
+    position: absolute;
+    bottom: 110px;
+    right: 24px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--color-terra);
+    color: var(--color-text-inverse);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(184, 92, 58, 0.35);
+    z-index: 40;
+    transition: all 0.2s ease;
+  }
+  .fab:hover { background: var(--color-terra-soft); transform: translateY(-2px); }
+  .fab svg { width: 22px; height: 22px; stroke: currentColor; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island"></div>
+    <div class="status-bar light">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg viewBox="0 0 18 14" fill="currentColor"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <svg viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="page">
+        <div class="page-bg"></div>
+
+        <div class="closets-hero fade-up delay-1">
+          <div class="scope-badge">
+            <span class="scope-badge-dot"></span>
+            <span class="scope-badge-text">Personal · 个人空间</span>
+          </div>
+          <h1 class="scope-title">我的衣橱</h1>
+          <p class="scope-desc">3 个衣橱 · 48 件衣物已归类</p>
+          <div class="closets-stats">
+            <div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">衣橱</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div>
+              <div class="stat-value accent">48</div>
+              <div class="stat-label">衣物</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div>
+              <div class="stat-value">2</div>
+              <div class="stat-label">未归类</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 空间筛选 -->
+        <div class="filter-bar fade-up delay-2" style="top:0;">
+          <button class="filter-chip active">个人空间</button>
+          <button class="filter-chip">家庭空间 · 林家小院</button>
+        </div>
+
+        <!-- 衣橱列表 -->
+        <div class="closet-list fade-up delay-3">
+          <a class="closet-card" href="closet-create.html">
+            <div class="closet-thumb closet-thumb-style-modern-flat">
+              <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            </div>
+            <div class="closet-info">
+              <div class="closet-name">主卧大衣橱</div>
+              <div class="closet-meta">
+                <span class="meta-style">简约平门柜</span>
+                <span class="meta-dot"></span>
+                <span class="meta-color">浅橡木</span>
+              </div>
+              <span class="closet-room-tag">主卧</span>
+            </div>
+            <div class="closet-count-wrap">
+              <div class="closet-count">28</div>
+              <div class="closet-count-unit">件衣物</div>
+            </div>
+          </a>
+
+          <a class="closet-card" href="closet-create.html">
+            <div class="closet-thumb closet-thumb-style-open-rack">
+              <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+            </div>
+            <div class="closet-info">
+              <div class="closet-name">次卧开放柜</div>
+              <div class="closet-meta">
+                <span class="meta-style">开放式收纳柜</span>
+                <span class="meta-dot"></span>
+                <span class="meta-color">鼠尾草绿</span>
+              </div>
+              <span class="closet-room-tag">次卧</span>
+            </div>
+            <div class="closet-count-wrap">
+              <div class="closet-count">14</div>
+              <div class="closet-count-unit">件衣物</div>
+            </div>
+          </a>
+
+          <a class="closet-card" href="closet-create.html">
+            <div class="closet-thumb closet-thumb-style-drawer-mix">
+              <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </div>
+            <div class="closet-info">
+              <div class="closet-name">储物间抽屉柜</div>
+              <div class="closet-meta">
+                <span class="meta-style">抽屉组合柜</span>
+                <span class="meta-dot"></span>
+                <span class="meta-color">胡桃棕</span>
+              </div>
+              <span class="closet-room-tag">储物间</span>
+            </div>
+            <div class="closet-count-wrap">
+              <div class="closet-count">6</div>
+              <div class="closet-count-unit">件衣物</div>
+            </div>
+          </a>
+
+          <!-- 新建衣橱卡片 -->
+          <a class="closet-card closet-card-add" href="closet-create.html">
+            <div class="add-icon">
+              <svg viewBox="0 0 24 24" class="icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <div class="add-text">
+              <span class="add-title">新建衣橱</span>
+              <span class="add-sub">选样式、配色、所属房间</span>
+            </div>
+          </a>
+        </div>
+
+        <a class="fab" href="closet-create.html" title="新建衣橱">
+          <svg viewBox="0 0 24 24" class="icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="tab-bar">
+      <a class="tab-item" href="home.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M3 12L12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="tab-item active" href="closets.html">
+        <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        <span>衣橱</span>
+      </a>
+      <a class="tab-item" href="clothes.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        <span>衣物</span>
+      </a>
+      <a class="tab-item" href="profile.html">
+        <svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>我的</span>
+      </a>
+    </nav>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+<view class="{{['scope-badge', 'data-v-208c7e95', b && 'scope-badge-dark']}}"><view class="scope-badge-dot data-v-208c7e95"></view><text class="scope-badge-text data-v-208c7e95">{{a}}</text></view>

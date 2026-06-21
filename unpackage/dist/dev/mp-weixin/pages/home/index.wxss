@@ -1,158 +1,255 @@
-.page {
+.page.data-v-4978fed5 {
   min-height: 100vh;
-  position: relative;
-  overflow: hidden;
   background: #f4efe6;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.page.data-v-4978fed5::-webkit-scrollbar {
+  display: none;
 }
 
-/* 背景层：随页面滚动 */
-.page-bg {
+/* ===== 第一屏：沉浸式 Hero ===== */
+.hero-screen.data-v-4978fed5 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #2d4334;
+  will-change: opacity;
+}
+.hero-bg-wrap.data-v-4978fed5 {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  min-height: 100%;
+  bottom: 0;
   z-index: 0;
-  background: linear-gradient(180deg, #2d4334 0%, #3a5443 12%, #4a6755 20%, #7a9580 28%, #a8bcae 34%, #c8cebf 38%, #f4efe6 42%, #f4efe6 100%);
+  overflow: hidden;
+}
+.hero-bg-image.data-v-4978fed5 {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+.hero-bg-overlay.data-v-4978fed5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(45, 67, 52, 0.55) 0%, rgba(45, 67, 52, 0.3) 30%, rgba(45, 67, 52, 0.15) 50%, rgba(45, 67, 52, 0.35) 80%, rgba(45, 67, 52, 0.6) 100%);
+}
+.hero-bg-noise.data-v-4978fed5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.04;
+  pointer-events: none;
 }
 
-/* 顶部绿色区 */
-.hero-zone {
-  position: relative;
-  z-index: 2;
-  padding: 0 28px 36px;
-  color: #f8f4ec;
+/* 装饰线条 */
+.hero-deco-lines.data-v-4978fed5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
-.topbar {
+.deco-svg.data-v-4978fed5 {
+  width: 100%;
+  height: 100%;
+}
+
+/* 顶部标记 */
+.hero-topbar.data-v-4978fed5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding-left: 28px;
+  padding-right: 28px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0 36px;
-}
-.greeting {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.greeting-hi {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.5);
-}
-.greeting-name {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-  font-size: 17px;
-  font-weight: 500;
-  color: #f8f4ec;
-  letter-spacing: -0.2px;
-}
-.logout-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
   justify-content: center;
+  will-change: transform, opacity;
 }
-.logout-icon {
-  width: 15px;
-  height: 15px;
-  border: 1.8px solid rgba(244, 239, 230, 0.6);
-  border-radius: 50%;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  transform: rotate(45deg);
-}
-.scope-info {
-  position: relative;
-}
-.scope-badge {
+.hero-mark.data-v-4978fed5 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 14px;
+  padding: 6px 16px;
+  border-radius: 999rpx;
+  background: rgba(244, 239, 230, 0.08);
+  border: 1px solid rgba(244, 239, 230, 0.12);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
 }
-.scope-badge-dot {
+.hero-mark-dot.data-v-4978fed5 {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #d4805f;
-  box-shadow: 0 0 8px #d4805f;
+  animation: pulseDot 2.5s ease-in-out infinite;
 }
-.scope-badge-text {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+.hero-mark-text.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
   font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.55);
+  letter-spacing: 3px;
+  color: rgba(244, 239, 230, 0.85);
+  font-weight: 500;
 }
-.scope-title {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-  font-size: 34px;
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.8px;
+
+/* 品牌主体内容 */
+.hero-content.data-v-4978fed5 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  padding: 0 40px;
+  will-change: transform, opacity;
+}
+.hero-title-en.data-v-4978fed5 {
+  display: block;
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1.5px;
   color: #f8f4ec;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
 }
-.scope-title-em {
+.hero-title-cn-wrap.data-v-4978fed5 {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
+}
+.hero-title-cn.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: rgba(244, 239, 230, 0.85);
+}
+.hero-title-cn.em.data-v-4978fed5 {
+  transform: skewX(-8deg);
+  transform-origin: left center;
   font-weight: 300;
   color: #a8bcae;
 }
-.scope-desc {
-  font-size: 13px;
-  line-height: 1.7;
-  color: rgba(244, 239, 230, 0.5);
-  max-width: 280px;
-  margin-bottom: 20px;
+.hero-divider.data-v-4978fed5 {
+  width: 40px;
+  height: 1px;
+  background: rgba(244, 239, 230, 0.25);
+  margin: 0 auto 24px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s both;
 }
-
-/* 元信息行 */
-.scope-meta-inline {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-}
-.scope-meta-item {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-}
-.scope-meta-item + .scope-meta-item::before {
-  content: "·";
-  margin: 0 10px;
-  color: rgba(244, 239, 230, 0.25);
-  font-size: 13px;
-}
-.scope-meta-key {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.35);
-}
-.scope-meta-val {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-  font-size: 14px;
+.hero-intro.data-v-4978fed5 {
+  display: block;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 15px;
   font-weight: 500;
   color: rgba(244, 239, 230, 0.85);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.65s both;
 }
-.scope-meta-val.accent {
-  color: #d4805f;
+.hero-intro-sub.data-v-4978fed5 {
+  display: block;
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(244, 239, 230, 0.5);
+  text-transform: uppercase;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.75s both;
 }
 
-/* 数据概览 */
-.stats-zone {
-  position: relative;
+/* 滚动提示 */
+.hero-scroll-hint.data-v-4978fed5 {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
-  padding: 0 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  will-change: transform, opacity;
 }
-.stats-label {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+.scroll-hint-text.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(244, 239, 230, 0.35);
+  text-transform: uppercase;
+}
+.scroll-hint-line.data-v-4978fed5 {
+  width: 1px;
+  height: 40px;
+  background: rgba(244, 239, 230, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-hint-dot.data-v-4978fed5 {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 8px;
+  border-radius: 2px;
+  background: #d4805f;
+  animation: scrollDot-4978fed5 2s ease-in-out infinite;
+}
+@keyframes scrollDot-4978fed5 {
+0% {
+    top: 0;
+    opacity: 1;
+}
+80% {
+    top: 32px;
+    opacity: 0;
+}
+100% {
+    top: 32px;
+    opacity: 0;
+}
+}
+/* ===== 内容区块通用 ===== */
+.content-section.data-v-4978fed5 {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.content-section.section-visible.data-v-4978fed5 {
+  opacity: 1;
+  transform: translateY(0);
+}
+.section-header.data-v-4978fed5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.section-greeting.data-v-4978fed5 {
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", "PingFang SC", "PingFangSC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  color: #8a8a7e;
+}
+.section-label.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -160,52 +257,432 @@
   margin-bottom: 14px;
   display: block;
 }
-.stats-row {
+
+/* ===== 数据概览 ===== */
+/* 降级模式提示条 */
+.degraded-banner.data-v-4978fed5 {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 28px 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(212, 128, 95, 0.08);
+  border: 1px solid rgba(212, 128, 95, 0.15);
+}
+.degraded-icon.data-v-4978fed5 {
+  width: 16px;
+  height: 16px;
+  color: #b85c3a;
+  flex-shrink: 0;
+}
+.degraded-text.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  color: #b85c3a;
+  letter-spacing: 0.3px;
+}
+
+/* 游客模式提示条 */
+.guest-banner.data-v-4978fed5 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 28px 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(45, 67, 52, 0.08) 0%, rgba(58, 84, 67, 0.05) 100%);
+  border: 1px solid rgba(45, 67, 52, 0.12);
+  transition: all 0.2s ease;
+}
+.guest-banner.data-v-4978fed5:active {
+  background: linear-gradient(135deg, rgba(45, 67, 52, 0.12) 0%, rgba(58, 84, 67, 0.08) 100%);
+  transform: scale(0.99);
+}
+.guest-icon.data-v-4978fed5 {
+  width: 20px;
+  height: 20px;
+  stroke: #3a5443;
+  flex-shrink: 0;
+}
+.guest-content.data-v-4978fed5 {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guest-title.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d4334;
+}
+.guest-desc.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 11px;
+  color: #8a8a7e;
+  line-height: 1.4;
+}
+.guest-action.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b85c3a;
+  padding: 6px 14px;
+  border-radius: 999rpx;
+  background: rgba(184, 92, 58, 0.08);
+  border: 1px solid rgba(184, 92, 58, 0.15);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.guest-action.data-v-4978fed5:active {
+  background: rgba(184, 92, 58, 0.15);
+}
+.stats-zone.data-v-4978fed5 {
+  padding: 40px 28px 0;
+}
+.stats-row.data-v-4978fed5 {
+  display: flex;
+  gap: 0;
   align-items: baseline;
 }
-.stat-item {
+.stat-item.data-v-4978fed5 {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
   position: relative;
+  padding: 4px 0;
+  border-radius: 20rpx;
+  transition: background 0.2s ease;
 }
-.stat-item + .stat-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 6px;
-  bottom: 6px;
+.stat-item-hover.data-v-4978fed5 {
+  background: rgba(58, 84, 67, 0.04);
+}
+.stat-divider.data-v-4978fed5 {
   width: 1px;
-  background: rgba(107, 126, 99, 0.08);
+  height: 36px;
+  background: rgba(58, 84, 67, 0.1);
+  align-self: center;
 }
-.stat-value {
-  font-family: "Fraunces", Georgia, serif;
+.stat-value.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 36px;
   font-weight: 300;
   line-height: 1;
   color: #2d4334;
   letter-spacing: -1px;
 }
-.stat-value.accent {
+.stat-value.accent.data-v-4978fed5 {
   color: #b85c3a;
 }
-.stat-label {
+.stat-value.muted.data-v-4978fed5 {
+  color: #8a8a7e;
+  font-size: 28px;
+}
+.stat-label.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: #4a4a42;
 }
 
-/* 核心操作 */
-.actions-zone {
-  position: relative;
-  z-index: 2;
+/* ===== 待整理提醒 ===== */
+.unassigned-zone.data-v-4978fed5 {
+  margin: 24px 28px 0;
+  padding: 16px 18px;
+  border-radius: 36rpx;
+  background: rgba(184, 92, 58, 0.06);
+  border: 1px solid rgba(184, 92, 58, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+.unassigned-zone-hover.data-v-4978fed5 {
+  background: rgba(184, 92, 58, 0.1);
+  transform: translateY(-1px);
+}
+.unassigned-icon-wrap.data-v-4978fed5 {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(184, 92, 58, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.unassigned-icon.data-v-4978fed5 {
+  width: 18px;
+  height: 18px;
+  stroke: #b85c3a;
+}
+.unassigned-content.data-v-4978fed5 {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.unassigned-title.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b85c3a;
+}
+.unassigned-desc.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  color: #4a4a42;
+  line-height: 1.4;
+}
+.unassigned-arrow.data-v-4978fed5 {
+  width: 16px;
+  height: 16px;
+  stroke: #b85c3a;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ===== 衣物分布 ===== */
+.distribution-zone.data-v-4978fed5 {
+  padding: 32px 28px 0;
+}
+.dist-list.data-v-4978fed5 {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dist-row.data-v-4978fed5 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.dist-row-top.data-v-4978fed5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.dist-cat-names.data-v-4978fed5 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.dist-cat-en.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8a8a7e;
+}
+.dist-cat-cn.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a4a42;
+}
+.dist-count-wrap.data-v-4978fed5 {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.dist-count.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d4334;
+}
+.dist-count-unit.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 10px;
+  color: #8a8a7e;
+}
+.dist-percent.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 10px;
+  color: #8a8a7e;
+  margin-left: 6px;
+}
+.dist-bar-track.data-v-4978fed5 {
+  height: 8px;
+  background: rgba(58, 84, 67, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.dist-bar-fill.data-v-4978fed5 {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bar-top.data-v-4978fed5 {
+  background: #3a5443;
+}
+.bar-bottom.data-v-4978fed5 {
+  background: #7a9580;
+}
+.bar-outerwear.data-v-4978fed5 {
+  background: #b85c3a;
+}
+.bar-shoes.data-v-4978fed5 {
+  background: #5d7553;
+}
+.bar-accessory.data-v-4978fed5 {
+  background: #a8bcae;
+}
+
+/* 分布骨架屏 */
+.dist-row-skeleton.data-v-4978fed5 {
+  gap: 8px;
+}
+.dist-skel-name.data-v-4978fed5 {
+  height: 12px;
+  width: 80px;
+  border-radius: 4px;
+}
+.dist-skel-num.data-v-4978fed5 {
+  height: 16px;
+  width: 40px;
+  border-radius: 4px;
+}
+.dist-skel-bar.data-v-4978fed5 {
+  height: 8px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+/* 分布空状态 */
+.dist-empty.data-v-4978fed5 {
+  padding: 24px 0;
+  text-align: center;
+}
+.dist-empty-text.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 14px;
+  color: #4a4a42;
+  display: block;
+  margin-bottom: 4px;
+}
+.dist-empty-sub.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 11px;
+  color: #8a8a7e;
+}
+
+/* ===== 最近添加 ===== */
+.recent-zone.data-v-4978fed5 {
+  padding: 32px 0 0;
+}
+.recent-header.data-v-4978fed5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  margin-bottom: 14px;
+}
+.recent-header .section-label.data-v-4978fed5 {
+  margin-bottom: 0;
+}
+.recent-link.data-v-4978fed5 {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: opacity 0.2s ease;
+}
+.recent-link-hover.data-v-4978fed5 {
+  opacity: 0.6;
+}
+.recent-link-text.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #b85c3a;
+}
+.recent-link-arrow.data-v-4978fed5 {
+  width: 14px;
+  height: 14px;
+  stroke: #b85c3a;
+}
+.recent-scroll.data-v-4978fed5 {
+  width: 100%;
+  white-space: nowrap;
+}
+.recent-list.data-v-4978fed5 {
+  display: inline-flex;
+  gap: 12px;
+  padding: 0 28px;
+}
+.recent-card-wrap.data-v-4978fed5 {
+  flex-shrink: 0;
+  width: 240rpx;
+}
+
+/* 最近添加骨架屏 */
+.recent-skeleton-card.data-v-4978fed5 {
+  border-radius: 36rpx;
+  background: #f8f4ec;
+  border: 1px solid rgba(58, 84, 67, 0.1);
+  overflow: hidden;
+}
+.recent-skel-img.data-v-4978fed5 {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0;
+}
+.recent-skel-info.data-v-4978fed5 {
+  padding: 16rpx 20rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.recent-skel-name.data-v-4978fed5 {
+  height: 22rpx;
+  width: 60%;
+  border-radius: 4rpx;
+}
+.recent-skel-sub.data-v-4978fed5 {
+  height: 18rpx;
+  width: 40%;
+  border-radius: 4rpx;
+}
+
+/* 最近添加空状态 */
+.recent-empty.data-v-4978fed5 {
+  margin: 0 28px;
+  padding: 24px 20px;
+  border-radius: 36rpx;
+  background: #f8f4ec;
+  border: 1px dashed rgba(58, 84, 67, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+.recent-empty-hover.data-v-4978fed5 {
+  background: #ebe4d6;
+}
+.recent-empty-text.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 13px;
+  color: #8a8a7e;
+}
+.recent-empty-icon.data-v-4978fed5 {
+  width: 16px;
+  height: 16px;
+  stroke: #b85c3a;
+  opacity: 0.7;
+}
+
+/* ===== 核心操作 ===== */
+.actions-zone.data-v-4978fed5 {
   padding: 32px 28px 0;
   display: flex;
   gap: 12px;
 }
-.action-card {
+.action-card.data-v-4978fed5 {
   flex: 1;
   border-radius: 18px;
   position: relative;
@@ -214,40 +691,51 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 120px;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.action-card.dark {
+.action-card.dark.data-v-4978fed5 {
   background: #3a5443;
   padding: 20px 18px;
 }
-.action-card.light {
+.action-card-dark-hover.data-v-4978fed5 {
+  background: #4a6755;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(58, 84, 67, 0.2);
+}
+.action-card.light.data-v-4978fed5 {
   background: #f8f4ec;
-  border: 1px solid rgba(107, 126, 99, 0.08);
+  border: 1px solid rgba(58, 84, 67, 0.1);
   padding: 20px 18px;
 }
-.card-top {
+.action-card-light-hover.data-v-4978fed5 {
+  background: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(58, 84, 67, 0.08);
+}
+.card-top.data-v-4978fed5 {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
-.card-number-wrap {
+.card-number-wrap.data-v-4978fed5 {
   display: flex;
   align-items: baseline;
 }
-.card-number {
-  font-family: "Fraunces", Georgia, serif;
+.card-number.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 44px;
   font-weight: 300;
   line-height: 0.9;
   letter-spacing: -2px;
 }
-.action-card.dark .card-number {
+.action-card.dark .card-number.data-v-4978fed5 {
   color: #a8bcae;
 }
-.action-card.light .card-number {
+.action-card.light .card-number.data-v-4978fed5 {
   color: #b85c3a;
 }
-.card-number-unit {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+.card-number-unit.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
   font-size: 10px;
   font-weight: 400;
   letter-spacing: 1px;
@@ -255,233 +743,267 @@
   margin-left: 4px;
   opacity: 0.5;
 }
-.card-bottom {
+.card-icon-wrap.data-v-4978fed5 {
+  margin-top: 4px;
+}
+.card-icon.data-v-4978fed5 {
+  width: 20px;
+  height: 20px;
+  opacity: 0.4;
+  display: block;
+}
+.action-card.dark .card-icon.data-v-4978fed5 {
+  stroke: #a8bcae;
+}
+.action-card.light .card-icon.data-v-4978fed5 {
+  stroke: #3a5443;
+}
+.card-bottom.data-v-4978fed5 {
   margin-top: 20px;
 }
-.card-title {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+.card-title.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 2px;
   display: block;
 }
-.action-card.dark .card-title {
+.action-card.dark .card-title.data-v-4978fed5 {
   color: #f8f4ec;
 }
-.action-card.light .card-title {
+.action-card.light .card-title.data-v-4978fed5 {
   color: #2d4334;
 }
-.card-subtitle {
+.card-subtitle.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 11px;
   line-height: 1.4;
   display: block;
 }
-.action-card.dark .card-subtitle {
+.action-card.dark .card-subtitle.data-v-4978fed5 {
   color: rgba(244, 239, 230, 0.5);
 }
-.action-card.light .card-subtitle {
+.action-card.light .card-subtitle.data-v-4978fed5 {
   color: #8a8a7e;
 }
-.card-arrow {
+.card-arrow.data-v-4978fed5 {
   position: absolute;
   bottom: 18px;
   right: 18px;
-  width: 12px;
-  height: 12px;
-  border-top: 1.5px solid;
-  border-right: 1.5px solid;
-  transform: rotate(45deg);
+  width: 16px;
+  height: 16px;
   opacity: 0.3;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
-.action-card.dark .card-arrow {
-  border-color: #a8bcae;
+.action-card.dark .card-arrow.data-v-4978fed5 {
+  stroke: #a8bcae;
 }
-.action-card.light .card-arrow {
-  border-color: #3a5443;
+.action-card.light .card-arrow.data-v-4978fed5 {
+  stroke: #3a5443;
 }
 
-/* 家庭协作区 */
-.family-zone {
-  position: relative;
-  z-index: 2;
-  padding: 28px 28px 0;
+/* ===== 家庭协作区 ===== */
+.family-zone.data-v-4978fed5 {
+  padding: 32px 28px 0;
 }
-.family-label {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #8a8a7e;
-  margin-bottom: 14px;
-  display: block;
-}
-.family-invite-box {
+.family-info-box.data-v-4978fed5 {
   padding: 22px;
   border-radius: 18px;
   background: #f8f4ec;
-  border: 1px solid rgba(107, 126, 99, 0.08);
+  border: 1px solid rgba(58, 84, 67, 0.1);
 }
-.family-name-row {
+.family-name-row.data-v-4978fed5 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-.family-name {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+.family-name.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 17px;
   font-weight: 600;
   color: #2d4334;
 }
-.family-role {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+.family-role.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #b85c3a;
   padding: 3px 10px;
   border: 1px solid rgba(184, 92, 58, 0.25);
-  border-radius: 999px;
+  border-radius: 40rpx;
 }
-.invite-row {
+.family-summary-row.data-v-4978fed5 {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-top: 1px solid rgba(107, 126, 99, 0.08);
-  border-bottom: 1px solid rgba(107, 126, 99, 0.08);
+  padding: 12px 0;
+  margin-bottom: 14px;
+  border-top: 1px solid rgba(58, 84, 67, 0.05);
+  border-bottom: 1px solid rgba(58, 84, 67, 0.05);
 }
-.invite-label {
-  font-size: 12px;
+.family-summary-item.data-v-4978fed5 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: 20rpx;
+  transition: background 0.2s ease;
+}
+.family-summary-item-hover.data-v-4978fed5 {
+  background: rgba(58, 84, 67, 0.03);
+}
+.family-summary-divider.data-v-4978fed5 {
+  width: 1px;
+  height: 28px;
+  background: rgba(58, 84, 67, 0.05);
+}
+.family-summary-val.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: #2d4334;
+  letter-spacing: -0.5px;
+}
+.family-summary-label.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
   color: #8a8a7e;
 }
-.invite-code {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  color: #2d4334;
-}
-.copy-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ebe4d6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.copy-icon {
-  width: 14px;
-  height: 14px;
-  border: 1.8px solid #3a5443;
-  border-radius: 3px;
-  border-top: none;
-  border-left: none;
-  position: relative;
-}
-.copy-icon::before {
-  content: "";
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  width: 10px;
-  height: 10px;
-  border: 1.8px solid #3a5443;
-  border-radius: 2px;
-}
-.members-row {
+.members-row.data-v-4978fed5 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 4px;
 }
-.member-avatar {
+.member-avatar.data-v-4978fed5 {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background: #5d7553;
   color: #f8f4ec;
   display: flex;
+  align-items: center;
   justify-content: center;
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 12px;
   font-weight: 600;
   border: 2px solid #f8f4ec;
 }
-.member-avatar.admin {
+.member-avatar.admin.data-v-4978fed5 {
   background: #b85c3a;
 }
-.member-more {
+.member-more.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 11px;
   color: #8a8a7e;
   margin-left: 4px;
 }
+.family-manage-link.data-v-4978fed5 {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 40rpx;
+  background: #ebe4d6;
+  transition: opacity 0.2s ease;
+}
+.family-manage-link-hover.data-v-4978fed5 {
+  opacity: 0.7;
+}
+.family-manage-text.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2d4334;
+}
+.family-manage-arrow.data-v-4978fed5 {
+  width: 12px;
+  height: 12px;
+  stroke: #2d4334;
+}
 
 /* 未加入家庭 */
-.family-empty-box {
+.family-empty-box.data-v-4978fed5 {
   padding: 26px 22px;
   border-radius: 18px;
   background: #f8f4ec;
-  border: 1px solid rgba(107, 126, 99, 0.08);
+  border: 1px solid rgba(58, 84, 67, 0.1);
   text-align: center;
 }
-.family-empty-title {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+.family-empty-title.data-v-4978fed5 {
+  display: block;
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 16px;
   font-weight: 600;
   color: #2d4334;
   margin-bottom: 6px;
-  display: block;
 }
-.family-empty-em {
+.family-empty-title .em.data-v-4978fed5 {
+  transform: skewX(-8deg);
+  transform-origin: left center;
+  display: inline-block;
   color: #b85c3a;
 }
-.family-empty-desc {
+.family-empty-desc.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 12px;
   color: #8a8a7e;
   line-height: 1.6;
   margin-bottom: 16px;
   display: block;
 }
-.family-empty-actions {
+.family-empty-actions.data-v-4978fed5 {
   display: flex;
   gap: 10px;
 }
-.btn-primary {
+.btn-primary.data-v-4978fed5 {
   flex: 1;
   height: 40px;
   border-radius: 20px;
   background: #3a5443;
   color: #f8f4ec;
   border: none;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 12px;
   font-weight: 600;
   line-height: 40px;
+  transition: background 0.2s ease;
 }
-.btn-secondary {
+.btn-primary-hover.data-v-4978fed5 {
+  background: #4a6755;
+}
+.btn-secondary.data-v-4978fed5 {
   flex: 1;
   height: 40px;
   border-radius: 20px;
   background: transparent;
   color: #2d4334;
-  border: 1px solid rgba(107, 126, 99, 0.08);
+  border: 1px solid rgba(58, 84, 67, 0.1);
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 12px;
   font-weight: 600;
   line-height: 40px;
+  transition: all 0.2s ease;
+}
+.btn-secondary-hover.data-v-4978fed5 {
+  background: #ebe4d6;
 }
 
-/* 季节贴士 */
-.season-tip {
-  margin: 28px 28px;
+/* ===== 季节贴士 ===== */
+.season-tip.data-v-4978fed5 {
+  margin: 32px 28px 0;
   padding: 16px 18px;
   border-left: 2px solid #b85c3a;
-  position: relative;
-  z-index: 2;
 }
-.season-tip-label {
-  font-family: "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+.season-tip-label.data-v-4978fed5 {
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
   font-size: 9px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -489,10 +1011,84 @@
   margin-bottom: 6px;
   display: block;
 }
-.season-tip-text {
-  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+.season-tip-text.data-v-4978fed5 {
+  display: block;
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.6;
   color: #4a4a42;
+}
+
+/* ===== 底部留白 ===== */
+.bottom-spacer.data-v-4978fed5 {
+  height: 120px;
+}
+
+/* ===== 骨架屏 ===== */
+.skeleton.data-v-4978fed5 {
+  background: linear-gradient(90deg, rgba(58, 84, 67, 0.06) 0%, rgba(58, 84, 67, 0.12) 50%, rgba(58, 84, 67, 0.06) 100%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+.skeleton-num.data-v-4978fed5 {
+  height: 36px;
+  width: 48px;
+  border-radius: 4px;
+}
+.skeleton-text-sm.data-v-4978fed5 {
+  height: 10px;
+  width: 40%;
+  margin-top: 6px;
+}
+
+/* ===== 错误态卡片 ===== */
+.error-card.data-v-4978fed5 {
+  padding: 18px 20px;
+  border-radius: 36rpx;
+  background: rgba(184, 92, 58, 0.06);
+  border: 1px solid rgba(184, 92, 58, 0.18);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.err-icon.data-v-4978fed5 {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke: #b85c3a;
+  margin-top: 1px;
+}
+.err-content.data-v-4978fed5 {
+  flex: 1;
+  min-width: 0;
+}
+.err-title.data-v-4978fed5 {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d4334;
+  margin-bottom: 2px;
+  display: block;
+}
+.err-desc.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  color: #4a4a42;
+  line-height: 1.5;
+  display: block;
+  margin-bottom: 8px;
+}
+.err-retry.data-v-4978fed5 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b85c3a;
+  padding: 4px 0;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.err-retry.data-v-4978fed5:active {
+  opacity: 0.8;
 }

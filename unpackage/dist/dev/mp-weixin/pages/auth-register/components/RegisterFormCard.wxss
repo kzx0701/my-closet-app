@@ -1,25 +1,65 @@
-.card {
-  padding: 38rpx 30rpx 34rpx;
-  border-radius: 30rpx;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 22rpx 54rpx rgba(35, 43, 34, 0.12);
+.form.data-v-712d4fb4 {
+  position: relative;
+  z-index: 2;
 }
-.field + .field {
-  margin-top: 24rpx;
+.field + .field.data-v-712d4fb4 {
+  margin-top: 26rpx;
 }
-.label {
+.label.data-v-712d4fb4 {
   display: block;
   margin-bottom: 14rpx;
-  font-size: 25rpx;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 24rpx;
   font-weight: 600;
   color: #2a2a24;
 }
-.links {
+.submit-btn.data-v-712d4fb4 {
+  margin-top: 36rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 40rpx;
+  background: #3a5443;
+  color: #f8f4ec;
+  border: none;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 28rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.submit-btn.data-v-712d4fb4:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+.submit-btn.data-v-712d4fb4::after {
+  border: none;
+}
+.links.data-v-712d4fb4 {
   display: flex;
   justify-content: center;
-  margin-top: 28rpx;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 24rpx;
 }
-.link {
+.link-static.data-v-712d4fb4 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 24rpx;
-  color: #4a4a42;
+  color: rgba(244, 239, 230, 0.55);
+}
+.link.data-v-712d4fb4 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #d4805f;
+  transition: opacity 0.2s ease;
+}
+.link.data-v-712d4fb4:active {
+  opacity: 0.7;
+}
+.footer.data-v-712d4fb4 {
+  margin-top: 48rpx;
+  text-align: center;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: #8a8a7e;
 }

@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "家庭引导",
+  "navigationStyle": "custom",
   "usingComponents": {
     "guide-actions": "./components/GuideActions",
     "guide-hero": "./components/GuideHero"

@@ -1,1 +1,1 @@
-<view class="hero"><text class="eyebrow">家庭协作可选开启</text><text class="title">你还没有加入家庭</text><text class="desc"> 你可以先创建家庭或加入已有家庭，也可以先跳过，直接以个人模式管理自己的衣橱和衣物。 </text></view>
+<view class="hero fade-up-delay-1 data-v-3cdb2950"><scope-badge wx:if="{{a}}" class="data-v-3cdb2950" u-i="3cdb2950-0" bind:__l="__l" u-p="{{a}}"/><text class="title data-v-3cdb2950">开启家庭协作</text><text class="desc data-v-3cdb2950">加入后可以和家人共享衣橱与衣物，按角色协作管理。也可以稍后再设置。</text></view>

@@ -1,9 +1,5 @@
 {
   "navigationBarTitleText": "衣物详情",
-  "usingComponents": {
-    "u-loading-icon": "../../node-modules/uview-plus/components/u-loading-icon/u-loading-icon",
-    "u-tag": "../../node-modules/uview-plus/components/u-tag/u-tag",
-    "u-button": "../../node-modules/uview-plus/components/u-button/u-button",
-    "u-empty": "../../node-modules/uview-plus/components/u-empty/u-empty"
-  }
+  "navigationStyle": "custom",
+  "usingComponents": {}
 }

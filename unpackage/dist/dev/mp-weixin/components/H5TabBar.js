@@ -15,26 +15,26 @@ const _sfc_main = {
       {
         route: common_constants_routes.ROUTES.home,
         label: "首页",
-        icon: "/static/tabbar/yun.png",
-        selectedIcon: "/static/tabbar/yun1.png"
+        icon: "/static/icons/tab-home.svg",
+        selectedIcon: "/static/icons/tab-home-active.svg"
       },
       {
         route: common_constants_routes.ROUTES.closets,
         label: "衣橱",
-        icon: "/static/tabbar/storage.png",
-        selectedIcon: "/static/tabbar/storage1.png"
+        icon: "/static/icons/tab-closet.svg",
+        selectedIcon: "/static/icons/tab-closet-active.svg"
       },
       {
         route: common_constants_routes.ROUTES.clothes,
         label: "衣物",
-        icon: "/static/tabbar/obj.png",
-        selectedIcon: "/static/tabbar/obj1.png"
+        icon: "/static/icons/tab-clothes.svg",
+        selectedIcon: "/static/icons/tab-clothes-active.svg"
       },
       {
         route: common_constants_routes.ROUTES.profile,
         label: "我的",
-        icon: "/static/tabbar/fn.png",
-        selectedIcon: "/static/tabbar/fn1.png"
+        icon: "/static/icons/tab-profile.svg",
+        selectedIcon: "/static/icons/tab-profile-active.svg"
       }
     ];
     function switchRoute(route) {
@@ -59,5 +59,6 @@ const _sfc_main = {
     };
   }
 };
-wx.createComponent(_sfc_main);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-dc680df8"]]);
+wx.createComponent(Component);
 //# sourceMappingURL=../../.sourcemap/mp-weixin/components/H5TabBar.js.map

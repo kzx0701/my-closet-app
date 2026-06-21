@@ -1,1 +1,1 @@
-<view class="hero"><text class="eyebrow">JOIN MY CLOSET</text><text class="title">先创建你的账号，再进入个人或家庭衣橱空间</text><text class="desc"> 注册成功后会自动进入系统，之后你可以先用个人模式，也可以继续创建或加入家庭。 </text></view>
+<view class="hero fade-up-delay-1 data-v-56974b31"><scope-badge wx:if="{{a}}" class="data-v-56974b31" u-i="56974b31-0" bind:__l="__l" u-p="{{a}}"/><text class="brand-mark data-v-56974b31">Season Closet · 四季衣橱</text><text class="title data-v-56974b31">建立你的衣橱</text></view>

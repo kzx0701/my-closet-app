@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "注册",
+  "navigationStyle": "custom",
   "usingComponents": {
     "register-form-card": "./components/RegisterFormCard",
     "register-hero": "./components/RegisterHero"

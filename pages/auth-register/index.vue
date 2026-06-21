@@ -1,17 +1,18 @@
 <template>
-  <view class="page">
-    <view class="bg-glow bg-glow-left"></view>
-    <view class="bg-glow bg-glow-right"></view>
+  <view class="page noise-texture">
+    <view class="back-btn" @click="goBack">
+      <svg viewBox="0 0 24 24" class="back-icon">
+        <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </view>
 
     <register-hero />
 
     <register-form-card
-      ref="registerFormCardRef"
       v-model:username="username"
       v-model:nickname="nickname"
       v-model:password="password"
       v-model:passwordConfirm="passwordConfirm"
-      v-model:captcha="captcha"
       :loading="submitting"
       @submit="submitRegister"
       @login="goLogin"
@@ -27,12 +28,10 @@ import { registerUser } from "@/common/api/modules/auth.js";
 import RegisterFormCard from "./components/RegisterFormCard.vue";
 import RegisterHero from "./components/RegisterHero.vue";
 
-const registerFormCardRef = ref(null);
 const username = ref("");
 const nickname = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
-const captcha = ref("");
 const submitting = ref(false);
 
 function isEmail(value) {
@@ -47,8 +46,8 @@ function validateRegisterForm() {
     return "请输入用户名";
   }
 
-  if (normalizedUsername.length < 3 || normalizedUsername.length > 32) {
-    return "用户名长度需为 3-32 位";
+  if (normalizedUsername.length < 4 || normalizedUsername.length > 20) {
+    return "用户名长度需为 4-20 位";
   }
 
   if (/^1\d{10}$/.test(normalizedUsername) || isEmail(normalizedUsername)) {
@@ -64,20 +63,8 @@ function validateRegisterForm() {
   }
 
   if (normalizedNickname) {
-    if (normalizedNickname.length < 3 || normalizedNickname.length > 32) {
-      return "昵称长度需为 3-32 位";
-    }
-
-    if (/^1\d{10}$/.test(normalizedNickname) || isEmail(normalizedNickname)) {
-      return "昵称不能是手机号或邮箱";
-    }
-
-    if (/^\d+$/.test(normalizedNickname)) {
-      return "昵称不能为纯数字";
-    }
-
-    if (/[\u4E00-\u9FA5\uF900-\uFA2D]/.test(normalizedNickname)) {
-      return "昵称不能包含中文";
+    if (normalizedNickname.length < 2 || normalizedNickname.length > 32) {
+      return "昵称长度需为 2-32 位";
     }
   }
 
@@ -85,16 +72,12 @@ function validateRegisterForm() {
     return "请输入密码";
   }
 
-  if (password.value.length < 8 || password.value.length > 16) {
-    return "密码长度需为 8-16 位";
+  if (password.value.length < 6) {
+    return "密码长度至少 6 位";
   }
 
   if (passwordConfirm.value !== password.value) {
     return "两次输入的密码不一致";
-  }
-
-  if (!captcha.value || captcha.value.length !== 4) {
-    return "请输入 4 位验证码";
   }
 
   return "";
@@ -123,7 +106,6 @@ async function submitRegister() {
       nickname: nickname.value.trim(),
       password: password.value,
       password2: passwordConfirm.value,
-      captcha: captcha.value,
     });
 
     mutations.loginSuccess({
@@ -136,7 +118,7 @@ async function submitRegister() {
     });
   } catch (error) {
     console.error("custom register failed", error);
-    registerFormCardRef.value?.refreshCaptcha();
+    uni.showToast({ title: error?.message || "注册失败，请重试", icon: "none" });
   } finally {
     submitting.value = false;
   }
@@ -151,36 +133,52 @@ function goLogin() {
     },
   });
 }
+
+function goBack() {
+  uni.navigateBack({
+    fail() {
+      uni.reLaunch({
+        url: ROUTES.entry,
+      });
+    },
+  });
+}
 </script>
 
-<style>
+<style lang="scss" scoped>
 .page {
   position: relative;
   min-height: 100vh;
-  padding: 112rpx 34rpx 80rpx;
+  padding: 112rpx 56rpx 80rpx;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, #4b5c45 0%, #677b61 34%, #eef1e7 34%, #f7f5ef 100%);
+  background: $gradient-hero;
 }
 
-.bg-glow {
+.back-btn {
   position: absolute;
-  width: 360rpx;
-  height: 360rpx;
+  top: 112rpx;
+  left: 28rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  filter: blur(18rpx);
-  opacity: 0.22;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: $color-text-inverse;
+  z-index: 10;
+  transition: all 0.25s ease;
 }
 
-.bg-glow-left {
-  top: 30rpx;
-  left: -80rpx;
-  background: #d5e2b9;
+.back-btn:hover,
+.back-btn:active {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.bg-glow-right {
-  top: 180rpx;
-  right: -110rpx;
-  background: #f6dca8;
+.back-icon {
+  width: 36rpx;
+  height: 36rpx;
+  opacity: 0.85;
 }
 </style>

@@ -1,19 +1,81 @@
-.actions {
+.actions.data-v-def3b79a {
+  position: relative;
+  z-index: 2;
+  padding: 0 28px 60px;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 12px;
 }
-.primary,
-.secondary,
-.ghost {
-  border-radius: 999rpx;
-  font-size: 30rpx;
+.option.data-v-def3b79a {
+  background: #f8f4ec;
+  border: 1px solid rgba(58, 84, 67, 0.1);
+  border-radius: 36rpx;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: all 0.25s ease;
 }
-.secondary {
-  background: #edf1ea;
-  color: #3a5443;
+.option.data-v-def3b79a:hover,
+.option.data-v-def3b79a:active {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 16rpx 36rpx rgba(73, 81, 69, 0.08);
 }
-.ghost {
-  background: transparent;
-  color: #4a4a42;
+.option-num.data-v-def3b79a {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: #b85c3a;
+  line-height: 1;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+  width: 44px;
+}
+.option-content.data-v-def3b79a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.option-title.data-v-def3b79a {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #2d4334;
+  margin-bottom: 4px;
+}
+.option-desc.data-v-def3b79a {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  color: #8a8a7e;
+  line-height: 1.5;
+}
+.option-arrow.data-v-def3b79a {
+  width: 16px;
+  height: 16px;
+  color: #8a8a7e;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+.option-arrow svg.data-v-def3b79a {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.skip.data-v-def3b79a {
+  text-align: center;
+  padding: 16px 0 0;
+}
+.skip-link.data-v-def3b79a {
+  display: inline-block;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8a8a7e;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(58, 84, 67, 0.1);
+  transition: color 0.2s ease;
+}
+.skip-link.data-v-def3b79a:active {
+  opacity: 0.7;
 }

@@ -1,6 +1,8 @@
 {
   "navigationBarTitleText": "创建家庭",
+  "navigationStyle": "custom",
   "usingComponents": {
+    "scope-badge": "../../components/ScopeBadge",
     "family-create-form": "./components/FamilyCreateForm"
   }
 }

@@ -1,53 +1,85 @@
-.uploader {
-  margin-top: 24rpx;
-}
-.label {
-  display: block;
-  font-size: 26rpx;
-  font-weight: 700;
-  color: #2a2a24;
-}
-.desc {
-  display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #4a4a42;
-}
-.preview {
-  position: relative;
-  margin-top: 16rpx;
+.uploader.data-v-1a0b434d {
   width: 100%;
-  height: 300rpx;
+}
+.image-preview.data-v-1a0b434d {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
   border-radius: 24rpx;
   overflow: hidden;
+  border: 1px solid rgba(58, 84, 67, 0.1);
+  background: linear-gradient(135deg, #ebe4d6 0%, #f8f4ec 100%);
 }
-.preview-image {
+.preview-image.data-v-1a0b434d {
   width: 100%;
   height: 100%;
 }
-.preview-remove {
+.season-mark.data-v-1a0b434d {
   position: absolute;
-  top: 12rpx;
-  right: 12rpx;
+  top: 24rpx;
+  left: 24rpx;
+  width: 8rpx;
+  height: 56rpx;
+  border-radius: 4rpx;
+  z-index: 2;
 }
-.upload-area {
+.replace-btn.data-v-1a0b434d {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 24rpx;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+.replace-btn.data-v-1a0b434d:active {
+  opacity: 0.8;
+}
+.replace-btn-text.data-v-1a0b434d {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #ffffff;
+}
+.image-upload.data-v-1a0b434d {
+  width: 100%;
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 16rpx;
-  height: 200rpx;
   border-radius: 24rpx;
+  background: #f8f4ec;
+  border: 3rpx dashed rgba(58, 84, 67, 0.1);
+  transition: all 0.2s ease;
+}
+.image-upload.data-v-1a0b434d:active {
   background: #ebe4d6;
-  border: 2rpx dashed rgba(107, 126, 99, 0.08);
+  border-color: #7a9580;
 }
-.upload-text {
-  margin-top: 12rpx;
-  font-size: 24rpx;
+.upload-icon.data-v-1a0b434d {
+  width: 72rpx;
+  height: 72rpx;
+  margin-bottom: 20rpx;
+  color: #8a8a7e;
+  opacity: 0.6;
+}
+.upload-icon svg.data-v-1a0b434d {
+  width: 100%;
+  height: 100%;
+}
+.upload-title.data-v-1a0b434d {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 28rpx;
+  font-weight: 500;
   color: #4a4a42;
+  margin-bottom: 6rpx;
 }
-.upload-hint {
-  margin-top: 8rpx;
-  font-size: 20rpx;
+.upload-sub.data-v-1a0b434d {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 22rpx;
   color: #8a8a7e;
 }

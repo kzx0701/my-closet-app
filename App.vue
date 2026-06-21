@@ -44,4 +44,66 @@ uni.$u.modal = (options) => {
 view {
   box-sizing: border-box;
 }
+
+/* ===== 全局动画 ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(212, 128, 95, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(212, 128, 95, 0.9);
+  }
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== 入场动画工具类 ===== */
+.fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.fade-up-delay-1 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both; }
+.fade-up-delay-2 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both; }
+.fade-up-delay-3 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.36s both; }
+.fade-up-delay-4 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.46s both; }
+.fade-up-delay-5 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.56s both; }
+.fade-up-delay-6 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.66s both; }
+
+/* ===== 隐藏滚动条 ===== */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* ===== 噪点纹理工具类 ===== */
+.noise-texture::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
 </style>

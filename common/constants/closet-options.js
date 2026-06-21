@@ -25,17 +25,21 @@ export const CLOSET_COLOR_OPTIONS = [
   {
     code: "oak-beige",
     name: "浅橡木",
+    color: "#d4b896",
   },
   {
     code: "walnut-brown",
     name: "胡桃棕",
+    color: "#6b4423",
   },
   {
     code: "mist-white",
     name: "雾感白",
+    color: "#e8e4dc",
   },
   {
     code: "sage-green",
     name: "鼠尾草绿",
+    color: "#a8bcae",
   },
 ];

@@ -2,15 +2,11 @@
 const common_vendor = require("../../../common/vendor.js");
 if (!Array) {
   const _easycom_u_input2 = common_vendor.resolveComponent("u-input");
-  const _easycom_uni_captcha2 = common_vendor.resolveComponent("uni-captcha");
-  const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
-  (_easycom_u_input2 + _easycom_uni_captcha2 + _easycom_u_button2)();
+  _easycom_u_input2();
 }
 const _easycom_u_input = () => "../../../node-modules/uview-plus/components/u-input/u-input.js";
-const _easycom_uni_captcha = () => "../../../uni_modules/uni-captcha/components/uni-captcha/uni-captcha.js";
-const _easycom_u_button = () => "../../../node-modules/uview-plus/components/u-button/u-button.js";
 if (!Math) {
-  (_easycom_u_input + _easycom_uni_captcha + _easycom_u_button)();
+  _easycom_u_input();
 }
 const _sfc_main = {
   __name: "RegisterFormCard",
@@ -31,10 +27,6 @@ const _sfc_main = {
       type: String,
       default: ""
     },
-    captcha: {
-      type: String,
-      default: ""
-    },
     loading: {
       type: Boolean,
       default: false
@@ -45,88 +37,70 @@ const _sfc_main = {
     "update:nickname",
     "update:password",
     "update:passwordConfirm",
-    "update:captcha",
     "submit",
     "login"
   ],
-  setup(__props, { expose: __expose, emit: __emit }) {
+  setup(__props, { emit: __emit }) {
     const emit = __emit;
-    const captchaRef = common_vendor.ref(null);
-    function handleCaptchaUpdate(value) {
-      emit("update:captcha", value);
-    }
-    function refreshCaptcha() {
-      var _a;
-      (_a = captchaRef.value) == null ? void 0 : _a.getImageCaptcha();
-    }
-    __expose({ refreshCaptcha });
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.o(($event) => emit("update:username", $event), "06"),
+        a: common_vendor.o(($event) => emit("update:username", $event), "15"),
         b: common_vendor.p({
           modelValue: __props.username,
-          maxlength: "32",
-          placeholder: "3-32 位，不能是纯数字/手机号/邮箱",
+          maxlength: "20",
+          placeholder: "字母 / 数字 4-20 位",
           shape: "circle",
           bgColor: "#f2f5ef",
           customStyle: {
-            padding: "0 24rpx"
+            padding: "0 24rpx",
+            borderRadius: "40rpx"
           }
         }),
-        c: common_vendor.o(($event) => emit("update:nickname", $event), "56"),
+        c: common_vendor.o(($event) => emit("update:nickname", $event), "6d"),
         d: common_vendor.p({
           modelValue: __props.nickname,
           maxlength: "32",
-          placeholder: "选填，建议填写你的昵称",
+          placeholder: "例如：林屿",
           shape: "circle",
           bgColor: "#f2f5ef",
           customStyle: {
-            padding: "0 24rpx"
+            padding: "0 24rpx",
+            borderRadius: "40rpx"
           }
         }),
-        e: common_vendor.o(($event) => emit("update:password", $event), "1c"),
+        e: common_vendor.o(($event) => emit("update:password", $event), "e3"),
         f: common_vendor.p({
           modelValue: __props.password,
           type: "password",
           maxlength: "20",
-          placeholder: "请输入 8-16 位密码",
+          placeholder: "至少 6 位",
           shape: "circle",
           bgColor: "#f2f5ef",
           customStyle: {
-            padding: "0 24rpx"
+            padding: "0 24rpx",
+            borderRadius: "40rpx"
           }
         }),
-        g: common_vendor.o(($event) => emit("update:passwordConfirm", $event), "a4"),
+        g: common_vendor.o(($event) => emit("update:passwordConfirm", $event), "d2"),
         h: common_vendor.p({
           modelValue: __props.passwordConfirm,
           type: "password",
           maxlength: "20",
-          placeholder: "请再次输入密码",
+          placeholder: "再次输入密码",
           shape: "circle",
           bgColor: "#f2f5ef",
           customStyle: {
-            padding: "0 24rpx"
+            padding: "0 24rpx",
+            borderRadius: "40rpx"
           }
         }),
-        i: common_vendor.sr(captchaRef, "3dc74893-4", {
-          "k": "captchaRef"
-        }),
-        j: common_vendor.o(handleCaptchaUpdate, "fc"),
-        k: common_vendor.p({
-          scene: "register",
-          modelValue: __props.captcha
-        }),
-        l: common_vendor.o(($event) => emit("submit"), "98"),
-        m: common_vendor.p({
-          type: "primary",
-          shape: "circle",
-          loading: __props.loading,
-          customStyle: "margin-top: 34rpx; background: $gradient-button; border: none;"
-        }),
-        n: common_vendor.o(($event) => emit("login"), "ab")
+        i: __props.loading,
+        j: common_vendor.o(($event) => emit("submit"), "69"),
+        k: common_vendor.o(($event) => emit("login"), "0f")
       };
     };
   }
 };
-wx.createComponent(_sfc_main);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-712d4fb4"]]);
+wx.createComponent(Component);
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/pages/auth-register/components/RegisterFormCard.js.map

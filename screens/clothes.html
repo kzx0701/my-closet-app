@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的衣物 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+<style>
+  .clothes-hero { padding: 100px 28px 18px; position: relative; z-index: 2; color: var(--color-text-inverse); }
+  .clothes-hero .scope-title { margin-bottom: 8px; }
+  .clothes-hero .scope-desc { margin-bottom: 0; max-width: 260px; }
+  .clothes-hero .scope-meta-inline { margin-top: 14px; }
+  .filter-bar { padding-top: 16px; padding-bottom: 16px; }
+  .clothes-section-label { padding: 0 28px 12px; position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: baseline; }
+  .clothes-section-label .count { font-family: var(--font-sans); font-size: 12px; color: var(--color-text-placeholder); }
+  .clothes-section-label .count .num { font-family: var(--font-serif); font-size: 15px; font-weight: 500; color: var(--color-terra); margin-right: 4px; }
+  .clothes-grid { padding-top: 0; }
+  .fab {
+    position: absolute; bottom: 110px; right: 24px;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--color-terra); color: var(--color-text-inverse);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(184, 92, 58, 0.35);
+    z-index: 40; transition: all 0.2s ease;
+  }
+  .fab:hover { background: var(--color-terra-soft); transform: translateY(-2px); }
+  .fab svg { width: 22px; height: 22px; stroke: currentColor; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island"></div>
+    <div class="status-bar light">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg viewBox="0 0 18 14" fill="currentColor"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <svg viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="page">
+        <div class="page-bg"></div>
+
+        <div class="clothes-hero fade-up delay-1">
+          <div class="scope-badge">
+            <span class="scope-badge-dot"></span>
+            <span class="scope-badge-text">Personal · 个人衣物</span>
+          </div>
+          <h1 class="scope-title">我的衣物</h1>
+          <div class="scope-meta-inline">
+            <span class="scope-meta-item"><span class="scope-meta-key">Total</span><span class="scope-meta-val">48</span></span>
+            <span class="scope-meta-item"><span class="scope-meta-key">Unassigned</span><span class="scope-meta-val accent">2 件未归类</span></span>
+          </div>
+        </div>
+
+        <!-- 筛选条 -->
+        <div class="filter-bar fade-up delay-2">
+          <button class="filter-chip active">全部</button>
+          <button class="filter-chip">上装</button>
+          <button class="filter-chip">下装</button>
+          <button class="filter-chip">外套</button>
+          <button class="filter-chip">鞋子</button>
+          <button class="filter-chip">配饰</button>
+        </div>
+
+        <div class="clothes-section-label fade-up delay-3">
+          <span class="count"><span class="num">8</span>件 · 当前视图</span>
+          <span class="count">按添加时间</span>
+        </div>
+
+        <div class="clothes-grid fade-up delay-3">
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-autumn"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">米色亚麻衬衫</div>
+              <div class="clothes-sub">上装 · 秋</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-autumn"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">燕麦色针织毛衣</div>
+              <div class="clothes-sub">上装 · 冬</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-winter"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M3 6l4-2h10l4 2v3a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3V6z"/><path d="M5 12v8h14v-8"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">墨绿羊毛大衣</div>
+              <div class="clothes-sub">外套 · 冬</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-autumn"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M3 6l4-2h10l4 2v3a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3V6z"/><path d="M5 12v8h14v-8"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">驼色风衣</div>
+              <div class="clothes-sub">外套 · 秋</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-spring"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M8 4l4-2 4 2v3a3 3 0 0 1-3 3 3 3 0 0 1-3-3V4z"/><path d="M5 9h14l-1 11H6L5 9z"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">白色直筒裤</div>
+              <div class="clothes-sub">下装 · 春</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-summer"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M8 4l4-2 4 2v3a3 3 0 0 1-3 3 3 3 0 0 1-3-3V4z"/><path d="M5 9h14l-1 11H6L5 9z"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">卡其短裤</div>
+              <div class="clothes-sub">下装 · 夏</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-autumn"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M2 12l8-3v9l-8-3v-3z"/><path d="M10 9l8-1v6l-8 1"/><path d="M14 14v4a2 2 0 0 0 4 0v-3"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">棕色乐福鞋</div>
+              <div class="clothes-sub">鞋子 · 秋</div>
+            </div>
+          </a>
+
+          <a class="clothes-card" href="clothes-detail.html">
+            <div class="clothes-img">
+              <span class="season-mark season-winter"></span>
+              <svg viewBox="0 0 24 24" class="icon"><path d="M2 12l8-3v9l-8-3v-3z"/><path d="M10 9l8-1v6l-8 1"/><path d="M14 14v4a2 2 0 0 0 4 0v-3"/></svg>
+            </div>
+            <div class="clothes-info">
+              <div class="clothes-name">黑色切尔西靴</div>
+              <div class="clothes-sub">鞋子 · 冬</div>
+            </div>
+          </a>
+        </div>
+
+        <a class="fab" href="clothes-create.html" title="新增衣物">
+          <svg viewBox="0 0 24 24" class="icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="tab-bar">
+      <a class="tab-item" href="home.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M3 12L12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="tab-item" href="closets.html">
+        <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        <span>衣橱</span>
+      </a>
+      <a class="tab-item active" href="clothes.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        <span>衣物</span>
+      </a>
+      <a class="tab-item" href="profile.html">
+        <svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>我的</span>
+      </a>
+    </nav>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+<script>
+  // 筛选 chip 单选切换
+  document.querySelectorAll('.filter-bar .filter-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.filter-bar .filter-chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

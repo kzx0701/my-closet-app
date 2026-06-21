@@ -4,6 +4,11 @@ const common_services_auth = require("../../common/services/auth.js");
 const common_api_modules_family = require("../../common/api/modules/family.js");
 const common_constants_routes = require("../../common/constants/routes.js");
 const common_services_familyGuideState = require("../../common/services/family-guide-state.js");
+if (!Array) {
+  const _component_path = common_vendor.resolveComponent("path");
+  const _component_svg = common_vendor.resolveComponent("svg");
+  (_component_path + _component_svg)();
+}
 if (!Math) {
   (GuideHero + GuideActions)();
 }
@@ -15,6 +20,22 @@ const _sfc_main = {
     const showJoinForm = common_vendor.ref(false);
     const inviteCode = common_vendor.ref("");
     const joining = common_vendor.ref(false);
+    const statusBarHeight = common_vendor.ref(20);
+    function goBack() {
+      common_vendor.index.navigateBack({
+        fail() {
+          common_vendor.index.reLaunch({ url: common_constants_routes.ROUTES.home });
+        }
+      });
+    }
+    common_vendor.onLoad(() => {
+      try {
+        const sysInfo = common_vendor.index.getSystemInfoSync();
+        statusBarHeight.value = sysInfo.statusBarHeight || 20;
+      } catch (e) {
+        statusBarHeight.value = 20;
+      }
+    });
     function handleCreateFamily() {
       common_vendor.index.navigateTo({
         url: common_constants_routes.ROUTES.familyCreate
@@ -73,7 +94,7 @@ const _sfc_main = {
           });
         }, 300);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/family-guide/index.vue:121", "joinFamilyByInviteCode failed", error);
+        common_vendor.index.__f__("error", "at pages/family-guide/index.vue:160", "joinFamilyByInviteCode failed", error);
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "加入家庭失败",
           icon: "none"
@@ -84,20 +105,38 @@ const _sfc_main = {
     }
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.o(handleCreateFamily, "7b"),
-        b: common_vendor.o(handleJoinFamily, "a9"),
-        c: common_vendor.o(handleSkip, "31"),
-        d: showJoinForm.value
+        a: common_vendor.p({
+          d: "M15 18l-6-6 6-6"
+        }),
+        b: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "2",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        c: common_vendor.o(goBack, "b3"),
+        d: statusBarHeight.value + "px",
+        e: common_vendor.o(handleCreateFamily, "ea"),
+        f: common_vendor.o(handleJoinFamily, "d4"),
+        g: common_vendor.o(handleSkip, "68"),
+        h: showJoinForm.value
       }, showJoinForm.value ? {
-        e: inviteCode.value,
-        f: common_vendor.o(handleInviteCodeInput, "d9"),
-        g: joining.value,
-        h: common_vendor.o(submitJoinFamily, "33"),
-        i: joining.value,
-        j: common_vendor.o(cancelJoinFamily, "76")
+        i: common_vendor.o(cancelJoinFamily, "fe"),
+        j: inviteCode.value,
+        k: common_vendor.o(handleInviteCodeInput, "2e"),
+        l: joining.value,
+        m: common_vendor.o(cancelJoinFamily, "80"),
+        n: joining.value,
+        o: common_vendor.o(submitJoinFamily, "92"),
+        p: common_vendor.o(() => {
+        }, "ba"),
+        q: common_vendor.o(cancelJoinFamily, "ae")
       } : {});
     };
   }
 };
-wx.createPage(_sfc_main);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-d7fa870b"]]);
+wx.createPage(MiniProgramPage);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/family-guide/index.js.map

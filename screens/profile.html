@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+<style>
+  .profile-hero { padding: 100px 28px 36px; position: relative; z-index: 2; color: var(--color-text-inverse); }
+  .profile-stats-row { display: flex; gap: 28px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--inverse-25); }
+  .profile-stats-row .stat-item { flex: 0 0 auto; }
+  .profile-stats-row .stat-value { color: var(--inverse-85); font-size: 26px; }
+  .profile-stats-row .stat-value.accent { color: var(--color-terra-soft); }
+  .profile-stats-row .stat-label { color: var(--inverse-55); }
+  .profile-stats-row .stat-divider { width: 1px; background: var(--inverse-25); }
+  .profile-list { padding-top: 28px; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island"></div>
+    <div class="status-bar light">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg viewBox="0 0 18 14" fill="currentColor"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <svg viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="page">
+        <div class="page-bg"></div>
+
+        <!-- 头部 -->
+        <div class="profile-hero fade-up delay-1">
+          <div class="scope-badge">
+            <span class="scope-badge-dot"></span>
+            <span class="scope-badge-text">Profile · 个人中心</span>
+          </div>
+          <div class="profile-avatar">L</div>
+          <div class="profile-name">林屿</div>
+          <div class="profile-meta">Family · 林家小院 · Admin</div>
+
+          <div class="profile-stats-row">
+            <div class="stat-item">
+              <div class="stat-value">3</div>
+              <div class="stat-label">衣橱</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value accent">48</div>
+              <div class="stat-label">衣物</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value">126</div>
+              <div class="stat-label">家庭共享</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 列表 -->
+        <div class="profile-list">
+          <div class="profile-group fade-up delay-2">
+            <span class="profile-group-label">Account · 账户</span>
+            <div class="profile-group-items">
+              <div class="profile-item">
+                <span class="profile-item-label">个人资料</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+              <div class="profile-item">
+                <span class="profile-item-label">账号安全</span>
+                <span class="profile-item-value">已绑定</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-group fade-up delay-3">
+            <span class="profile-group-label">Family · 家庭</span>
+            <div class="profile-group-items">
+              <div class="profile-item">
+                <span class="profile-item-label">家庭信息</span>
+                <span class="profile-item-value">林家小院</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+              <div class="profile-item">
+                <span class="profile-item-label">家庭成员</span>
+                <span class="profile-item-value">4 人</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+              <div class="profile-item">
+                <span class="profile-item-label">邀请码</span>
+                <span class="profile-item-value">MY-FAM-2024</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-group fade-up delay-4">
+            <span class="profile-group-label">Settings · 设置</span>
+            <div class="profile-group-items">
+              <div class="profile-item">
+                <span class="profile-item-label">通知设置</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+              <div class="profile-item">
+                <span class="profile-item-label">缓存清理</span>
+                <span class="profile-item-value">2.4 MB</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+              <div class="profile-item">
+                <span class="profile-item-label">关于 MyCloset</span>
+                <span class="profile-item-value">v1.0.0</span>
+                <svg class="profile-item-arrow icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-group fade-up delay-5">
+            <div class="profile-group-items">
+              <div class="profile-item danger" style="justify-content: center;">
+                <span class="profile-item-label">退出登录</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="tab-bar">
+      <a class="tab-item" href="home.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M3 12L12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="tab-item" href="closets.html">
+        <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        <span>衣橱</span>
+      </a>
+      <a class="tab-item" href="clothes.html">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        <span>衣物</span>
+      </a>
+      <a class="tab-item active" href="profile.html">
+        <svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>我的</span>
+      </a>
+    </nav>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+</body>
+</html>

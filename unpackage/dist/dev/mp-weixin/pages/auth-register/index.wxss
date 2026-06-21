@@ -1,27 +1,32 @@
-
-.page {
+.page.data-v-f5970715 {
   position: relative;
   min-height: 100vh;
-  padding: 112rpx 34rpx 80rpx;
+  padding: 112rpx 56rpx 80rpx;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, #4b5c45 0%, #677b61 34%, #eef1e7 34%, #f7f5ef 100%);
+  background: linear-gradient(180deg, #2d4334 0%, #3a5443 12%, #4a6755 20%, #7a9580 28%, #a8bcae 34%, #c8cebf 38%, #f4efe6 42%, #f4efe6 100%);
 }
-.bg-glow {
+.back-btn.data-v-f5970715 {
   position: absolute;
-  width: 360rpx;
-  height: 360rpx;
+  top: 112rpx;
+  left: 28rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  filter: blur(18rpx);
-  opacity: 0.22;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8f4ec;
+  z-index: 10;
+  transition: all 0.25s ease;
 }
-.bg-glow-left {
-  top: 30rpx;
-  left: -80rpx;
-  background: #d5e2b9;
+.back-btn.data-v-f5970715:hover,
+.back-btn.data-v-f5970715:active {
+  background: rgba(255, 255, 255, 0.2);
 }
-.bg-glow-right {
-  top: 180rpx;
-  right: -110rpx;
-  background: #f6dca8;
+.back-icon.data-v-f5970715 {
+  width: 36rpx;
+  height: 36rpx;
+  opacity: 0.85;
 }

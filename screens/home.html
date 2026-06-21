@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首页 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+<style>
+  /* 仅 home 页特定微调 */
+  .hero-zone { padding-top: 96px; }
+  .stats-zone { padding-top: 28px; }
+
+  /* 骨架屏占位（加载态） */
+  .skeleton {
+    background: linear-gradient(90deg,
+      rgba(58, 84, 67, 0.06) 0%,
+      rgba(58, 84, 67, 0.12) 50%,
+      rgba(58, 84, 67, 0.06) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  .skeleton.text { height: 14px; }
+  .skeleton.text.lg { height: 22px; width: 60%; }
+  .skeleton.text.sm { height: 10px; width: 40%; }
+  .skeleton.num { height: 36px; width: 48px; border-radius: 4px; }
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton { animation: none; }
+  }
+
+  /* 状态切换器：默认成功态显示，[data-state="loading"] 显示骨架 */
+  [data-state="loading"] .success-only,
+  [data-state="empty"] .success-only,
+  [data-state="error"] .success-only { display: none; }
+  [data-state="loading"] .loading-only { display: block; }
+  [data-state="empty"] .empty-only { display: block; }
+  [data-state="error"] .error-only { display: block; }
+  .loading-only, .empty-only, .error-only { display: none; }
+
+  /* 错误态 */
+  .error-card {
+    padding: 18px 20px;
+    border-radius: var(--radius-card);
+    background: rgba(184, 92, 58, 0.06);
+    border: 1px solid rgba(184, 92, 58, 0.18);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .error-card .err-icon {
+    width: 20px; height: 20px;
+    flex-shrink: 0;
+    stroke: var(--color-terra);
+    stroke-width: 1.5;
+    fill: none;
+    margin-top: 1px;
+  }
+  .error-card .err-title {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    margin-bottom: 2px;
+    display: block;
+  }
+  .error-card .err-desc {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .error-card .err-retry {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-terra);
+    padding: 4px 0;
+  }
+
+  /* 空态 */
+  .empty-card {
+    padding: 22px 20px;
+    border-radius: var(--radius-card);
+    background: var(--color-bg-card-end);
+    border: 1px dashed var(--color-border);
+    text-align: center;
+  }
+  .empty-card .empty-icon-lg {
+    width: 36px; height: 36px;
+    margin: 0 auto 10px;
+    stroke: var(--color-text-placeholder);
+    stroke-width: 1.3;
+    fill: none;
+    opacity: 0.5;
+  }
+  .empty-card .empty-title {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .empty-card .empty-desc {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-placeholder);
+    line-height: 1.5;
+  }
+
+  /* 状态切换按钮（演示用，浮在右上） */
+  .state-demo {
+    position: absolute;
+    top: 56px; left: 14px;
+    z-index: 80;
+    display: flex;
+    gap: 4px;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 3px;
+  }
+  .state-demo button {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    padding: 4px 8px;
+    border-radius: 10px;
+    transition: all 0.18s ease;
+  }
+  .state-demo button.active {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island" aria-hidden="true"></div>
+
+    <!-- 状态栏 (深色背景上用浅色) -->
+    <div class="status-bar light" aria-hidden="true">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <!-- 信号 -->
+        <svg viewBox="0 0 20 12" fill="currentColor" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <!-- WiFi -->
+        <svg viewBox="0 0 18 14" fill="currentColor" aria-hidden="true"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <!-- 电池 -->
+        <svg viewBox="0 0 27 13" fill="none" aria-hidden="true"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <!-- 状态切换演示器（仅原型用，可移除） -->
+    <div class="state-demo" role="group" aria-label="状态预览切换">
+      <button type="button" data-state-btn="success" class="active">成功</button>
+      <button type="button" data-state-btn="loading">加载</button>
+      <button type="button" data-state-btn="empty">空</button>
+      <button type="button" data-state-btn="error">错误</button>
+    </div>
+
+    <main class="screen-content" data-state="success">
+      <div class="page">
+        <div class="page-bg" aria-hidden="true"></div>
+
+        <!-- 顶部绿色区 -->
+        <section class="hero-zone" data-od-id="hero">
+          <div class="topbar">
+            <div class="greeting">
+              <span class="greeting-hi">Good morning</span>
+              <span class="greeting-name">林屿</span>
+            </div>
+            <button type="button" class="icon-btn" aria-label="退出登录" title="退出登录">
+              <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false"><path d="M16 17l5-5-5-5M21 12H9M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/></svg>
+            </button>
+          </div>
+
+          <div class="scope-info">
+            <div class="scope-badge">
+              <span class="scope-badge-dot" aria-hidden="true"></span>
+              <span class="scope-badge-text">Personal Space</span>
+            </div>
+            <h1 class="scope-title">个人空间</h1>
+            <p class="scope-desc">管理你自己的衣橱和衣物，随时可以创建或加入家庭。</p>
+            <div class="scope-meta-inline">
+              <span class="scope-meta-item"><span class="scope-meta-key">Mode</span><span class="scope-meta-val">个人模式</span></span>
+              <span class="scope-meta-item"><span class="scope-meta-key">Family</span><span class="scope-meta-val accent">已加入家庭</span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 数据概览 -->
+        <section class="stats-zone fade-up delay-3" data-od-id="stats">
+          <span class="section-label">Overview · 概览</span>
+
+          <!-- 成功态 -->
+          <div class="stats-row success-only">
+            <div class="stat-item">
+              <span class="stat-value">3</span>
+              <span class="stat-label">衣橱</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value accent">48</span>
+              <span class="stat-label">衣物</span>
+            </div>
+          </div>
+
+          <!-- 加载态 -->
+          <div class="stats-row loading-only" aria-hidden="true">
+            <div class="stat-item"><span class="skeleton num"></span><span class="skeleton text sm" style="margin-top:6px;"></span></div>
+            <div class="stat-item"><span class="skeleton num"></span><span class="skeleton text sm" style="margin-top:6px;"></span></div>
+          </div>
+
+          <!-- 错误态 -->
+          <div class="error-only">
+            <div class="error-card">
+              <svg class="err-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div>
+                <span class="err-title">数据加载失败</span>
+                <span class="err-desc">网络连接异常，请稍后重试。</span>
+                <button type="button" class="err-retry">重新加载</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 核心操作 -->
+        <section class="actions-zone fade-up delay-4" data-od-id="actions" aria-label="核心操作">
+          <a class="action-card dark" href="closets.html" aria-label="我的衣橱，共 3 个">
+            <div class="card-top">
+              <div class="card-number-wrap">
+                <span class="card-number">3</span>
+                <span class="card-number-unit">个</span>
+              </div>
+              <svg class="card-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            </div>
+            <div class="card-bottom">
+              <span class="card-title">我的衣橱</span>
+              <span class="card-subtitle">查看和管理</span>
+            </div>
+            <svg class="card-arrow icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+
+          <a class="action-card light" href="clothes.html" aria-label="我的衣物，共 48 件">
+            <div class="card-top">
+              <div class="card-number-wrap">
+                <span class="card-number">48</span>
+                <span class="card-number-unit">件</span>
+              </div>
+              <svg class="card-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+            </div>
+            <div class="card-bottom">
+              <span class="card-title">我的衣物</span>
+              <span class="card-subtitle">浏览列表</span>
+            </div>
+            <svg class="card-arrow icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+        </section>
+
+        <!-- 家庭协作区 -->
+        <section class="family-zone fade-up delay-5" data-od-id="family">
+          <span class="section-label">Family · 家庭协作</span>
+
+          <div class="family-invite-box">
+            <div class="family-name-row">
+              <span class="family-name">林家小院</span>
+              <span class="family-role" aria-label="角色：管理员">Admin</span>
+            </div>
+
+            <a class="family-summary-row" href="closets.html" aria-label="查看家庭衣橱和衣物：5 个衣橱，126 件衣物">
+              <div class="family-summary-item">
+                <span class="family-summary-val">5</span>
+                <span class="family-summary-label">家庭衣橱</span>
+              </div>
+              <div class="family-summary-divider" aria-hidden="true"></div>
+              <div class="family-summary-item">
+                <span class="family-summary-val">126</span>
+                <span class="family-summary-label">家庭衣物</span>
+              </div>
+              <svg class="family-summary-arrow icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg>
+            </a>
+
+            <div class="invite-row">
+              <span class="invite-label">邀请码</span>
+              <span class="invite-code" id="invite-code">MY-FAM-2024</span>
+              <button type="button" class="copy-btn" data-copy="#invite-code" aria-label="复制邀请码 MY-FAM-2024">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+
+            <div class="members-row" role="group" aria-label="家庭成员，共 4 人">
+              <button type="button" class="member-avatar admin" aria-label="林屿，管理员">L</button>
+              <button type="button" class="member-avatar" aria-label="苏晚">S</button>
+              <button type="button" class="member-avatar" aria-label="林一">Y</button>
+              <button type="button" class="member-more" aria-label="查看全部 4 位成员">+1</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 季节贴士 -->
+        <section class="season-tip fade-up delay-6" data-od-id="season-tip">
+          <span class="season-tip-label">Autumn · 秋日提示</span>
+          <span class="season-tip-text">「入秋了，把薄外套翻出来，检查去年的冬装是否还能穿。」</span>
+        </section>
+      </div>
+    </main>
+
+    <!-- TabBar -->
+    <nav class="tab-bar" aria-label="主导航">
+      <a class="tab-item active" href="home.html" aria-current="page">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false"><path d="M3 12L12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="tab-item" href="closets.html">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        <span>衣橱</span>
+      </a>
+      <a class="tab-item" href="clothes.html">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        <span>衣物</span>
+      </a>
+      <a class="tab-item" href="profile.html">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>我的</span>
+      </a>
+    </nav>
+
+    <div class="home-indicator" aria-hidden="true"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+<script>
+  // 状态切换演示器
+  (function () {
+    var screen = document.querySelector('[data-state]');
+    var btns = document.querySelectorAll('[data-state-btn]');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var state = btn.getAttribute('data-state-btn');
+        btns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        screen.setAttribute('data-state', state);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

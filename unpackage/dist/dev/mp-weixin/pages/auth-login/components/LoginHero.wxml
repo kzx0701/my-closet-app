@@ -1,1 +1,1 @@
-<view class="hero"><text class="eyebrow">MY CLOSET</text><text class="title">把家庭与个人衣橱放进同一个空间</text><text class="desc"> 登录后你可以继续使用个人模式，也可以创建家庭或加入家庭，和家人一起管理衣物。 </text></view>
+<view class="hero fade-up-delay-1 data-v-a8f868cf"><scope-badge wx:if="{{a}}" class="data-v-a8f868cf" u-i="a8f868cf-0" bind:__l="__l" u-p="{{a}}"/><text class="brand-mark data-v-a8f868cf">Season Closet · 四季衣橱</text><text class="title data-v-a8f868cf">欢迎回来</text></view>

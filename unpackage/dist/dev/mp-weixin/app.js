@@ -17,6 +17,7 @@ if (!Math) {
   "./pages/clothes/index.js";
   "./pages/clothes-create/index.js";
   "./pages/clothes-detail/index.js";
+  "./pages/closet-detail/index.js";
   "./pages/closets/index.js";
   "./pages/closet-create/index.js";
   "./pages/home/index.js";

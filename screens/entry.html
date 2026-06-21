@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>启动 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island"></div>
+    <div class="status-bar light">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg viewBox="0 0 18 14" fill="currentColor"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <svg viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="entry-page fade-up delay-1">
+        <div class="entry-mark">MyCloset · 家庭衣橱</div>
+        <h1 class="entry-title">把每一件<br><span class="italic">衣物</span>都安顿好</h1>
+        <p class="entry-sub">为家庭而生的衣物管理系统</p>
+
+        <!-- 装饰性 SVG 衣架 -->
+        <svg viewBox="0 0 200 120" style="width: 200px; height: 120px; margin-bottom: 60px; opacity: 0.18; position: relative; z-index: 2;" fill="none" stroke="#f8f4ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 30 Q90 10 80 30 Q70 50 100 60 L100 90 L40 110 L160 110 L100 90"/>
+          <circle cx="100" cy="20" r="6"/>
+          <line x1="40" y1="110" x2="160" y2="110"/>
+        </svg>
+
+        <div class="entry-loader"></div>
+      </div>
+    </div>
+
+    <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+<script>
+  // 启动 2 秒后自动跳转登录页（原型演示）
+  setTimeout(function () {
+    location.href = 'auth-login.html';
+  }, 2200);
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "启动中",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

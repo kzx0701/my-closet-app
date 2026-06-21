@@ -1,15 +1,20 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_constants_closetOptions = require("../../common/constants/closet-options.js");
+const common_constants_routes = require("../../common/constants/routes.js");
+const common_utils_navHelper = require("../../common/utils/nav-helper.js");
 const common_api_modules_closet = require("../../common/api/modules/closet.js");
+const common_services_familyMembership = require("../../common/services/family-membership.js");
+const common_services_auth = require("../../common/services/auth.js");
 if (!Array) {
-  const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
-  _easycom_u_button2();
+  const _component_path = common_vendor.resolveComponent("path");
+  const _component_svg = common_vendor.resolveComponent("svg");
+  (_component_path + _component_svg)();
 }
-const _easycom_u_button = () => "../../node-modules/uview-plus/components/u-button/u-button.js";
 if (!Math) {
-  (ClosetStylePicker + ClosetColorPicker + ClosetBasicForm + _easycom_u_button)();
+  (ScopeBadge + ClosetStylePicker + ClosetColorPicker + ClosetBasicForm)();
 }
+const ScopeBadge = () => "../../components/ScopeBadge.js";
 const ClosetBasicForm = () => "./components/ClosetBasicForm.js";
 const ClosetColorPicker = () => "./components/ClosetColorPicker.js";
 const ClosetStylePicker = () => "./components/ClosetStylePicker.js";
@@ -23,22 +28,32 @@ const _sfc_main = {
     const colorCode = common_vendor.ref(((_b = colorOptions[0]) == null ? void 0 : _b.code) || "");
     const name = common_vendor.ref("");
     const roomName = common_vendor.ref("");
-    const description = common_vendor.ref("");
     const submitting = common_vendor.ref(false);
     const scopeType = common_vendor.ref("personal");
     const closetId = common_vendor.ref("");
+    const familyName = common_vendor.ref("");
+    const statusBarHeight = common_vendor.ref(20);
+    const nameFocused = common_vendor.ref(false);
     const isEditMode = common_vendor.computed(() => Boolean(closetId.value));
-    const pageEyebrow = common_vendor.computed(() => isEditMode.value ? "EDIT CLOSET" : "CREATE CLOSET");
-    const pageTitle = common_vendor.computed(() => {
-      if (isEditMode.value) {
-        return scopeType.value === "family" ? "编辑家庭衣橱" : "编辑个人衣橱";
-      }
-      return scopeType.value === "family" ? "新建家庭衣橱" : "新建个人衣橱";
-    });
+    const pageTitle = common_vendor.computed(() => isEditMode.value ? "编辑衣橱" : "新建衣橱");
     const pageDesc = common_vendor.computed(
-      () => isEditMode.value ? "你可以继续调整衣柜样式、颜色、名称和房间信息。" : scopeType.value === "family" ? "为当前家庭空间新增一个衣橱，后续家庭成员可以一起查看和管理。" : "先选择一个你喜欢的衣柜样式和颜色，再填写名称与房间。"
+      () => isEditMode.value ? "你可以继续调整衣橱样式、配色、名称和房间信息。" : "选择样式与配色，记录衣橱所在房间。"
     );
     const submitButtonText = common_vendor.computed(() => isEditMode.value ? "保存修改" : "创建衣橱");
+    async function loadFamilyName() {
+      var _a2;
+      const session = common_services_auth.getCurrentSession();
+      if (!(session == null ? void 0 : session.uid))
+        return;
+      try {
+        const membership = await common_services_familyMembership.getFamilyMembership(session.uid);
+        if (membership.status === "success" && membership.hasFamily) {
+          familyName.value = ((_a2 = membership.familyRecord) == null ? void 0 : _a2.name) || "家庭空间";
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:131", "loadFamilyName failed", error);
+      }
+    }
     async function loadClosetDetail(targetClosetId) {
       var _a2, _b2;
       const result = await common_api_modules_closet.getClosetDetail({
@@ -53,7 +68,6 @@ const _sfc_main = {
       colorCode.value = closet.color_code || ((_b2 = colorOptions[0]) == null ? void 0 : _b2.code) || "";
       name.value = closet.name || "";
       roomName.value = closet.room_name || "";
-      description.value = closet.description || "";
     }
     async function submitCloset() {
       if (!name.value.trim()) {
@@ -65,14 +79,14 @@ const _sfc_main = {
       }
       if (!styleCode.value) {
         common_vendor.index.showToast({
-          title: "请选择衣柜样式",
+          title: "请选择衣橱样式",
           icon: "none"
         });
         return;
       }
       if (!colorCode.value) {
         common_vendor.index.showToast({
-          title: "请选择衣柜颜色",
+          title: "请选择衣橱颜色",
           icon: "none"
         });
         return;
@@ -88,8 +102,7 @@ const _sfc_main = {
             name: name.value.trim(),
             roomName: roomName.value.trim(),
             styleCode: styleCode.value,
-            colorCode: colorCode.value,
-            description: description.value.trim()
+            colorCode: colorCode.value
           });
         } else {
           await common_api_modules_closet.createCloset({
@@ -97,19 +110,19 @@ const _sfc_main = {
             name: name.value.trim(),
             roomName: roomName.value.trim(),
             styleCode: styleCode.value,
-            colorCode: colorCode.value,
-            description: description.value.trim()
+            colorCode: colorCode.value
           });
         }
         common_vendor.index.showToast({
           title: isEditMode.value ? "衣橱修改成功" : "衣橱创建成功",
           icon: "success"
         });
+        common_vendor.index.$emit("closets:need-refresh");
         setTimeout(() => {
           common_vendor.index.navigateBack();
         }, 300);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:149", "createCloset failed", error);
+        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:214", "createCloset failed", error);
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "衣橱创建失败",
           icon: "none"
@@ -118,12 +131,49 @@ const _sfc_main = {
         submitting.value = false;
       }
     }
+    function goBack() {
+      common_utils_navHelper.safeNavigateBack(common_constants_routes.ROUTES.closets);
+    }
+    function handleDelete() {
+      if (!closetId.value)
+        return;
+      common_vendor.index.showModal({
+        title: "删除衣橱",
+        content: "删除后衣橱内衣物的归属信息将被清除，是否继续？",
+        confirmColor: "#b85c3a",
+        success: async (res) => {
+          if (!res.confirm)
+            return;
+          try {
+            await common_api_modules_closet.deleteCloset({ closetId: closetId.value });
+            common_vendor.index.showToast({ title: "衣橱已删除", icon: "success" });
+            common_vendor.index.$emit("closets:need-refresh");
+            setTimeout(() => {
+              common_vendor.index.navigateBack();
+            }, 300);
+          } catch (error) {
+            common_vendor.index.__f__("error", "at pages/closet-create/index.vue:247", "deleteCloset failed", error);
+            common_vendor.index.showToast({
+              title: (error == null ? void 0 : error.message) || "删除失败",
+              icon: "none"
+            });
+          }
+        }
+      });
+    }
     common_vendor.onLoad((options) => {
+      try {
+        const sysInfo = common_vendor.index.getSystemInfoSync();
+        statusBarHeight.value = sysInfo.statusBarHeight || 20;
+      } catch (e) {
+        statusBarHeight.value = 20;
+      }
       scopeType.value = (options == null ? void 0 : options.scopeType) === "family" ? "family" : "personal";
       closetId.value = String((options == null ? void 0 : options.closetId) || "").trim();
+      loadFamilyName();
       if (closetId.value) {
         loadClosetDetail(closetId.value).catch((error) => {
-          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:165", "loadClosetDetail failed", error);
+          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:272", "loadClosetDetail failed", error);
           common_vendor.index.showToast({
             title: (error == null ? void 0 : error.message) || "衣橱详情加载失败",
             icon: "none"
@@ -132,39 +182,61 @@ const _sfc_main = {
       }
     });
     return (_ctx, _cache) => {
-      return {
-        a: common_vendor.t(pageEyebrow.value),
-        b: common_vendor.t(pageTitle.value),
-        c: common_vendor.t(pageDesc.value),
-        d: common_vendor.o(($event) => styleCode.value = $event, "a4"),
+      return common_vendor.e({
+        a: common_vendor.p({
+          d: "M15 18l-6-6 6-6"
+        }),
+        b: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "2",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        c: common_vendor.o(goBack, "e6"),
+        d: statusBarHeight.value + "px",
         e: common_vendor.p({
+          text: "Add · 新建衣橱"
+        }),
+        f: common_vendor.t(pageTitle.value),
+        g: common_vendor.t(pageDesc.value),
+        h: nameFocused.value ? 1 : "",
+        i: name.value,
+        j: common_vendor.o(($event) => nameFocused.value = true, "e7"),
+        k: common_vendor.o(($event) => nameFocused.value = false, "c9"),
+        l: common_vendor.o(($event) => name.value = $event.detail.value, "fa"),
+        m: common_vendor.o(($event) => styleCode.value = $event, "00"),
+        n: common_vendor.p({
           options: common_vendor.unref(styleOptions),
           modelValue: styleCode.value
         }),
-        f: common_vendor.o(($event) => colorCode.value = $event, "20"),
-        g: common_vendor.p({
+        o: common_vendor.o(($event) => colorCode.value = $event, "3f"),
+        p: common_vendor.p({
           options: common_vendor.unref(colorOptions),
           modelValue: colorCode.value
         }),
-        h: common_vendor.o(($event) => name.value = $event, "59"),
-        i: common_vendor.o(($event) => roomName.value = $event, "a6"),
-        j: common_vendor.o(($event) => description.value = $event, "22"),
-        k: common_vendor.p({
-          name: name.value,
+        q: common_vendor.o(($event) => roomName.value = $event, "66"),
+        r: common_vendor.o(($event) => scopeType.value = $event, "c2"),
+        s: common_vendor.p({
           ["room-name"]: roomName.value,
-          description: description.value
+          ["scope-type"]: scopeType.value,
+          ["family-name"]: familyName.value,
+          ["hide-scope"]: isEditMode.value
         }),
-        l: common_vendor.t(submitButtonText.value),
-        m: common_vendor.o(submitCloset, "0e"),
-        n: common_vendor.p({
-          type: "primary",
-          shape: "circle",
-          loading: submitting.value,
-          customStyle: "margin-top: 34rpx; background: linear-gradient(135deg, #5a7351 0%, #738c67 100%); border: none;"
-        })
-      };
+        t: common_vendor.t(submitButtonText.value),
+        v: isEditMode.value ? 1 : "",
+        w: submitting.value,
+        x: submitting.value,
+        y: common_vendor.o(submitCloset, "32"),
+        z: isEditMode.value
+      }, isEditMode.value ? {
+        A: submitting.value,
+        B: common_vendor.o(handleDelete, "d3")
+      } : {});
     };
   }
 };
-wx.createPage(_sfc_main);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-1e56e140"]]);
+wx.createPage(MiniProgramPage);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/closet-create/index.js.map

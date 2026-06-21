@@ -1,10 +1,12 @@
 {
   "navigationBarTitleText": "我的衣物",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "u-loadmore": "../../node-modules/uview-plus/components/u-loadmore/u-loadmore",
     "h5-tab-bar": "../../components/H5TabBar",
-    "clothes-empty-state": "./components/ClothesEmptyState",
+    "scope-badge": "../../components/ScopeBadge",
     "clothes-filter-bar": "./components/ClothesFilterBar",
-    "clothes-list-card": "./components/ClothesListCard"
+    "clothes-list-card": "./components/ClothesListCard",
+    "clothes-empty-state": "./components/ClothesEmptyState"
   }
 }

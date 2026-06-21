@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>衣物详情 — MyCloset 家庭衣橱</title>
+<link rel="stylesheet" href="../assets/design-system.css">
+<style>
+  .detail-hero { position: relative; }
+  .detail-hero .navbar { position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
+  .detail-hero .detail-image {
+    width: 100%;
+    height: 420px;
+    background: linear-gradient(135deg, #ebe4d6 0%, #d4b896 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .detail-hero .detail-image svg {
+    width: 50%; height: 50%;
+    stroke: var(--color-sage); stroke-width: 1.2; fill: none; opacity: 0.5;
+  }
+  .detail-hero .detail-image .season-mark {
+    position: absolute; top: 100px; left: 28px;
+    width: 4px; height: 28px; border-radius: 2px;
+  }
+  .detail-body { padding: 28px 28px 120px; position: relative; z-index: 2; }
+  .detail-name-row { margin-bottom: 24px; }
+  .detail-cta {
+    display: flex; gap: 10px;
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px 28px 36px;
+    background: linear-gradient(180deg, rgba(244,239,230,0) 0%, var(--color-bg-page) 30%);
+    z-index: 30;
+  }
+  .btn-edit { flex: 2; }
+  .btn-delete {
+    flex: 1;
+    height: 48px;
+    border-radius: var(--radius-btn);
+    background: transparent;
+    color: var(--color-terra);
+    border: 1px solid rgba(184, 92, 58, 0.3);
+    font-family: var(--font-sans); font-size: 14px; font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  .btn-delete:hover { background: rgba(184, 92, 58, 0.06); }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+    <div class="dynamic-island"></div>
+    <div class="status-bar dark">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="2" width="3" height="10" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg viewBox="0 0 18 14" fill="currentColor"><path d="M9 1c3 0 5.7 1.1 7.8 3l-1.5 1.6C13.5 4 11.3 3 9 3S4.5 4 2.7 5.6L1.2 4C3.3 2.1 6 1 9 1zm0 4c2 0 3.8.7 5.2 2l-1.5 1.6C11.6 7.6 10.4 7 9 7s-2.6.6-3.7 1.6L3.8 7c1.4-1.3 3.2-2 5.2-2zm0 4c1 0 1.9.3 2.6 1l-2.6 2.7L6.4 10c.7-.7 1.6-1 2.6-1z"/></svg>
+        <svg viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.5" fill="currentColor"/><path d="M24 4v5h1.5V4H24z" fill="currentColor" opacity="0.5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <div class="page-plain">
+        <div class="detail-hero">
+          <div class="navbar" style="padding-top: 56px; padding-bottom: 0;">
+            <button class="nav-back" data-back style="color: var(--color-primary-dark); background: rgba(255,255,255,0.6); border: 1px solid var(--color-border);">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <span class="nav-title"></span>
+            <button class="nav-action">编辑</button>
+          </div>
+          <div class="detail-image">
+            <span class="season-mark season-autumn"></span>
+            <svg viewBox="0 0 24 24" class="icon"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </div>
+        </div>
+
+        <div class="detail-body fade-up delay-1">
+          <div class="detail-name-row">
+            <h1 class="detail-name">米色亚麻衬衫</h1>
+            <div class="detail-meta">
+              上装<span class="dot">·</span>秋 / 冬<span class="dot">·</span>主卧大衣橱
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <span class="detail-section-label">Details · 详细信息</span>
+            <div class="detail-row">
+              <span class="detail-row-key">分类</span>
+              <span class="detail-row-val">上装</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-key">适合季节</span>
+              <span class="detail-row-val">秋 · 冬</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-key">归属衣橱</span>
+              <span class="detail-row-val">主卧大衣橱</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-key">归属空间</span>
+              <span class="detail-row-val">个人空间</span>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <span class="detail-section-label">Notes · 备注</span>
+            <p style="font-family: var(--font-serif); font-size: 14px; line-height: 1.7; color: var(--color-text-secondary);">
+              亚麻 100%，2024 年 9 月购于 MUJI。透气性好，适合初秋单穿或冬季叠搭。
+            </p>
+          </div>
+
+          <div class="detail-section">
+            <span class="detail-section-label">Meta · 元信息</span>
+            <div class="detail-row">
+              <span class="detail-row-key">添加人</span>
+              <span class="detail-row-val">林屿</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-key">添加时间</span>
+              <span class="detail-row-val">2024-09-12</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-key">衣物 ID</span>
+              <span class="detail-row-val" style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px;">CL-2024-0912-03</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-cta">
+          <button class="btn-submit btn-edit">编辑衣物</button>
+          <button class="btn-delete">删除</button>
+        </div>
+      </div>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="../assets/prototype.js"></script>
+</body>
+</html>

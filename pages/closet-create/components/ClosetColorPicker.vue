@@ -1,15 +1,19 @@
 <template>
   <view class="section">
-    <text class="section-title">选择衣柜颜色</text>
-    <view class="color-row">
+    <text class="section-title">配色</text>
+    <view class="swatch-row">
       <view
         v-for="item in options"
         :key="item.code"
-        class="color-chip"
+        class="swatch"
         :class="{ active: modelValue === item.code }"
         @click="emit('update:modelValue', item.code)"
       >
-        <text class="color-name">{{ item.name }}</text>
+        <view
+          class="swatch-dot"
+          :style="{ background: item.color }"
+        ></view>
+        <text class="swatch-name">{{ item.name }}</text>
       </view>
     </view>
   </view>
@@ -32,39 +36,57 @@ defineProps({
 const emit = defineEmits(["update:modelValue"]);
 </script>
 
-<style lang="scss">
-.section + .section {
-  margin-top: 26rpx;
+<style lang="scss" scoped>
+.section {
+  margin-top: 48rpx;
 }
 
 .section-title {
-  display: block;
-  margin-bottom: 18rpx;
-  font-size: $font-size-lg;
-  font-weight: 700;
-  color: $color-text-title;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  font-family: $font-mono;
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
+  color: $color-text-placeholder;
 }
 
-.color-row {
+.swatch-row {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing-md;
+  gap: 36rpx;
 }
 
-.color-chip {
-  padding: 14rpx 22rpx;
-  border-radius: $radius-pill;
-  background: #f3f5ef;
-  border: 2rpx solid transparent;
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
 }
 
-.color-chip.active {
-  background: $color-primary-light;
-  border-color: $color-primary;
+.swatch-dot {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  border: 1px solid rgba(58, 84, 67, 0.08);
+  transition: all 0.25s ease;
 }
 
-.color-name {
-  font-size: $font-size-base;
-  color: $color-text-primary;
+.swatch.active .swatch-dot {
+  box-shadow: 0 0 0 4rpx $color-bg-page, 0 0 0 6rpx $color-primary;
+}
+
+.swatch-name {
+  font-family: $font-sans;
+  font-size: 22rpx;
+  color: $color-text-placeholder;
+  transition: color 0.25s ease;
+}
+
+.swatch.active .swatch-name {
+  color: $color-text-title;
+  font-weight: 600;
 }
 </style>

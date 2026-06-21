@@ -1,29 +1,41 @@
 <template>
-  <view class="card" @click="goDetail">
-    <view v-if="clothes.image_url" class="image-wrap">
-      <image class="image" :src="clothes.image_url" mode="aspectFill" @click.stop="previewImage" />
-    </view>
-    <view class="content">
-      <view class="badge-row">
-        <text class="badge">{{ categoryName }}</text>
-        <text class="badge">{{ seasonName }}</text>
-        <text v-if="clothes.color" class="badge">{{ clothes.color }}</text>
+  <view class="clothes-card" hover-class="clothes-card-hover" :hover-stay-time="100" @click="goDetail">
+    <!-- 图片区 -->
+    <view class="clothes-img-wrap">
+      <image
+        v-if="clothes.image_url && !imageError"
+        class="clothes-img"
+        :src="clothes.image_url"
+        mode="aspectFill"
+        lazy-load
+        @error="onImageError"
+      />
+      <view v-else class="clothes-img-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
       </view>
-      <text class="title">{{ clothes.name }}</text>
-      <text class="meta">{{ closetLabel }}</text>
-      <text v-if="showCreator && creatorText" class="creator">{{ creatorText }}</text>
-      <text class="remark">{{ clothes.remark || "当前还没有补充衣物备注。" }}</text>
+      <!-- 季节标记：左侧4px竖线 -->
+      <view class="season-mark" :class="seasonClass"></view>
     </view>
-    <view class="action-row">
-      <button class="action-btn" size="mini" @click.stop="$emit('edit', clothes)">编辑</button>
-      <button class="action-btn danger-btn" size="mini" @click.stop="$emit('delete', clothes)">删除</button>
+
+    <!-- 信息区 -->
+    <view class="clothes-info">
+      <text class="clothes-name">{{ clothes.name }}</text>
+      <view class="clothes-sub-row">
+        <view
+          v-if="colorHex"
+          class="color-indicator"
+          :class="{ 'color-indicator-multicolor': isMulticolor }"
+          :style="colorDotStyle"
+        ></view>
+        <text class="clothes-sub">{{ subtitle }}</text>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { CLOTHES_CATEGORY_OPTIONS, CLOTHES_SEASON_OPTIONS } from "@/common/constants/clothes-options.js";
+import { computed, ref, watch } from "vue";
+import { CLOTHES_CATEGORY_OPTIONS, CLOTHES_COLOR_OPTIONS, CLOTHES_SEASON_OPTIONS } from "@/common/constants/clothes-options.js";
 import { ROUTES } from "@/common/constants/routes.js";
 
 const props = defineProps({
@@ -33,140 +45,200 @@ const props = defineProps({
       return {};
     },
   },
-  showCreator: {
-    type: Boolean,
-    default: false,
-  },
 });
 
-defineEmits(["edit", "delete"]);
+const imageError = ref(false);
+
+// 当图片地址变化时重置错误状态
+watch(
+  () => props.clothes.image_url,
+  () => {
+    imageError.value = false;
+  }
+);
+
+function onImageError() {
+  imageError.value = true;
+}
 
 const categoryName = computed(() => {
-  return CLOTHES_CATEGORY_OPTIONS.find((item) => item.code === props.clothes.category)?.name || "未知分类";
+  return CLOTHES_CATEGORY_OPTIONS.find((item) => item.code === props.clothes.category)?.name || "未分类";
 });
 
 const seasonName = computed(() => {
-  return CLOTHES_SEASON_OPTIONS.find((item) => item.code === props.clothes.season)?.name || "未知季节";
+  const codes = String(props.clothes.season || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (!codes.length) return "";
+  return codes
+    .map((code) => CLOTHES_SEASON_OPTIONS.find((item) => item.code === code)?.name || code)
+    .join("/");
 });
 
-const closetLabel = computed(() => {
-  const closetName = String(props.clothes.closet_name || "").trim();
-  return closetName ? `所属衣橱：${closetName}` : "当前未绑定衣橱";
+const seasonClass = computed(() => {
+  const codes = String(props.clothes.season || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const code = codes[0] || "all-season";
+  return `season-${code}`;
 });
 
-const creatorText = computed(() => {
-  const creatorName = String(props.clothes.creator_name || "").trim();
-  return creatorName ? `创建者：${creatorName}` : "";
+// 颜色指示器
+const colorOption = computed(() => {
+  const code = props.clothes.color;
+  if (!code) return null;
+  return CLOTHES_COLOR_OPTIONS.find((item) => item.code === code) || null;
 });
 
-function previewImage() {
-  if (props.clothes.image_url) {
-    uni.previewImage({
-      urls: [props.clothes.image_url],
-      current: props.clothes.image_url,
-    });
-  }
-}
+const colorHex = computed(() => colorOption.value?.hex || "");
+
+const isMulticolor = computed(() => colorOption.value?.code === "multicolor");
+
+const colorDotStyle = computed(() => {
+  if (!colorHex.value) return {};
+  // 渐变值直接用于 background
+  return { background: colorHex.value };
+});
+
+const subtitle = computed(() => {
+  const parts = [categoryName.value];
+  if (seasonName.value) parts.push(seasonName.value);
+  return parts.join(" · ");
+});
 
 function goDetail() {
+  const targetId = props.clothes?._id;
+  if (!targetId) return;
   uni.navigateTo({
-    url: `${ROUTES.clothesDetail}?clothesId=${props.clothes._id}`,
+    url: `${ROUTES.clothesDetail}?clothesId=${targetId}`,
   });
 }
 </script>
 
-<style lang="scss">
-.card {
-  display: flex;
-  gap: $spacing-md;
-  padding: 30rpx 26rpx;
-  border-radius: $radius-lg;
-  background: $gradient-card;
-  box-shadow: $shadow-card;
-  border: 2rpx solid $color-border;
+<style lang="scss" scoped>
+.clothes-card {
+  border-radius: $radius-card;
+  background: $color-bg-card-end;
+  border: 1px solid $color-border;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.image-wrap {
-  width: 160rpx;
-  height: 160rpx;
-  flex-shrink: 0;
-  border-radius: $radius-md;
+.clothes-card:hover,
+.clothes-card:active {
+  transform: translateY(-3px);
+  box-shadow: $shadow-card;
+}
+
+.clothes-card-hover {
+  transform: translateY(-2px);
+  box-shadow: $shadow-card;
+  opacity: 0.92;
+}
+
+/* 图片区 */
+.clothes-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
   overflow: hidden;
 }
 
-.image {
+.clothes-img {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
-.content {
-  flex: 1;
-  min-width: 0;
-}
-
-.badge-row {
+.clothes-img-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 14rpx;
-}
-
-.badge {
-  padding: $spacing-xs 16rpx;
-  border-radius: $radius-pill;
-  font-size: $font-size-xs;
-  color: $color-text-primary;
-  background: $color-bg-tag;
-}
-
-.title {
-  display: block;
-  margin-top: 18rpx;
-  font-size: $font-size-xxl;
-  font-weight: 700;
-  color: $color-text-title;
-}
-
-.meta {
-  display: block;
-  margin-top: $spacing-sm;
-  font-size: $font-size-base;
-  color: $color-text-secondary;
-}
-
-.creator {
-  display: block;
-  margin-top: 10rpx;
-  font-size: $font-size-sm;
-  color: $color-text-secondary;
-}
-
-.remark {
-  display: block;
-  margin-top: $spacing-md;
-  font-size: 23rpx;
-  line-height: 1.7;
-  color: $color-text-secondary;
-}
-
-.action-row {
-  display: flex;
-  gap: $spacing-md;
-  margin-top: 22rpx;
-}
-
-.action-btn {
-  min-width: 132rpx;
-  height: 62rpx;
-  line-height: 62rpx;
-  border-radius: $radius-pill;
-  font-size: $font-size-sm;
-  color: $color-text-primary;
+  align-items: center;
+  justify-content: center;
   background: $color-bg-chip;
-  border: none;
 }
 
-.danger-btn {
-  color: $color-danger;
-  background: $color-danger-bg;
+.clothes-img-placeholder svg {
+  width: 56rpx;
+  height: 56rpx;
+  stroke: $color-text-placeholder;
+  opacity: 0.4;
+}
+
+/* 季节标记：左侧4px竖线 */
+.season-mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.season-spring {
+  background: $color-sage;
+}
+
+.season-summer {
+  background: #5b8fb0;
+}
+
+.season-autumn {
+  background: $color-terra;
+}
+
+.season-winter {
+  background: #8b7355;
+}
+
+.season-all-season {
+  background: $color-sage-light;
+}
+
+/* 信息区 */
+.clothes-info {
+  padding: 20rpx 24rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.clothes-name {
+  font-family: $font-serif;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: $color-text-title;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clothes-sub {
+  font-family: $font-sans;
+  font-size: 24rpx;
+  color: $color-text-placeholder;
+  line-height: 1.4;
+}
+
+.clothes-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.color-indicator {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.color-indicator-multicolor {
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 </style>

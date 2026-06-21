@@ -7,6 +7,7 @@ const ROUTES = {
   familyCreate: "/pages/family-create/index",
   closets: "/pages/closets/index",
   closetCreate: "/pages/closet-create/index",
+  closetDetail: "/pages/closet-detail/index",
   home: "/pages/home/index",
   clothes: "/pages/clothes/index",
   clothesCreate: "/pages/clothes-create/index",

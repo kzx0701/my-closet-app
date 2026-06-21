@@ -1,53 +1,144 @@
-.page {
+.page.data-v-d7fa870b {
+  position: relative;
   min-height: 100vh;
-  padding: 88rpx 36rpx 80rpx;
-  background: linear-gradient(180deg, #f5f3ee 0%, #ffffff 50%, #f2eee6 100%);
+  background: #f4efe6;
+  overflow: hidden;
 }
-.card {
-  margin-top: 48rpx;
-  padding: 40rpx 30rpx;
-  border-radius: 30rpx;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18rpx 40rpx rgba(73, 81, 69, 0.08);
+.page-bg.data-v-d7fa870b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 100%;
+  z-index: 0;
+  background: linear-gradient(180deg, #2d4334 0%, #3a5443 12%, #4a6755 20%, #7a9580 28%, #a8bcae 34%, #c8cebf 38%, #f4efe6 42%, #f4efe6 100%);
 }
-.join-card {
-  margin-top: 32rpx;
-  padding-top: 32rpx;
-  border-top: 2rpx solid #edf0e8;
+
+/* 自定义导航栏 */
+.navbar.data-v-d7fa870b {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding-left: 28rpx;
+  padding-right: 28rpx;
+  padding-bottom: 16rpx;
 }
-.join-label {
-  display: block;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #3a5443;
+.nav-back.data-v-d7fa870b {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.join-input {
-  margin-top: 18rpx;
-  height: 92rpx;
-  padding: 0 24rpx;
-  border-radius: 20rpx;
-  background: #f2f5ef;
+.nav-back-icon.data-v-d7fa870b {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f8f4ec;
+}
+.nav-back-icon svg.data-v-d7fa870b {
+  width: 32rpx;
+  height: 32rpx;
+}
+.nav-title.data-v-d7fa870b {
+  flex: 1;
+  text-align: center;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 30rpx;
+  font-weight: 600;
+  color: #f8f4ec;
+}
+.nav-placeholder.data-v-d7fa870b {
+  width: 64rpx;
+}
+
+/* 加入家庭弹层 */
+.join-mask.data-v-d7fa870b {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.join-sheet.data-v-d7fa870b {
+  width: 100%;
+  padding: 32rpx 36rpx 72rpx;
+  background: #f8f4ec;
+  border-radius: 36rpx 36rpx 0 0;
+  animation: fadeUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.join-header.data-v-d7fa870b {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+.join-label.data-v-d7fa870b {
+  font-family: "Fraunces", "Songti SC", "STSong", "Georgia", "PingFang SC", serif;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #2d4334;
+}
+.join-close.data-v-d7fa870b {
+  font-size: 44rpx;
+  color: #8a8a7e;
+  line-height: 1;
+  padding: 0 12rpx;
+}
+.join-input.data-v-d7fa870b {
+  height: 96rpx;
+  padding: 0 28rpx;
+  border-radius: 40rpx;
+  background: #f2f5ef;
+  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 32rpx;
+  letter-spacing: 4rpx;
   color: #2a2a24;
 }
-.join-hint {
+.join-hint.data-v-d7fa870b {
   display: block;
-  margin-top: 16rpx;
+  margin-top: 18rpx;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 24rpx;
   line-height: 1.7;
   color: #4a4a42;
 }
-.join-actions {
+.join-actions.data-v-d7fa870b {
   display: flex;
   gap: 20rpx;
-  margin-top: 28rpx;
+  margin-top: 36rpx;
 }
-.join-submit,
-.join-cancel {
+.join-submit.data-v-d7fa870b,
+.join-cancel.data-v-d7fa870b {
   flex: 1;
-  border-radius: 999rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 40rpx;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
 }
-.join-cancel {
-  background: #edf1ea;
-  color: #3a5443;
+.join-submit.data-v-d7fa870b {
+  background: #3a5443;
+  color: #f8f4ec;
+}
+.join-submit.data-v-d7fa870b::after,
+.join-cancel.data-v-d7fa870b::after {
+  border: none;
+}
+.join-cancel.data-v-d7fa870b {
+  background: #ebe4d6;
+  color: #2d4334;
 }

@@ -1,12 +1,10 @@
 "use strict";
 const common_vendor = require("../vendor.js");
+const common_constants_clothesOptions = require("../constants/clothes-options.js");
 if (!Array) {
-  const _easycom_u_icon2 = common_vendor.resolveComponent("u-icon");
-  _easycom_u_icon2();
-}
-const _easycom_u_icon = () => "../../node-modules/uview-plus/components/u-icon/u-icon.js";
-if (!Math) {
-  _easycom_u_icon();
+  const _component_path = common_vendor.resolveComponent("path");
+  const _component_svg = common_vendor.resolveComponent("svg");
+  (_component_path + _component_svg)();
 }
 const _sfc_main = {
   __name: "ImageUploader",
@@ -15,13 +13,9 @@ const _sfc_main = {
       type: String,
       default: ""
     },
-    label: {
+    season: {
       type: String,
-      default: "图片"
-    },
-    desc: {
-      type: String,
-      default: "可选，上传一张衣物照片方便识别"
+      default: ""
     },
     maxSize: {
       type: Number,
@@ -32,6 +26,10 @@ const _sfc_main = {
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit = __emit;
+    const seasonMarkColor = common_vendor.computed(() => {
+      const firstSeason = String(props.season || "").split(",").map((item) => item.trim()).filter(Boolean)[0];
+      return common_constants_clothesOptions.SEASON_COLOR_MAP[firstSeason] || "";
+    });
     function chooseImage() {
       common_vendor.index.chooseImage({
         count: 1,
@@ -66,7 +64,7 @@ const _sfc_main = {
         });
         emit("update:imageUrl", uploadResult.fileID);
       } catch (error) {
-        common_vendor.index.__f__("error", "at common/components/ImageUploader.vue:85", "uploadImage failed", error);
+        common_vendor.index.__f__("error", "at common/components/ImageUploader.vue:100", "uploadImage failed", error);
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "图片上传失败",
           icon: "none"
@@ -74,9 +72,6 @@ const _sfc_main = {
       } finally {
         common_vendor.index.hideLoading();
       }
-    }
-    function removeImage() {
-      emit("update:imageUrl", "");
     }
     function previewImage() {
       if (props.imageUrl) {
@@ -88,28 +83,33 @@ const _sfc_main = {
     }
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.t(__props.label),
-        b: common_vendor.t(__props.desc),
-        c: __props.imageUrl
-      }, __props.imageUrl ? {
-        d: __props.imageUrl,
-        e: common_vendor.o(previewImage, "cc"),
-        f: common_vendor.p({
-          name: "close-circle-fill",
-          color: "#dd524d",
-          size: "40"
+        a: __props.imageUrl
+      }, __props.imageUrl ? common_vendor.e({
+        b: __props.imageUrl,
+        c: seasonMarkColor.value
+      }, seasonMarkColor.value ? {
+        d: seasonMarkColor.value
+      } : {}, {
+        e: common_vendor.o(chooseImage, "2f"),
+        f: common_vendor.o(previewImage, "7b")
+      }) : {
+        g: common_vendor.p({
+          d: "M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
         }),
-        g: common_vendor.o(removeImage, "35")
-      } : {
         h: common_vendor.p({
-          name: "camera",
-          color: "#7a8678",
-          size: "60"
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.4",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
         }),
-        i: common_vendor.o(chooseImage, "4c")
+        i: common_vendor.t(__props.maxSize),
+        j: common_vendor.o(chooseImage, "00")
       });
     };
   }
 };
-wx.createComponent(_sfc_main);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-1a0b434d"]]);
+wx.createComponent(Component);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/common/components/ImageUploader.js.map

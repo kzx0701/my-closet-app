@@ -37,26 +37,26 @@ const items = [
   {
     route: ROUTES.home,
     label: "首页",
-    icon: "/static/tabbar/yun.png",
-    selectedIcon: "/static/tabbar/yun1.png",
+    icon: "/static/icons/tab-home.svg",
+    selectedIcon: "/static/icons/tab-home-active.svg",
   },
   {
     route: ROUTES.closets,
     label: "衣橱",
-    icon: "/static/tabbar/storage.png",
-    selectedIcon: "/static/tabbar/storage1.png",
+    icon: "/static/icons/tab-closet.svg",
+    selectedIcon: "/static/icons/tab-closet-active.svg",
   },
   {
     route: ROUTES.clothes,
     label: "衣物",
-    icon: "/static/tabbar/obj.png",
-    selectedIcon: "/static/tabbar/obj1.png",
+    icon: "/static/icons/tab-clothes.svg",
+    selectedIcon: "/static/icons/tab-clothes-active.svg",
   },
   {
     route: ROUTES.profile,
     label: "我的",
-    icon: "/static/tabbar/fn.png",
-    selectedIcon: "/static/tabbar/fn1.png",
+    icon: "/static/icons/tab-profile.svg",
+    selectedIcon: "/static/icons/tab-profile-active.svg",
   },
 ];
 
@@ -67,7 +67,7 @@ function switchRoute(route) {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .h5-tabbar-wrap {
   display: block;
 }
@@ -84,7 +84,7 @@ function switchRoute(route) {
   z-index: 999;
   display: flex;
   padding: 14rpx 18rpx calc(14rpx + env(safe-area-inset-bottom));
-  background: rgba(251, 250, 247, 0.96);
+  background: rgba(248, 244, 236, 0.95);
   backdrop-filter: blur(18rpx);
   box-shadow: 0 -10rpx 30rpx rgba(73, 81, 69, 0.08);
   border-top: 1rpx solid rgba(107, 126, 99, 0.12);
@@ -98,21 +98,27 @@ function switchRoute(route) {
   justify-content: center;
   gap: 8rpx;
   padding: 8rpx 0;
+  transition: background 0.2s ease;
 }
 
 .h5-tabbar-item-active .h5-tabbar-text {
-  color: #314033;
+  // 对应 $color-primary (#3a5443)
+  color: $color-primary;
   font-weight: 600;
 }
 
 .h5-tabbar-icon {
   width: 44rpx;
   height: 44rpx;
+  transition: color 0.2s ease;
 }
 
 .h5-tabbar-text {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 20rpx;
+  // #7a8678 为未激活态文字色，介于 sage 与 placeholder 之间的中性灰绿
   color: #7a8678;
   line-height: 1;
+  transition: color 0.2s ease, font-weight 0.2s ease;
 }
 </style>

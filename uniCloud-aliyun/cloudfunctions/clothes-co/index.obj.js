@@ -65,6 +65,38 @@ function assertOptionCode(value, fieldLabel, errCode, validCodes) {
   return normalizedValue;
 }
 
+// 季节支持多选，以逗号分隔存储（向后兼容单选值）
+function assertSeasonCodes(value, fieldLabel, errCode, validCodes) {
+  const rawValue = String(value || "").trim();
+
+  if (!rawValue) {
+    const error = new Error(`请选择${fieldLabel}`);
+    error.errCode = errCode;
+    throw error;
+  }
+
+  const codes = rawValue
+    .split(",")
+    .map((code) => code.trim())
+    .filter(Boolean);
+
+  if (!codes.length) {
+    const error = new Error(`请选择${fieldLabel}`);
+    error.errCode = errCode;
+    throw error;
+  }
+
+  for (const code of codes) {
+    if (!validCodes.includes(code)) {
+      const error = new Error(`${fieldLabel}不在支持范围内`);
+      error.errCode = `${errCode}_INVALID`;
+      throw error;
+    }
+  }
+
+  return codes.join(",");
+}
+
 async function getActiveFamilyMembership(uid) {
   const res = await familyMembersTable
     .where({ user_id: uid, status: "active" })
@@ -239,7 +271,7 @@ module.exports = {
     const scope = await resolveCreateScope(uid, payload.scopeType);
     const name = assertClothesName(payload.name);
     const category = assertOptionCode(payload.category, "衣物分类", "CLOTHES_CATEGORY_REQUIRED", VALID_CATEGORY_CODES);
-    const season = assertOptionCode(payload.season, "适用季节", "CLOTHES_SEASON_REQUIRED", VALID_SEASON_CODES);
+    const season = assertSeasonCodes(payload.season, "适用季节", "CLOTHES_SEASON_REQUIRED", VALID_SEASON_CODES);
     const color = normalizeOptionalText(payload.color, 20, "颜色");
     const remark = normalizeOptionalText(payload.remark, 500, "备注");
     const imageUrl = normalizeOptionalText(payload.imageUrl, 500, "图片地址");
@@ -288,7 +320,7 @@ module.exports = {
 
     const name = assertClothesName(payload.name);
     const category = assertOptionCode(payload.category, "衣物分类", "CLOTHES_CATEGORY_REQUIRED", VALID_CATEGORY_CODES);
-    const season = assertOptionCode(payload.season, "适用季节", "CLOTHES_SEASON_REQUIRED", VALID_SEASON_CODES);
+    const season = assertSeasonCodes(payload.season, "适用季节", "CLOTHES_SEASON_REQUIRED", VALID_SEASON_CODES);
     const color = normalizeOptionalText(payload.color, 20, "颜色");
     const remark = normalizeOptionalText(payload.remark, 500, "备注");
     const imageUrl = normalizeOptionalText(payload.imageUrl, 500, "图片地址");

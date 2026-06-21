@@ -1,32 +1,27 @@
 <template>
-  <view class="picker-card">
-    <text class="label">绑定衣橱</text>
-    <text class="desc">可以先不绑定，后续整理时再放入具体衣橱。</text>
-
-    <u-cell-group :border="false" customStyle="margin-top: 22rpx;">
-      <u-cell
-        title="暂不绑定衣橱"
-        :border="false"
-        :customStyle="modelValue === '' ? 'background: $color-bg-chip-active; border-radius: $radius-sm;' : ''"
-        @click="emit('update:modelValue', '')"
-      >
-        <template #right-icon>
-          <u-icon v-if="modelValue === ''" name="checkmark-circle-fill" color="$color-primary" size="40" />
-        </template>
-      </u-cell>
-      <u-cell
+  <view class="section">
+    <view class="section-title">
+      <text>归属衣橱</text>
+      <text class="hint">可不选</text>
+    </view>
+    <view class="chip-row">
+      <view
         v-for="item in options"
         :key="item._id"
-        :title="item.name"
-        :border="false"
-        :customStyle="modelValue === item._id ? 'background: $color-bg-chip-active; border-radius: $radius-sm;' : ''"
+        class="chip"
+        :class="{ active: modelValue === item._id }"
         @click="emit('update:modelValue', item._id)"
       >
-        <template #right-icon>
-          <u-icon v-if="modelValue === item._id" name="checkmark-circle-fill" color="$color-primary" size="40" />
-        </template>
-      </u-cell>
-    </u-cell-group>
+        <text class="chip-text">{{ item.name }}</text>
+      </view>
+      <view
+        class="chip"
+        :class="{ active: modelValue === '' }"
+        @click="emit('update:modelValue', '')"
+      >
+        <text class="chip-text">暂不归类</text>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -47,28 +42,58 @@ defineProps({
 const emit = defineEmits(["update:modelValue"]);
 </script>
 
-<style lang="scss">
-.picker-card {
-  margin-top: $spacing-lg;
-  padding: 30rpx 26rpx;
-  border-radius: $radius-lg;
-  background: $gradient-card;
-  box-shadow: $shadow-card;
-  border: 2rpx solid $color-border;
+<style lang="scss" scoped>
+.section {
+  margin-top: 48rpx;
 }
 
-.label {
-  display: block;
-  font-size: $font-size-md;
-  font-weight: 700;
-  color: $color-text-title;
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  font-family: $font-mono;
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
+  color: $color-text-placeholder;
 }
 
-.desc {
-  display: block;
-  margin-top: $spacing-sm;
-  font-size: 23rpx;
-  line-height: 1.7;
+.hint {
+  font-family: $font-sans;
+  font-size: 22rpx;
+  letter-spacing: 0;
+  text-transform: none;
+  color: $color-text-placeholder;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.chip {
+  padding: 14rpx 28rpx;
+  border-radius: $radius-btn;
+  background: $color-bg-chip;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+}
+
+.chip.active {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.chip-text {
+  font-family: $font-sans;
+  font-size: 24rpx;
   color: $color-text-secondary;
+}
+
+.chip.active .chip-text {
+  color: $color-text-inverse;
+  font-weight: 600;
 }
 </style>

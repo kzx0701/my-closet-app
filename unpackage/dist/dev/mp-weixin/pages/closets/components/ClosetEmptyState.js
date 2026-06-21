@@ -1,14 +1,10 @@
 "use strict";
 const common_vendor = require("../../../common/vendor.js");
 if (!Array) {
-  const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
-  const _easycom_u_empty2 = common_vendor.resolveComponent("u-empty");
-  (_easycom_u_button2 + _easycom_u_empty2)();
-}
-const _easycom_u_button = () => "../../../node-modules/uview-plus/components/u-button/u-button.js";
-const _easycom_u_empty = () => "../../../node-modules/uview-plus/components/u-empty/u-empty.js";
-if (!Math) {
-  (_easycom_u_button + _easycom_u_empty)();
+  const _component_rect = common_vendor.resolveComponent("rect");
+  const _component_line = common_vendor.resolveComponent("line");
+  const _component_svg = common_vendor.resolveComponent("svg");
+  (_component_rect + _component_line + _component_svg)();
 }
 const _sfc_main = {
   __name: "ClosetEmptyState",
@@ -26,6 +22,12 @@ const _sfc_main = {
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit = __emit;
+    const titleText = common_vendor.computed(() => {
+      if (props.scopeType === "family") {
+        return "家庭空间还没有衣橱";
+      }
+      return "还没有衣橱";
+    });
     const descText = common_vendor.computed(() => {
       if (props.scopeType === "family") {
         return "当前家庭空间还没有衣橱，现在就可以先创建一个";
@@ -34,24 +36,41 @@ const _sfc_main = {
     });
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: __props.canCreate
-      }, __props.canCreate ? {
-        b: common_vendor.o(($event) => emit("create"), "55"),
+        a: common_vendor.p({
+          x: "3",
+          y: "3",
+          width: "18",
+          height: "18",
+          rx: "2"
+        }),
+        b: common_vendor.p({
+          x1: "3",
+          y1: "12",
+          x2: "21",
+          y2: "12"
+        }),
         c: common_vendor.p({
-          type: "primary",
-          size: "small",
-          shape: "circle",
-          customStyle: "background: $color-primary; border-color: $color-primary;"
-        })
-      } : {}, {
+          x1: "12",
+          y1: "3",
+          x2: "12",
+          y2: "21"
+        }),
         d: common_vendor.p({
-          mode: "list",
-          text: descText.value,
-          iconSize: 160
-        })
-      });
+          viewBox: "0 0 24 24",
+          fill: "none",
+          ["stroke-width"]: "1.3",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        e: common_vendor.t(titleText.value),
+        f: common_vendor.t(descText.value),
+        g: __props.canCreate
+      }, __props.canCreate ? {
+        h: common_vendor.o(($event) => emit("create"), "a6")
+      } : {});
     };
   }
 };
-wx.createComponent(_sfc_main);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-3720155d"]]);
+wx.createComponent(Component);
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/pages/closets/components/ClosetEmptyState.js.map
