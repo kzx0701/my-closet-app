@@ -144,7 +144,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { onShow, onPullDownRefresh, onReachBottom, onUnload } from "@dcloudio/uni-app";
+import { onLoad, onShow, onPullDownRefresh, onReachBottom, onUnload } from "@dcloudio/uni-app";
 import H5TabBar from "@/components/H5TabBar.vue";
 import ScopeBadge from "@/components/ScopeBadge.vue";
 import { ROUTES } from "@/common/constants/routes.js";
@@ -501,7 +501,17 @@ onReachBottom(() => {
   loadClothes(true);
 });
 
+onLoad(() => {
+  // #ifdef MP-WEIXIN
+  uni.hideTabBar({ animation: false });
+  // #endif
+});
+
 onShow(async () => {
+  // #ifdef MP-WEIXIN
+  uni.hideTabBar({ animation: false });
+  // #endif
+
   const session = getCurrentSession();
   if (!session.hasLogin) {
     uni.showToast({ title: "请先登录", icon: "none", duration: 1500 });

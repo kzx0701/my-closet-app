@@ -203,6 +203,56 @@ async function attachClosetCreatorNames(closets = []) {
   });
 }
 
+function buildOrderBy(query, sortBy) {
+  const normalized = String(sortBy || "default").trim();
+
+  switch (normalized) {
+    case "created_at_asc":
+      return query.orderBy("created_at", "asc");
+    case "created_at_desc":
+      return query.orderBy("created_at", "desc");
+    case "name_asc":
+      return query.orderBy("name", "asc");
+    case "name_desc":
+      return query.orderBy("name", "desc");
+    case "sort_asc":
+      return query.orderBy("sort", "asc").orderBy("created_at", "desc");
+    case "default":
+    default:
+      return query.orderBy("sort", "asc").orderBy("created_at", "desc");
+  }
+}
+
+async function attachClothesCount(closets = []) {
+  if (!closets.length) {
+    return closets;
+  }
+
+  const closetIds = closets.map((item) => item._id).filter(Boolean);
+
+  if (!closetIds.length) {
+    return closets.map((item) => ({ ...item, clothes_count: 0 }));
+  }
+
+  const clothesRes = await clothesTable
+    .where({
+      closet_id: dbCmd.in(closetIds),
+      status: "active",
+    })
+    .field("closet_id")
+    .get();
+
+  const countMap = {};
+  (clothesRes.data || []).forEach((item) => {
+    countMap[item.closet_id] = (countMap[item.closet_id] || 0) + 1;
+  });
+
+  return closets.map((item) => ({
+    ...item,
+    clothes_count: countMap[item._id] || 0,
+  }));
+}
+
 async function getPersonalSummary(uid) {
   const [closetRes, clothesRes, unassignedRes] = await Promise.all([
     closetsTable
@@ -274,6 +324,85 @@ async function getFamilySummary(uid) {
     closetCount: closetRes.total || 0,
     clothesCount: clothesRes.total || 0,
     unassignedClothesCount: unassignedRes.total || 0,
+    familyId: membership.family_id,
+  };
+}
+
+async function fetchPersonalClosetListCore(context, payload = {}) {
+  const uid = requireLogin(context);
+  const page = Math.max(1, Number(payload.page) || 1);
+  const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
+  const roomName = normalizeOptionalText(payload.roomName, 30);
+  const sortBy = String(payload.sortBy || "default").trim();
+
+  const whereClause = {
+    scope_type: PERSONAL_SCOPE,
+    scope_owner_user_id: uid,
+    status: "active",
+  };
+
+  if (roomName) {
+    whereClause.room_name = roomName;
+  }
+
+  let query = closetsTable.where(whereClause);
+  query = buildOrderBy(query, sortBy);
+
+  const [countRes, listRes] = await Promise.all([
+    closetsTable.where(whereClause).count(),
+    query.skip((page - 1) * pageSize).limit(pageSize).get(),
+  ]);
+
+  const list = await attachClosetCreatorNames(await attachClothesCount(listRes.data || []));
+
+  return {
+    list,
+    total: countRes.total || 0,
+    page,
+    pageSize,
+  };
+}
+
+async function fetchFamilyClosetListCore(context, payload = {}) {
+  const uid = requireLogin(context);
+  const membership = await getActiveFamilyMembership(uid);
+
+  if (!membership?.family_id) {
+    const error = new Error("你当前还没有加入家庭");
+    error.errCode = "CLOSET_FAMILY_REQUIRED";
+    throw error;
+  }
+
+  const page = Math.max(1, Number(payload.page) || 1);
+  const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
+  const roomName = normalizeOptionalText(payload.roomName, 30);
+  const sortBy = String(payload.sortBy || "default").trim();
+
+  const whereClause = {
+    scope_type: FAMILY_SCOPE,
+    family_id: membership.family_id,
+    status: "active",
+  };
+
+  if (roomName) {
+    whereClause.room_name = roomName;
+  }
+
+  let query = closetsTable.where(whereClause);
+  query = buildOrderBy(query, sortBy);
+
+  const [countRes, listRes] = await Promise.all([
+    closetsTable.where(whereClause).count(),
+    query.skip((page - 1) * pageSize).limit(pageSize).get(),
+  ]);
+
+  const list = await attachClosetCreatorNames(await attachClothesCount(listRes.data || []));
+
+  return {
+    list,
+    total: countRes.total || 0,
+    page,
+    pageSize,
     familyId: membership.family_id,
   };
 }
@@ -386,79 +515,36 @@ module.exports = {
   },
 
   async getPersonalClosetList(payload = {}) {
-    const uid = requireLogin(this);
-    const page = Math.max(1, Number(payload.page) || 1);
-    const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
-    const skip = (page - 1) * pageSize;
-
-    const [listRes, countRes] = await Promise.all([
-      closetsTable
-        .where({
-          scope_type: PERSONAL_SCOPE,
-          scope_owner_user_id: uid,
-          status: "active",
-        })
-        .orderBy("sort", "asc")
-        .orderBy("created_at", "desc")
-        .skip(skip)
-        .limit(pageSize)
-        .get(),
-      closetsTable
-        .where({
-          scope_type: PERSONAL_SCOPE,
-          scope_owner_user_id: uid,
-          status: "active",
-        })
-        .count(),
-    ]);
-
-    return {
-      list: listRes.data || [],
-      total: countRes.total || 0,
-      page,
-      pageSize,
-    };
+    return fetchPersonalClosetListCore(this, payload);
   },
 
   async getFamilyClosetList(payload = {}) {
-    const uid = requireLogin(this);
-    const membership = await getActiveFamilyMembership(uid);
+    return fetchFamilyClosetListCore(this, payload);
+  },
 
-    if (!membership?.family_id) {
-      const error = new Error("你当前还没有加入家庭");
-      error.errCode = "CLOSET_FAMILY_REQUIRED";
+  async getClosetListWithSummary(payload = {}) {
+    const uid = requireLogin(this);
+    const scopeType = String(payload.scopeType || PERSONAL_SCOPE).trim();
+
+    let listResult;
+    if (scopeType === FAMILY_SCOPE) {
+      listResult = await fetchFamilyClosetListCore(this, payload);
+    } else if (scopeType === PERSONAL_SCOPE) {
+      listResult = await fetchPersonalClosetListCore(this, payload);
+    } else {
+      const error = new Error("衣橱作用域不合法");
+      error.errCode = "CLOSET_SCOPE_INVALID";
       throw error;
     }
 
-    const page = Math.max(1, Number(payload.page) || 1);
-    const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, Number(payload.pageSize) || DEFAULT_PAGE_SIZE));
-    const skip = (page - 1) * pageSize;
-
-    const where = {
-      scope_type: FAMILY_SCOPE,
-      family_id: membership.family_id,
-      status: "active",
-    };
-
-    const [listRes, countRes] = await Promise.all([
-      closetsTable
-        .where(where)
-        .orderBy("sort", "asc")
-        .orderBy("created_at", "desc")
-        .skip(skip)
-        .limit(pageSize)
-        .get(),
-      closetsTable
-        .where(where)
-        .count(),
-    ]);
+    const summaryResult =
+      scopeType === FAMILY_SCOPE
+        ? await getFamilySummary(uid)
+        : await getPersonalSummary(uid);
 
     return {
-      list: await attachClosetCreatorNames(listRes.data || []),
-      total: countRes.total || 0,
-      page,
-      pageSize,
-      familyId: membership.family_id,
+      ...listResult,
+      summary: summaryResult,
     };
   },
 

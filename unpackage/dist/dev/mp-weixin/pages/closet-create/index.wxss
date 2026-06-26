@@ -5,37 +5,41 @@
   overflow: hidden;
 }
 
-/* 自定义导航栏 */
+/* ========== 自定义导航栏 ========== */
 .navbar.data-v-1e56e140 {
   position: relative;
   z-index: 10;
   display: flex;
   align-items: center;
-  padding-left: 28rpx;
-  padding-right: 28rpx;
-  padding-bottom: 16rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  padding-bottom: 20rpx;
 }
 .nav-back.data-v-1e56e140 {
-  width: 64rpx;
-  height: 64rpx;
+  width: 68rpx;
+  height: 68rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .nav-back-icon.data-v-1e56e140 {
-  width: 64rpx;
-  height: 64rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(58, 84, 67, 0.25);
+  border: 1px solid rgba(244, 239, 230, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #f8f4ec;
+  transition: background 0.25s ease;
+}
+.nav-back-icon.data-v-1e56e140:active {
+  background: rgba(58, 84, 67, 0.4);
 }
 .nav-back-icon svg.data-v-1e56e140 {
-  width: 32rpx;
-  height: 32rpx;
+  width: 34rpx;
+  height: 34rpx;
 }
 .nav-title.data-v-1e56e140 {
   flex: 1;
@@ -44,16 +48,17 @@
   font-size: 30rpx;
   font-weight: 600;
   color: #f8f4ec;
+  letter-spacing: 1rpx;
 }
 .nav-placeholder.data-v-1e56e140 {
-  width: 64rpx;
+  width: 68rpx;
 }
 
-/* Hero 区 */
+/* ========== Hero 区 ========== */
 .form-page-hero.data-v-1e56e140 {
   position: relative;
   z-index: 2;
-  padding: 24rpx 56rpx 48rpx;
+  padding: 20rpx 48rpx 56rpx;
   color: #f8f4ec;
 }
 .hero-title.data-v-1e56e140 {
@@ -72,53 +77,58 @@
   font-size: 26rpx;
   line-height: 1.7;
   color: rgba(244, 239, 230, 0.55);
+  max-width: 580rpx;
 }
 
-/* 表单区 */
-.form-body.data-v-1e56e140 {
+/* ========== 白色表单卡片 ========== */
+.form-card.data-v-1e56e140 {
   position: relative;
   z-index: 2;
-  padding: 0 56rpx 240rpx;
+  margin: 0 24rpx 240rpx;
+  padding: 44rpx 40rpx 20rpx;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border-radius: 36rpx;
 }
-.section.data-v-1e56e140 {
-  margin-top: 48rpx;
+.form-section.data-v-1e56e140 {
+  margin-bottom: 48rpx;
 }
-.form-body .section.data-v-1e56e140:first-child {
-  margin-top: 0;
+.form-label.data-v-1e56e140 {
+  display: block;
+  margin-bottom: 20rpx;
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #4a4a42;
+  letter-spacing: 2rpx;
 }
-.section-title.data-v-1e56e140 {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 24rpx;
-  font-family: "JetBrains Mono", "SF Mono", "Consolas", "Menlo", monospace;
-  font-size: 20rpx;
-  letter-spacing: 4rpx;
-  text-transform: uppercase;
-  color: #8a8a7e;
+.input-wrap.data-v-1e56e140 {
+  position: relative;
 }
 .form-input.data-v-1e56e140 {
   width: 100%;
-  height: 88rpx;
+  height: 92rpx;
   padding: 0 28rpx;
-  border-radius: 40rpx;
-  background: rgba(58, 84, 67, 0.04);
-  border: 1px solid rgba(58, 84, 67, 0.05);
+  border-radius: 24rpx;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
   font-size: 28rpx;
   color: #2a2a24;
   box-sizing: border-box;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .form-input-focus.data-v-1e56e140 {
   border-color: #3a5443;
+  box-shadow: 0 0 0 3rpx rgba(58, 84, 67, 0.08);
 }
-.form-input-placeholder.data-v-1e56e140 {
+.input-placeholder.data-v-1e56e140 {
   color: #8a8a7e;
   font-size: 26rpx;
 }
 
-/* 底部固定栏 */
+/* ========== 底部固定栏 ========== */
 .form-bottom-bar.data-v-1e56e140 {
   position: fixed;
   bottom: 0;
@@ -127,7 +137,7 @@
   z-index: 30;
   display: flex;
   gap: 20rpx;
-  padding: 32rpx 56rpx;
+  padding: 32rpx 48rpx;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, rgba(244, 239, 230, 0) 0%, #f4efe6 30%);
 }
@@ -165,7 +175,7 @@
   background: transparent;
   border: 1px solid rgba(184, 92, 58, 0.3);
   font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: #b85c3a;
   transition: all 0.2s ease;

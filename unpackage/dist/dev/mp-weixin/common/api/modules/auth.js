@@ -9,17 +9,17 @@ function registerUser(payload) {
   return uniIdCo.registerUser(payload);
 }
 async function getCurrentUserInfo(uid) {
-  var _a;
+  var _a, _b;
   if (!uid)
     return null;
   const res = await common_api_clients_clientDb.getCollection("uni-id-users").doc(uid).field("nickname, username, avatar_file").get();
-  const user = res.data[0];
+  const user = (_a = res == null ? void 0 : res.data) == null ? void 0 : _a[0];
   if (!user)
     return null;
   return {
     nickname: user.nickname || "",
     username: user.username || "",
-    avatar: ((_a = user.avatar_file) == null ? void 0 : _a.url) || ""
+    avatar: ((_b = user.avatar_file) == null ? void 0 : _b.url) || ""
   };
 }
 exports.getCurrentUserInfo = getCurrentUserInfo;

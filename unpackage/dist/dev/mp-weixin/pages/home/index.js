@@ -15,9 +15,9 @@ if (!Array) {
   const _component_svg = common_vendor.resolveComponent("svg");
   const _component_line = common_vendor.resolveComponent("line");
   const _component_circle = common_vendor.resolveComponent("circle");
-  const _component_polyline = common_vendor.resolveComponent("polyline");
   const _component_rect = common_vendor.resolveComponent("rect");
-  (_component_path + _component_svg + _component_line + _component_circle + _component_polyline + _component_rect)();
+  const _component_polyline = common_vendor.resolveComponent("polyline");
+  (_component_path + _component_svg + _component_line + _component_circle + _component_rect + _component_polyline)();
 }
 if (!Math) {
   (ClothesListCard + H5TabBar)();
@@ -45,6 +45,7 @@ const _sfc_main = {
     const familyError = common_vendor.ref(false);
     const isDegraded = common_vendor.ref(false);
     const isGuest = common_vendor.ref(false);
+    const hasInitialized = common_vendor.ref(false);
     const clothesList = common_vendor.ref([]);
     const clothesLoading = common_vendor.ref(false);
     const scrollY = common_vendor.ref(0);
@@ -220,7 +221,7 @@ const _sfc_main = {
         }
         loadError.value = false;
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/home/index.vue:621", "syncClosetSummary failed", error);
+        common_vendor.index.__f__("error", "at pages/home/index.vue:681", "syncClosetSummary failed", error);
         if (!cached) {
           closetCount.value = 0;
           clothesCount.value = 0;
@@ -255,7 +256,7 @@ const _sfc_main = {
           common_services_cacheService.setHomeClothesCache(uid, list);
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/home/index.vue:662", "loadClothesForHome failed", error);
+        common_vendor.index.__f__("error", "at pages/home/index.vue:722", "loadClothesForHome failed", error);
         if (!cached) {
           clothesList.value = [];
         }
@@ -286,7 +287,7 @@ const _sfc_main = {
         }
         familyError.value = false;
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/home/index.vue:698", "syncFamilySummary failed", error);
+        common_vendor.index.__f__("error", "at pages/home/index.vue:758", "syncFamilySummary failed", error);
         if (!cached) {
           familyClosetCount.value = 0;
           familyClothesCount.value = 0;
@@ -508,29 +509,42 @@ const _sfc_main = {
         windowHeight.value = 812;
         statusBarHeight.value = 44;
       }
+      common_vendor.index.hideTabBar({ animation: false });
     });
+    let scrollThrottleTimer = null;
+    let pendingScrollTop = 0;
     common_vendor.onPageScroll((e) => {
-      if (!isAnimating.value) {
-        scrollY.value = e.scrollTop;
+      pendingScrollTop = e.scrollTop;
+      if (!scrollThrottleTimer) {
+        scrollThrottleTimer = setTimeout(() => {
+          scrollThrottleTimer = null;
+          if (!isAnimating.value) {
+            scrollY.value = pendingScrollTop;
+          }
+          const wh = windowHeight.value;
+          const triggers = {
+            stats: wh * 0.3,
+            distribution: wh * 0.5,
+            recent: wh * 0.7,
+            actions: wh * 0.85,
+            family: wh * 1,
+            season: wh * 1.15
+          };
+          Object.keys(triggers).forEach((key) => {
+            if (pendingScrollTop > triggers[key] && !sectionsVisible.value[key]) {
+              sectionsVisible.value[key] = true;
+            }
+          });
+        }, 50);
       }
-      const wh = windowHeight.value;
-      const triggers = {
-        stats: wh * 0.3,
-        distribution: wh * 0.5,
-        recent: wh * 0.7,
-        actions: wh * 0.85,
-        family: wh * 1,
-        season: wh * 1.15
-      };
-      Object.keys(triggers).forEach((key) => {
-        if (e.scrollTop > triggers[key] && !sectionsVisible.value[key]) {
-          sectionsVisible.value[key] = true;
-        }
-      });
     });
     common_vendor.onShow(() => {
+      common_vendor.index.hideTabBar({ animation: false });
       loadCustomFonts();
-      syncScopeStatus();
+      if (!hasInitialized.value) {
+        hasInitialized.value = true;
+        syncScopeStatus();
+      }
     });
     return (_ctx, _cache) => {
       var _a, _b;
@@ -619,58 +633,145 @@ const _sfc_main = {
         }),
         x: common_vendor.o(goLogin, "a8")
       } : {}, {
-        y: common_vendor.t(greetingText.value),
-        z: common_vendor.t(nickname.value),
-        A: loading.value
+        y: common_vendor.p({
+          cx: "12",
+          cy: "12",
+          r: "5"
+        }),
+        z: common_vendor.p({
+          d: "M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+        }),
+        A: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        B: common_vendor.t(greetingText.value),
+        C: common_vendor.t(nickname.value),
+        D: common_vendor.p({
+          cx: "260",
+          cy: "20",
+          r: "60",
+          fill: "rgba(255,255,255,0.04)"
+        }),
+        E: common_vendor.p({
+          cx: "280",
+          cy: "80",
+          r: "40",
+          fill: "rgba(255,255,255,0.03)"
+        }),
+        F: common_vendor.p({
+          cx: "30",
+          cy: "100",
+          r: "30",
+          fill: "rgba(255,255,255,0.02)"
+        }),
+        G: common_vendor.p({
+          viewBox: "0 0 300 120"
+        }),
+        H: loading.value
       }, loading.value ? {} : loadError.value ? {
-        C: common_vendor.p({
+        J: common_vendor.p({
           cx: "12",
           cy: "12",
           r: "10"
         }),
-        D: common_vendor.p({
+        K: common_vendor.p({
           x1: "12",
           y1: "8",
           x2: "12",
           y2: "12"
         }),
-        E: common_vendor.p({
+        L: common_vendor.p({
           x1: "12",
           y1: "16",
           x2: "12.01",
           y2: "16"
         }),
-        F: common_vendor.p({
+        M: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        G: common_vendor.o(retryLoad, "9e")
+        N: common_vendor.o(retryLoad, "68")
       } : {
-        H: common_vendor.t(summaryData.value.closetCount),
-        I: common_vendor.o(goClosets, "c6"),
-        J: common_vendor.t(summaryData.value.clothesCount),
-        K: common_vendor.o(goClothes, "ab"),
-        L: common_vendor.t(summaryData.value.unassignedCount)
-      }, {
-        B: loadError.value,
-        M: !loading.value && !loadError.value && unassignedCount.value > 0
-      }, !loading.value && !loadError.value && unassignedCount.value > 0 ? {
-        N: common_vendor.p({
+        O: common_vendor.t(summaryData.value.closetCount),
+        P: common_vendor.p({
+          x: "3",
+          y: "3",
+          width: "18",
+          height: "18",
+          rx: "2"
+        }),
+        Q: common_vendor.p({
+          x1: "3",
+          y1: "12",
+          x2: "21",
+          y2: "12"
+        }),
+        R: common_vendor.p({
+          x1: "12",
+          y1: "3",
+          x2: "12",
+          y2: "21"
+        }),
+        S: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        T: common_vendor.o(goClosets, "e0"),
+        U: common_vendor.t(summaryData.value.clothesCount),
+        V: common_vendor.p({
+          d: "M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
+        }),
+        W: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        X: common_vendor.o(goClothes, "a5"),
+        Y: common_vendor.t(summaryData.value.unassignedCount),
+        Z: common_vendor.p({
           d: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
         }),
-        O: common_vendor.p({
+        aa: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        })
+      }, {
+        I: loadError.value,
+        ab: statusBarHeight.value + 24 + "px",
+        ac: !loading.value && !loadError.value && unassignedCount.value > 0
+      }, !loading.value && !loadError.value && unassignedCount.value > 0 ? {
+        ad: common_vendor.p({
+          d: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+        }),
+        ae: common_vendor.p({
           points: "3.27 6.96 12 12.01 20.73 6.96"
         }),
-        P: common_vendor.p({
+        af: common_vendor.p({
           x1: "12",
           y1: "22.08",
           x2: "12",
           y2: "12"
         }),
-        Q: common_vendor.p({
+        ag: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -678,11 +779,11 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        R: common_vendor.t(unassignedCount.value),
-        S: common_vendor.p({
+        ah: common_vendor.t(unassignedCount.value),
+        ai: common_vendor.p({
           d: "M9 18l6-6-6-6"
         }),
-        T: common_vendor.p({
+        aj: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -690,18 +791,18 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        U: common_vendor.o(goClothes, "13")
+        ak: common_vendor.o(goClothes, "1a")
       } : {}, {
-        V: sectionsVisible.value.stats ? 1 : "",
-        W: clothesLoading.value
+        al: sectionsVisible.value.stats ? 1 : "",
+        am: clothesLoading.value
       }, clothesLoading.value ? {
-        X: common_vendor.f(5, (n, k0, i0) => {
+        an: common_vendor.f(5, (n, k0, i0) => {
           return {
             a: n
           };
         })
       } : distributionTotal.value === 0 ? {} : {
-        Z: common_vendor.f(distributionData.value, (item, idx, i0) => {
+        ap: common_vendor.f(distributionData.value, (item, idx, i0) => {
           return {
             a: common_vendor.t(item.enName),
             b: common_vendor.t(item.name),
@@ -714,14 +815,14 @@ const _sfc_main = {
           };
         })
       }, {
-        Y: distributionTotal.value === 0,
-        aa: sectionsVisible.value.distribution ? 1 : "",
-        ab: recentClothes.value.length > 0
+        ao: distributionTotal.value === 0,
+        aq: sectionsVisible.value.distribution ? 1 : "",
+        ar: recentClothes.value.length > 0
       }, recentClothes.value.length > 0 ? {
-        ac: common_vendor.p({
+        as: common_vendor.p({
           d: "M9 18l6-6-6-6"
         }),
-        ad: common_vendor.p({
+        at: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -729,23 +830,23 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        ae: common_vendor.o(goClothes, "d8")
+        av: common_vendor.o(goClothes, "51")
       } : {}, {
-        af: !clothesLoading.value && recentClothes.value.length === 0
+        aw: !clothesLoading.value && recentClothes.value.length === 0
       }, !clothesLoading.value && recentClothes.value.length === 0 ? {
-        ag: common_vendor.p({
+        ax: common_vendor.p({
           x1: "12",
           y1: "5",
           x2: "12",
           y2: "19"
         }),
-        ah: common_vendor.p({
+        ay: common_vendor.p({
           x1: "5",
           y1: "12",
           x2: "19",
           y2: "12"
         }),
-        ai: common_vendor.p({
+        az: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -753,19 +854,19 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        aj: common_vendor.o(goCreateClothes, "65")
+        aA: common_vendor.o(goCreateClothes, "02")
       } : common_vendor.e({
-        ak: clothesLoading.value
+        aB: clothesLoading.value
       }, clothesLoading.value ? {
-        al: common_vendor.f(4, (n, k0, i0) => {
+        aC: common_vendor.f(4, (n, k0, i0) => {
           return {
             a: n
           };
         })
       } : {
-        am: common_vendor.f(recentClothes.value, (item, k0, i0) => {
+        aD: common_vendor.f(recentClothes.value, (item, k0, i0) => {
           return {
-            a: "4978fed5-27-" + i0,
+            a: "4978fed5-42-" + i0,
             b: common_vendor.p({
               clothes: item
             }),
@@ -773,91 +874,149 @@ const _sfc_main = {
           };
         })
       }), {
-        an: sectionsVisible.value.recent ? 1 : "",
-        ao: common_vendor.t(summaryData.value.closetCount),
-        ap: common_vendor.p({
+        aE: sectionsVisible.value.recent ? 1 : "",
+        aF: common_vendor.p({
+          x1: "0",
+          y1: "0",
+          x2: "200",
+          y2: "200",
+          stroke: "rgba(255,255,255,0.04)",
+          ["stroke-width"]: "1"
+        }),
+        aG: common_vendor.p({
+          x1: "60",
+          y1: "0",
+          x2: "200",
+          y2: "140",
+          stroke: "rgba(255,255,255,0.03)",
+          ["stroke-width"]: "1"
+        }),
+        aH: common_vendor.p({
+          x1: "120",
+          y1: "0",
+          x2: "200",
+          y2: "80",
+          stroke: "rgba(255,255,255,0.02)",
+          ["stroke-width"]: "1"
+        }),
+        aI: common_vendor.p({
+          x1: "0",
+          y1: "60",
+          x2: "140",
+          y2: "200",
+          stroke: "rgba(255,255,255,0.03)",
+          ["stroke-width"]: "1"
+        }),
+        aJ: common_vendor.p({
+          x1: "0",
+          y1: "120",
+          x2: "80",
+          y2: "200",
+          stroke: "rgba(255,255,255,0.02)",
+          ["stroke-width"]: "1"
+        }),
+        aK: common_vendor.p({
+          viewBox: "0 0 200 200"
+        }),
+        aL: common_vendor.t(summaryData.value.closetCount),
+        aM: common_vendor.p({
           x: "3",
           y: "3",
           width: "18",
           height: "18",
           rx: "2"
         }),
-        aq: common_vendor.p({
+        aN: common_vendor.p({
           x1: "3",
           y1: "12",
           x2: "21",
           y2: "12"
         }),
-        ar: common_vendor.p({
+        aO: common_vendor.p({
           x1: "12",
           y1: "3",
           x2: "12",
           y2: "21"
         }),
-        as: common_vendor.p({
+        aP: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        at: common_vendor.p({
+        aQ: common_vendor.p({
           d: "M7 17L17 7M17 7H8M17 7v9"
         }),
-        av: common_vendor.p({
+        aR: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        aw: common_vendor.o(goClosets, "1b"),
-        ax: common_vendor.t(summaryData.value.clothesCount),
-        ay: common_vendor.p({
+        aS: common_vendor.o(goClosets, "d8"),
+        aT: common_vendor.p({
+          cx: "160",
+          cy: "40",
+          r: "50",
+          fill: "rgba(184,92,58,0.04)"
+        }),
+        aU: common_vendor.p({
+          cx: "180",
+          cy: "160",
+          r: "30",
+          fill: "rgba(184,92,58,0.03)"
+        }),
+        aV: common_vendor.p({
+          viewBox: "0 0 200 200"
+        }),
+        aW: common_vendor.t(summaryData.value.clothesCount),
+        aX: common_vendor.p({
           d: "M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
         }),
-        az: common_vendor.p({
+        aY: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        aA: common_vendor.p({
+        aZ: common_vendor.p({
           d: "M7 17L17 7M17 7H8M17 7v9"
         }),
-        aB: common_vendor.p({
+        ba: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        aC: common_vendor.o(goClothes, "6a"),
-        aD: sectionsVisible.value.actions ? 1 : "",
-        aE: isFamilyMode.value
+        bb: common_vendor.o(goClothes, "2d"),
+        bc: sectionsVisible.value.actions ? 1 : "",
+        bd: isFamilyMode.value
       }, isFamilyMode.value ? common_vendor.e({
-        aF: common_vendor.t(((_a = familyRecord.value) == null ? void 0 : _a.name) || "未命名家庭"),
-        aG: common_vendor.t(((_b = membershipRecord.value) == null ? void 0 : _b.role) === "admin" ? "Admin" : "Member"),
-        aH: common_vendor.t(familySummaryData.value.closetCount),
-        aI: common_vendor.o(goFamilyClosets, "1e"),
-        aJ: common_vendor.t(familySummaryData.value.clothesCount),
-        aK: common_vendor.o(goFamilyClothes, "28"),
-        aL: common_vendor.f(displayMembers.value, (member, k0, i0) => {
+        be: common_vendor.t(((_a = familyRecord.value) == null ? void 0 : _a.name) || "未命名家庭"),
+        bf: common_vendor.t(((_b = membershipRecord.value) == null ? void 0 : _b.role) === "admin" ? "Admin" : "Member"),
+        bg: common_vendor.t(familySummaryData.value.closetCount),
+        bh: common_vendor.o(goFamilyClosets, "a6"),
+        bi: common_vendor.t(familySummaryData.value.clothesCount),
+        bj: common_vendor.o(goFamilyClothes, "ac"),
+        bk: common_vendor.f(displayMembers.value, (member, k0, i0) => {
           return {
             a: common_vendor.t(getAvatarText(member.nickname || member.username)),
             b: member.role === "admin" ? 1 : "",
             c: member.user_id
           };
         }),
-        aM: extraMemberCount.value > 0
+        bl: extraMemberCount.value > 0
       }, extraMemberCount.value > 0 ? {
-        aN: common_vendor.t(extraMemberCount.value)
+        bm: common_vendor.t(extraMemberCount.value)
       } : {}, {
-        aO: common_vendor.p({
+        bn: common_vendor.p({
           d: "M9 18l6-6-6-6"
         }),
-        aP: common_vendor.p({
+        bo: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -865,20 +1024,31 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        aQ: common_vendor.o(goFamilyManage, "bd")
+        bp: common_vendor.o(goFamilyManage, "3e")
       }) : {
-        aR: common_vendor.o(goCreateFamily, "d8"),
-        aS: common_vendor.o(goJoinFamily, "64")
+        bq: common_vendor.o(goCreateFamily, "93"),
+        br: common_vendor.o(goJoinFamily, "ee")
       }, {
-        aT: sectionsVisible.value.family ? 1 : "",
-        aU: common_vendor.t(seasonLabel.value),
-        aV: common_vendor.t(seasonTipText.value),
-        aW: sectionsVisible.value.season ? 1 : "",
-        aX: common_vendor.p({
+        bs: sectionsVisible.value.family ? 1 : "",
+        bt: common_vendor.p({
+          d: "M30 5 Q 40 20 30 35 Q 20 20 30 5Z",
+          fill: "rgba(184,92,58,0.08)"
+        }),
+        bv: common_vendor.p({
+          d: "M30 25 Q 40 40 30 55 Q 20 40 30 25Z",
+          fill: "rgba(184,92,58,0.05)"
+        }),
+        bw: common_vendor.p({
+          viewBox: "0 0 60 60"
+        }),
+        bx: common_vendor.t(seasonLabel.value),
+        by: common_vendor.t(seasonTipText.value),
+        bz: sectionsVisible.value.season ? 1 : "",
+        bA: common_vendor.p({
           ["current-route"]: common_vendor.unref(common_constants_routes.ROUTES).home
         }),
-        aY: common_vendor.o(onTouchStart, "4e"),
-        aZ: common_vendor.o(onTouchEnd, "14")
+        bB: common_vendor.o(onTouchStart, "4e"),
+        bC: common_vendor.o(onTouchEnd, "14")
       });
     };
   }

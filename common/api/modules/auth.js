@@ -45,7 +45,7 @@ export async function getCurrentUserInfo(uid) {
     .field("nickname, username, avatar_file")
     .get();
 
-  const user = res.data[0];
+  const user = res?.data?.[0];
   if (!user) return null;
 
   return {

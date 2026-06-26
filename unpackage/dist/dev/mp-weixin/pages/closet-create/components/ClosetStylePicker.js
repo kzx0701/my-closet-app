@@ -21,11 +21,12 @@ const _sfc_main = {
       return {
         a: common_vendor.f(__props.options, (item, k0, i0) => {
           return {
-            a: common_vendor.t(item.name),
-            b: common_vendor.t(item.desc),
-            c: item.code,
-            d: __props.modelValue === item.code ? 1 : "",
-            e: common_vendor.o(($event) => emit("update:modelValue", item.code), item.code)
+            a: __props.modelValue === item.code ? 1 : "",
+            b: common_vendor.t(item.name),
+            c: common_vendor.t(item.desc),
+            d: item.code,
+            e: __props.modelValue === item.code ? 1 : "",
+            f: common_vendor.o(($event) => emit("update:modelValue", item.code), item.code)
           };
         })
       };

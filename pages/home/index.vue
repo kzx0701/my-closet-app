@@ -79,49 +79,76 @@
       </view>
 
       <!-- 概览统计 -->
-      <view class="stats-zone">
-        <view class="section-header">
-          <text class="section-label">Overview · 概览</text>
-          <text class="section-greeting">{{ greetingText }}，{{ nickname }}</text>
-        </view>
-
-        <!-- 加载骨架屏 -->
-        <view v-if="loading" class="stats-row">
-          <view class="stat-item">
-            <view class="skeleton skeleton-num"></view>
-            <view class="skeleton skeleton-text-sm"></view>
+      <view class="stats-zone" :style="{ paddingTop: statusBarHeight + 24 + 'px' }">
+        <!-- 问候区 -->
+        <view class="stats-greeting">
+          <view class="greeting-icon-wrap">
+            <svg class="greeting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           </view>
-          <view class="stat-item">
-            <view class="skeleton skeleton-num"></view>
-            <view class="skeleton skeleton-text-sm"></view>
+          <view class="greeting-text-wrap">
+            <text class="greeting-label">{{ greetingText }}</text>
+            <text class="greeting-name">{{ nickname }}</text>
           </view>
         </view>
 
-        <!-- 错误态 -->
-        <view v-else-if="loadError" class="error-card">
-          <svg class="err-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <view class="err-content">
-            <text class="err-title">数据加载失败</text>
-            <text class="err-desc">网络连接异常，请稍后重试。</text>
-            <text class="err-retry" @click="retryLoad">重新加载</text>
+        <!-- 数据卡片 -->
+        <view class="stats-card">
+          <!-- 装饰纹理 -->
+          <view class="stats-card-deco">
+            <svg viewBox="0 0 300 120" class="stats-deco-svg">
+              <circle cx="260" cy="20" r="60" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="280" cy="80" r="40" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="100" r="30" fill="rgba(255,255,255,0.02)"/>
+            </svg>
           </view>
-        </view>
 
-        <!-- 成功态 -->
-        <view v-else class="stats-row">
-          <view class="stat-item" hover-class="stat-item-hover" :hover-stay-time="100" @click="goClosets">
-            <text class="stat-value">{{ summaryData.closetCount }}</text>
-            <text class="stat-label">衣橱</text>
+          <!-- 加载骨架屏 -->
+          <view v-if="loading" class="stats-row">
+            <view class="stat-item">
+              <view class="skeleton skeleton-num"></view>
+              <view class="skeleton skeleton-text-sm"></view>
+            </view>
+            <view class="stat-item">
+              <view class="skeleton skeleton-num"></view>
+              <view class="skeleton skeleton-text-sm"></view>
+            </view>
           </view>
-          <view class="stat-divider"></view>
-          <view class="stat-item" hover-class="stat-item-hover" :hover-stay-time="100" @click="goClothes">
-            <text class="stat-value accent">{{ summaryData.clothesCount }}</text>
-            <text class="stat-label">衣物</text>
+
+          <!-- 错误态 -->
+          <view v-else-if="loadError" class="error-card">
+            <svg class="err-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <view class="err-content">
+              <text class="err-title">数据加载失败</text>
+              <text class="err-desc">网络连接异常，请稍后重试。</text>
+              <text class="err-retry" @click="retryLoad">重新加载</text>
+            </view>
           </view>
-          <view class="stat-divider"></view>
-          <view class="stat-item">
-            <text class="stat-value muted">{{ summaryData.unassignedCount }}</text>
-            <text class="stat-label">未归类</text>
+
+          <!-- 成功态 -->
+          <view v-else class="stats-row">
+            <view class="stat-item" hover-class="stat-item-hover" :hover-stay-time="100" @click="goClosets">
+              <text class="stat-value">{{ summaryData.closetCount }}</text>
+              <text class="stat-label">衣橱</text>
+              <view class="stat-icon-wrap">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+              </view>
+            </view>
+            <view class="stat-divider"></view>
+            <view class="stat-item" hover-class="stat-item-hover" :hover-stay-time="100" @click="goClothes">
+              <text class="stat-value accent">{{ summaryData.clothesCount }}</text>
+              <text class="stat-label">衣物</text>
+              <view class="stat-icon-wrap">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+              </view>
+            </view>
+            <view class="stat-divider"></view>
+            <view class="stat-item">
+              <text class="stat-value muted">{{ summaryData.unassignedCount }}</text>
+              <text class="stat-label">未归类</text>
+              <view class="stat-icon-wrap">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -148,7 +175,10 @@
     <!-- ===== 衣物分布 ===== -->
     <view class="content-section" :class="{ 'section-visible': sectionsVisible.distribution }">
       <view class="distribution-zone">
-        <text class="section-label">Distribution · 衣物分布</text>
+        <view class="section-header-row">
+          <text class="section-label">Distribution · 衣物分布</text>
+          <view class="section-header-deco"></view>
+        </view>
 
         <!-- 骨架屏 -->
         <view v-if="clothesLoading" class="dist-list">
@@ -202,7 +232,10 @@
     <view class="content-section" :class="{ 'section-visible': sectionsVisible.recent }">
       <view class="recent-zone">
         <view class="recent-header">
-          <text class="section-label">Recent · 最近添加</text>
+          <view class="section-header-row" style="padding: 0; margin-bottom: 0;">
+            <text class="section-label">Recent · 最近添加</text>
+            <view class="section-header-deco"></view>
+          </view>
           <view
             v-if="recentClothes.length > 0"
             class="recent-link"
@@ -255,6 +288,16 @@
     <view class="content-section" :class="{ 'section-visible': sectionsVisible.actions }">
       <view class="actions-zone">
         <view class="action-card dark" hover-class="action-card-dark-hover" :hover-stay-time="100" @click="goClosets">
+          <!-- 装饰图案 -->
+          <view class="card-deco-pattern">
+            <svg viewBox="0 0 200 200" class="card-deco-svg">
+              <line x1="0" y1="0" x2="200" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="60" y1="0" x2="200" y2="140" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="120" y1="0" x2="200" y2="80" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+              <line x1="0" y1="60" x2="140" y2="200" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="0" y1="120" x2="80" y2="200" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+            </svg>
+          </view>
           <view class="card-top">
             <view class="card-number-wrap">
               <text class="card-number">{{ summaryData.closetCount }}</text>
@@ -272,6 +315,13 @@
         </view>
 
         <view class="action-card light" hover-class="action-card-light-hover" :hover-stay-time="100" @click="goClothes">
+          <!-- 装饰图案 -->
+          <view class="card-deco-pattern">
+            <svg viewBox="0 0 200 200" class="card-deco-svg">
+              <circle cx="160" cy="40" r="50" fill="rgba(184,92,58,0.04)"/>
+              <circle cx="180" cy="160" r="30" fill="rgba(184,92,58,0.03)"/>
+            </svg>
+          </view>
           <view class="card-top">
             <view class="card-number-wrap">
               <text class="card-number">{{ summaryData.clothesCount }}</text>
@@ -293,7 +343,10 @@
     <!-- ===== 家庭协作区（精简版，无邀请码） ===== -->
     <view class="content-section" :class="{ 'section-visible': sectionsVisible.family }">
       <view class="family-zone">
-        <text class="section-label">Family · 家庭协作</text>
+        <view class="section-header-row">
+          <text class="section-label">Family · 家庭协作</text>
+          <view class="section-header-deco"></view>
+        </view>
 
         <!-- 已加入家庭 -->
         <view v-if="isFamilyMode" class="family-info-box">
@@ -344,6 +397,12 @@
     <!-- ===== 季节贴士 ===== -->
     <view class="content-section" :class="{ 'section-visible': sectionsVisible.season }">
       <view class="season-tip">
+        <view class="season-tip-deco">
+          <svg viewBox="0 0 60 60" class="season-deco-svg">
+            <path d="M30 5 Q 40 20 30 35 Q 20 20 30 5Z" fill="rgba(184,92,58,0.08)"/>
+            <path d="M30 25 Q 40 40 30 55 Q 20 40 30 25Z" fill="rgba(184,92,58,0.05)"/>
+          </svg>
+        </view>
         <text class="season-tip-label">{{ seasonLabel }}</text>
         <text class="season-tip-text">{{ seasonTipText }}</text>
       </view>
@@ -400,6 +459,7 @@ const clothesError = ref(false);
 const familyError = ref(false);
 const isDegraded = ref(false); // 降级模式标记
 const isGuest = ref(false); // 游客模式标记
+const hasInitialized = ref(false); // 首次加载标记
 
 // 衣物列表（用于分布统计和最近添加）
 const clothesList = ref([]);
@@ -967,37 +1027,59 @@ onLoad(() => {
     windowHeight.value = 812;
     statusBarHeight.value = 44;
   }
+
+  // #ifdef MP-WEIXIN
+  uni.hideTabBar({ animation: false });
+  // #endif
 });
 
+// 节流：scroll 监听避免频繁触发
+let scrollThrottleTimer = null;
+let pendingScrollTop = 0;
+
 onPageScroll((e) => {
-  // 自定义动画期间，scrollY 由动画循环直接管理，跳过以避免反馈循环
-  if (!isAnimating.value) {
-    scrollY.value = e.scrollTop;
+  pendingScrollTop = e.scrollTop;
+
+  if (!scrollThrottleTimer) {
+    scrollThrottleTimer = setTimeout(() => {
+      scrollThrottleTimer = null;
+      // 自定义动画期间，scrollY 由动画循环直接管理，跳过以避免反馈循环
+      if (!isAnimating.value) {
+        scrollY.value = pendingScrollTop;
+      }
+
+      // 滚动触发区块动画
+      const wh = windowHeight.value;
+      const triggers = {
+        stats: wh * 0.3,
+        distribution: wh * 0.5,
+        recent: wh * 0.7,
+        actions: wh * 0.85,
+        family: wh * 1.0,
+        season: wh * 1.15,
+      };
+
+      Object.keys(triggers).forEach((key) => {
+        if (pendingScrollTop > triggers[key] && !sectionsVisible.value[key]) {
+          sectionsVisible.value[key] = true;
+        }
+      });
+    }, 50);
   }
-
-  // 滚动触发区块动画（动画期间也更新，让内容平滑出现）
-  const wh = windowHeight.value;
-  const triggers = {
-    stats: wh * 0.3,
-    distribution: wh * 0.5,
-    recent: wh * 0.7,
-    actions: wh * 0.85,
-    family: wh * 1.0,
-    season: wh * 1.15,
-  };
-
-  Object.keys(triggers).forEach((key) => {
-    if (e.scrollTop > triggers[key] && !sectionsVisible.value[key]) {
-      sectionsVisible.value[key] = true;
-    }
-  });
 });
 
 onShow(() => {
   // #ifdef MP-WEIXIN
+  uni.hideTabBar({ animation: false });
   loadCustomFonts();
   // #endif
-  syncScopeStatus();
+
+  if (!hasInitialized.value) {
+    // 首次加载：全量请求
+    hasInitialized.value = true;
+    syncScopeStatus();
+  }
+  // 非首次不重新请求，页面数据保持上次状态
 });
 </script>
 
@@ -1293,6 +1375,24 @@ onShow(() => {
   display: block;
 }
 
+.section-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-header-row .section-label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.section-header-deco {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, $color-border 0%, transparent 100%);
+}
+
 /* ===== 数据概览 ===== */
 
 /* 降级模式提示条 */
@@ -1300,7 +1400,7 @@ onShow(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 12px 28px 0;
+  margin: 0 28px 12px;
   padding: 10px 16px;
   border-radius: 10px;
   background: rgba(212, 128, 95, 0.08);
@@ -1326,7 +1426,7 @@ onShow(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 12px 28px 0;
+  margin: 0 28px 12px;
   padding: 14px 16px;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(45, 67, 52, 0.08) 0%, rgba(58, 84, 67, 0.05) 100%);
@@ -1385,74 +1485,164 @@ onShow(() => {
   background: rgba(184, 92, 58, 0.15);
 }
 
+/* 问候区 */
 .stats-zone {
-  padding: 40px 28px 0;
+  padding: 0 28px;
+}
+.stats-greeting {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.greeting-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(58, 84, 67, 0.08) 0%, rgba(122, 149, 128, 0.12) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.greeting-icon {
+  width: 22px;
+  height: 22px;
+  stroke: $color-primary;
+}
+
+.greeting-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.greeting-label {
+  font-family: $font-sans;
+  font-size: 12px;
+  color: $color-text-placeholder;
+  font-weight: 500;
+}
+
+.greeting-name {
+  font-family: $font-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: $color-primary-dark;
+  letter-spacing: -0.5px;
+}
+
+/* 数据卡片 */
+.stats-card {
+  position: relative;
+  border-radius: 20px;
+  background: linear-gradient(135deg, $color-primary-dark 0%, $color-primary 60%, $color-primary-soft 100%);
+  padding: 28px 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(45, 67, 52, 0.18);
+}
+
+.stats-card-deco {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.stats-deco-svg {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 200px;
+  height: auto;
+  opacity: 0.8;
 }
 
 .stats-row {
   display: flex;
   gap: 0;
-  align-items: baseline;
+  align-items: stretch;
+  position: relative;
+  z-index: 1;
 }
 
 .stat-item {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   position: relative;
-  padding: 4px 0;
+  padding: 8px 4px;
   border-radius: $radius-sm;
   transition: background 0.2s ease;
 }
 
 .stat-item-hover {
-  background: rgba(58, 84, 67, 0.04);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .stat-divider {
   width: 1px;
-  height: 36px;
-  background: $color-border;
-  align-self: center;
+  background: rgba(244, 239, 230, 0.15);
+  align-self: stretch;
+  margin: 4px 0;
 }
 
 .stat-value {
   font-family: $font-serif;
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 300;
   line-height: 1;
-  color: $color-primary-dark;
-  letter-spacing: -1px;
+  color: $color-text-inverse;
+  letter-spacing: -1.5px;
 }
 
 .stat-value.accent {
-  color: $color-terra;
+  color: $color-terra-soft;
 }
 
 .stat-value.muted {
-  color: $color-text-placeholder;
-  font-size: 28px;
+  color: $inverse-55;
+  font-size: 32px;
 }
 
 .stat-label {
   font-family: $font-sans;
   font-size: 11px;
   font-weight: 600;
-  color: $color-text-secondary;
+  color: $inverse-55;
+  letter-spacing: 0.5px;
+}
+
+.stat-icon-wrap {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0.2;
+}
+
+.stat-icon {
+  width: 14px;
+  height: 14px;
+  stroke: $color-text-inverse;
 }
 
 /* ===== 待整理提醒 ===== */
 .unassigned-zone {
-  margin: 24px 28px 0;
+  margin: 20px 28px 0;
   padding: 16px 18px;
   border-radius: $radius-card;
-  background: rgba(184, 92, 58, 0.06);
+  background: linear-gradient(135deg, rgba(184, 92, 58, 0.06) 0%, rgba(212, 128, 95, 0.04) 100%);
   border: 1px solid rgba(184, 92, 58, 0.18);
   display: flex;
   align-items: center;
   gap: 14px;
   transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .unassigned-zone-hover {
@@ -1509,19 +1699,23 @@ onShow(() => {
 
 /* ===== 衣物分布 ===== */
 .distribution-zone {
-  padding: 32px 28px 0;
+  padding: 36px 28px 0;
 }
 
 .dist-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  background: $color-bg-card-end;
+  border: 1px solid $color-border;
 }
 
 .dist-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -1579,23 +1773,24 @@ onShow(() => {
 }
 
 .dist-bar-track {
-  height: 8px;
+  height: 6px;
   background: rgba(58, 84, 67, 0.06);
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .dist-bar-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
 }
 
-.bar-top { background: $color-primary; }
-.bar-bottom { background: $color-sage; }
-.bar-outerwear { background: $color-terra; }
-.bar-shoes { background: $color-moss; }
-.bar-accessory { background: $color-sage-light; }
+.bar-top { background: linear-gradient(90deg, $color-primary, $color-primary-soft); }
+.bar-bottom { background: linear-gradient(90deg, $color-sage, $color-sage-light); }
+.bar-outerwear { background: linear-gradient(90deg, $color-terra, $color-terra-soft); }
+.bar-shoes { background: linear-gradient(90deg, $color-moss, $color-sage); }
+.bar-accessory { background: linear-gradient(90deg, $color-sage-light, #c8cebf); }
 
 /* 分布骨架屏 */
 .dist-row-skeleton { gap: 8px; }
@@ -1625,7 +1820,7 @@ onShow(() => {
 
 /* ===== 最近添加 ===== */
 .recent-zone {
-  padding: 32px 0 0;
+  padding: 36px 0 0;
 }
 
 .recent-header {
@@ -1733,44 +1928,65 @@ onShow(() => {
 
 /* ===== 核心操作 ===== */
 .actions-zone {
-  padding: 32px 28px 0;
+  padding: 36px 28px 0;
   display: flex;
   gap: 12px;
 }
 
 .action-card {
   flex: 1;
-  border-radius: 18px;
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 120px;
+  min-height: 140px;
   transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .action-card.dark {
-  background: $color-primary;
-  padding: 20px 18px;
+  background: linear-gradient(145deg, $color-primary-dark 0%, $color-primary 100%);
+  padding: 22px 20px;
+  box-shadow: 0 6px 24px rgba(45, 67, 52, 0.15);
 }
 
 .action-card-dark-hover {
-  background: $color-primary-soft;
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(58, 84, 67, 0.2);
+  background: linear-gradient(145deg, $color-primary-soft 0%, $color-primary 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(45, 67, 52, 0.25);
 }
 
 .action-card.light {
   background: $color-bg-card-end;
   border: 1px solid $color-border;
-  padding: 20px 18px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 16px rgba(58, 84, 67, 0.06);
 }
 
 .action-card-light-hover {
   background: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(58, 84, 67, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(58, 84, 67, 0.12);
+}
+
+/* 卡片装饰图案 */
+.card-deco-pattern {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-deco-svg {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 160px;
+  height: 160px;
 }
 
 .card-top {
@@ -1856,14 +2072,15 @@ onShow(() => {
 
 /* ===== 家庭协作区 ===== */
 .family-zone {
-  padding: 32px 28px 0;
+  padding: 36px 28px 0;
 }
 
 .family-info-box {
-  padding: 22px;
-  border-radius: 18px;
+  padding: 24px;
+  border-radius: 20px;
   background: $color-bg-card-end;
   border: 1px solid $color-border;
+  box-shadow: 0 4px 16px rgba(58, 84, 67, 0.05);
 }
 
 .family-name-row {
@@ -1994,11 +2211,12 @@ onShow(() => {
 
 /* 未加入家庭 */
 .family-empty-box {
-  padding: 26px 22px;
-  border-radius: 18px;
+  padding: 30px 24px;
+  border-radius: 20px;
   background: $color-bg-card-end;
   border: 1px solid $color-border;
   text-align: center;
+  box-shadow: 0 4px 16px rgba(58, 84, 67, 0.05);
 }
 
 .family-empty-title {
@@ -2065,9 +2283,28 @@ onShow(() => {
 
 /* ===== 季节贴士 ===== */
 .season-tip {
-  margin: 32px 28px 0;
-  padding: 16px 18px;
-  border-left: 2px solid $color-terra;
+  margin: 36px 28px 0;
+  padding: 20px 20px;
+  border-radius: 16px;
+  border-left: 3px solid $color-terra;
+  background: linear-gradient(135deg, rgba(184, 92, 58, 0.04) 0%, rgba(212, 128, 95, 0.02) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.season-tip-deco {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 50px;
+  height: 50px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.season-deco-svg {
+  width: 100%;
+  height: 100%;
 }
 
 .season-tip-label {
@@ -2097,9 +2334,9 @@ onShow(() => {
 /* ===== 骨架屏 ===== */
 .skeleton {
   background: linear-gradient(90deg,
-    rgba(58, 84, 67, 0.06) 0%,
-    rgba(58, 84, 67, 0.12) 50%,
-    rgba(58, 84, 67, 0.06) 100%);
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 100%);
   background-size: 200% 100%;
   animation: skeletonShimmer 1.4s ease-in-out infinite;
   border-radius: 6px;
@@ -2112,18 +2349,20 @@ onShow(() => {
 .error-card {
   padding: 18px 20px;
   border-radius: $radius-card;
-  background: rgba(184, 92, 58, 0.06);
-  border: 1px solid rgba(184, 92, 58, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .err-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  stroke: $color-terra;
+  stroke: $color-terra-soft;
   margin-top: 1px;
 }
 
@@ -2136,7 +2375,7 @@ onShow(() => {
   font-family: $font-serif;
   font-size: 14px;
   font-weight: 600;
-  color: $color-primary-dark;
+  color: $color-text-inverse;
   margin-bottom: 2px;
   display: block;
 }
@@ -2144,7 +2383,7 @@ onShow(() => {
 .err-desc {
   font-family: $font-sans;
   font-size: 12px;
-  color: $color-text-secondary;
+  color: $inverse-55;
   line-height: 1.5;
   display: block;
   margin-bottom: 8px;
@@ -2154,7 +2393,7 @@ onShow(() => {
   font-family: $font-sans;
   font-size: 12px;
   font-weight: 600;
-  color: $color-terra;
+  color: $color-terra-soft;
   padding: 4px 0;
   display: inline-block;
   transition: all 0.2s ease;

@@ -1,8 +1,8 @@
 <template>
-  <view class="section">
-    <view class="section-title">
-      <text>样式</text>
-      <text class="hint">选一个最接近的</text>
+  <view class="form-section">
+    <view class="section-header">
+      <text class="form-label">样式</text>
+      <text class="section-hint">选一个最接近的</text>
     </view>
     <view class="style-grid">
       <view
@@ -12,6 +12,7 @@
         :class="{ active: modelValue === item.code }"
         @click="emit('update:modelValue', item.code)"
       >
+        <view class="style-card-indicator" :class="{ active: modelValue === item.code }"></view>
         <text class="style-card-name">{{ item.name }}</text>
         <text class="style-card-desc">{{ item.desc }}</text>
       </view>
@@ -37,27 +38,28 @@ const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <style lang="scss" scoped>
-.section {
-  margin-top: 48rpx;
+.form-section {
+  margin-bottom: 48rpx;
 }
 
-.section-title {
+.section-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   margin-bottom: 24rpx;
-  font-family: $font-mono;
-  font-size: 20rpx;
-  letter-spacing: 4rpx;
-  text-transform: uppercase;
-  color: $color-text-placeholder;
 }
 
-.hint {
+.form-label {
+  font-family: $font-sans;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $color-text-secondary;
+  letter-spacing: 2rpx;
+}
+
+.section-hint {
   font-family: $font-sans;
   font-size: 22rpx;
-  letter-spacing: 0;
-  text-transform: none;
   color: $color-text-placeholder;
 }
 
@@ -68,17 +70,34 @@ const emit = defineEmits(["update:modelValue"]);
 }
 
 .style-card {
+  position: relative;
   padding: 28rpx 24rpx;
-  border-radius: $radius-md;
-  background: $color-bg-card-end;
-  border: 2rpx solid transparent;
-  transition: all 0.25s ease;
+  border-radius: $radius-card;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .style-card.active {
-  background: $color-bg-card;
   border-color: $color-primary;
-  box-shadow: $shadow-card-sm;
+  box-shadow: 0 4px 12px rgba(58, 84, 67, 0.12);
+  transform: translateY(-2rpx);
+}
+
+.style-card-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.style-card-indicator.active {
+  background: $color-primary;
 }
 
 .style-card-name {
@@ -87,11 +106,16 @@ const emit = defineEmits(["update:modelValue"]);
   font-size: 28rpx;
   font-weight: 600;
   color: $color-text-title;
+  line-height: 1.35;
+}
+
+.style-card.active .style-card-name {
+  color: $color-primary-dark;
 }
 
 .style-card-desc {
   display: block;
-  margin-top: 10rpx;
+  margin-top: 12rpx;
   font-family: $font-sans;
   font-size: 22rpx;
   line-height: 1.6;

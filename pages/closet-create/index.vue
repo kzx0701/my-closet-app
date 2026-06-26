@@ -9,7 +9,7 @@
           </svg>
         </view>
       </view>
-      <text class="nav-title">新建衣橱</text>
+      <text class="nav-title">{{ pageTitle }}</text>
       <view class="nav-placeholder"></view>
     </view>
 
@@ -20,25 +20,27 @@
       <text class="hero-desc">{{ pageDesc }}</text>
     </view>
 
-    <!-- 表单区 -->
-    <view class="form-body fade-up-delay-2">
+    <!-- 白色表单卡片 -->
+    <view class="form-card fade-up-delay-2">
       <!-- 名称 -->
-      <view class="section">
-        <text class="section-title">名称</text>
-        <input
-          class="form-input"
-          :class="{ 'form-input-focus': nameFocused }"
-          type="text"
-          :value="name"
-          maxlength="30"
-          :adjust-position="true"
-          :cursor-spacing="80"
-          placeholder="例如：主卧大衣橱"
-          placeholder-class="form-input-placeholder"
-          @focus="nameFocused = true"
-          @blur="nameFocused = false"
-          @input="name = $event.detail.value"
-        />
+      <view class="form-section">
+        <text class="form-label">名称</text>
+        <view class="input-wrap">
+          <input
+            class="form-input"
+            :class="{ 'form-input-focus': nameFocused }"
+            type="text"
+            :value="name"
+            maxlength="30"
+            :adjust-position="true"
+            :cursor-spacing="80"
+            placeholder="例如：主卧大衣橱"
+            placeholder-class="input-placeholder"
+            @focus="nameFocused = true"
+            @blur="nameFocused = false"
+            @input="name = $event.detail.value"
+          />
+        </view>
       </view>
 
       <!-- 样式 -->
@@ -265,6 +267,11 @@ onLoad((options) => {
   scopeType.value = options?.scopeType === "family" ? "family" : "personal";
   closetId.value = String(options?.closetId || "").trim();
 
+  const presetName = String(options?.name || "").trim();
+  if (presetName && !closetId.value) {
+    name.value = presetName;
+  }
+
   loadFamilyName();
 
   if (closetId.value) {
@@ -287,40 +294,45 @@ onLoad((options) => {
   overflow: hidden;
 }
 
-/* 自定义导航栏 */
+/* ========== 自定义导航栏 ========== */
 .navbar {
   position: relative;
   z-index: 10;
   display: flex;
   align-items: center;
-  padding-left: 28rpx;
-  padding-right: 28rpx;
-  padding-bottom: 16rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  padding-bottom: 20rpx;
 }
 
 .nav-back {
-  width: 64rpx;
-  height: 64rpx;
+  width: 68rpx;
+  height: 68rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .nav-back-icon {
-  width: 64rpx;
-  height: 64rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(58, 84, 67, 0.25);
+  border: 1px solid rgba(244, 239, 230, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   color: $color-text-inverse;
+  transition: background 0.25s ease;
+}
+
+.nav-back-icon:active {
+  background: rgba(58, 84, 67, 0.40);
 }
 
 .nav-back-icon svg {
-  width: 32rpx;
-  height: 32rpx;
+  width: 34rpx;
+  height: 34rpx;
 }
 
 .nav-title {
@@ -330,17 +342,18 @@ onLoad((options) => {
   font-size: 30rpx;
   font-weight: 600;
   color: $color-text-inverse;
+  letter-spacing: 1rpx;
 }
 
 .nav-placeholder {
-  width: 64rpx;
+  width: 68rpx;
 }
 
-/* Hero 区 */
+/* ========== Hero 区 ========== */
 .form-page-hero {
   position: relative;
   z-index: 2;
-  padding: 24rpx 56rpx 48rpx;
+  padding: 20rpx 48rpx 56rpx;
   color: $color-text-inverse;
 }
 
@@ -361,59 +374,64 @@ onLoad((options) => {
   font-size: 26rpx;
   line-height: 1.7;
   color: $inverse-55;
+  max-width: 580rpx;
 }
 
-/* 表单区 */
-.form-body {
+/* ========== 白色表单卡片 ========== */
+.form-card {
   position: relative;
   z-index: 2;
-  padding: 0 56rpx 240rpx;
+  margin: 0 24rpx 240rpx;
+  padding: 44rpx 40rpx 20rpx;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border-radius: $radius-card;
 }
 
-.section {
-  margin-top: 48rpx;
+.form-section {
+  margin-bottom: 48rpx;
 }
 
-.form-body .section:first-child {
-  margin-top: 0;
+.form-label {
+  display: block;
+  margin-bottom: 20rpx;
+  font-family: $font-sans;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $color-text-secondary;
+  letter-spacing: 2rpx;
 }
 
-.section-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 24rpx;
-  font-family: $font-mono;
-  font-size: 20rpx;
-  letter-spacing: 4rpx;
-  text-transform: uppercase;
-  color: $color-text-placeholder;
+.input-wrap {
+  position: relative;
 }
 
 .form-input {
   width: 100%;
-  height: 88rpx;
+  height: 92rpx;
   padding: 0 28rpx;
-  border-radius: $radius-btn;
-  background: rgba(58, 84, 67, 0.04);
-  border: 1px solid $color-border-soft;
+  border-radius: 24rpx;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   font-family: $font-sans;
   font-size: 28rpx;
   color: $color-text-title;
   box-sizing: border-box;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .form-input-focus {
   border-color: $color-primary;
+  box-shadow: 0 0 0 3rpx rgba(58, 84, 67, 0.08);
 }
 
-.form-input-placeholder {
+.input-placeholder {
   color: $color-text-placeholder;
   font-size: 26rpx;
 }
 
-/* 底部固定栏 */
+/* ========== 底部固定栏 ========== */
 .form-bottom-bar {
   position: fixed;
   bottom: 0;
@@ -422,7 +440,7 @@ onLoad((options) => {
   z-index: 30;
   display: flex;
   gap: 20rpx;
-  padding: 32rpx 56rpx;
+  padding: 32rpx 48rpx;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
   background: $gradient-bottom-bar;
 }
@@ -466,7 +484,7 @@ onLoad((options) => {
   background: transparent;
   border: 1px solid rgba(184, 92, 58, 0.3);
   font-family: $font-sans;
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: $color-terra;
   transition: all 0.2s ease;

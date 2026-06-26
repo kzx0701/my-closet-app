@@ -1,1 +1,0 @@
-<view class="hero fade-up-delay-1 data-v-a8f868cf"><scope-badge wx:if="{{a}}" class="data-v-a8f868cf" u-i="a8f868cf-0" bind:__l="__l" u-p="{{a}}"/><text class="brand-mark data-v-a8f868cf">Season Closet · 四季衣橱</text><text class="title data-v-a8f868cf">欢迎回来</text></view>

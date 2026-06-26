@@ -2,159 +2,244 @@
 const common_vendor = require("../../../common/vendor.js");
 const common_constants_closetOptions = require("../../../common/constants/closet-options.js");
 const common_constants_routes = require("../../../common/constants/routes.js");
-if (!Array) {
-  const _component_path = common_vendor.resolveComponent("path");
-  const _component_line = common_vendor.resolveComponent("line");
-  const _component_rect = common_vendor.resolveComponent("rect");
-  const _component_svg = common_vendor.resolveComponent("svg");
-  (_component_path + _component_line + _component_rect + _component_svg)();
-}
 const _sfc_main = {
-  __name: "ClosetListCard",
+  name: "ClosetListCard",
   props: {
     closet: {
       type: Object,
-      default() {
-        return {};
-      }
+      required: true
     }
   },
-  setup(__props) {
-    const props = __props;
-    const styleName = common_vendor.computed(() => {
-      var _a;
-      return ((_a = common_constants_closetOptions.CLOSET_STYLE_OPTIONS.find((item) => item.code === props.closet.style_code)) == null ? void 0 : _a.name) || "未知样式";
-    });
-    const colorName = common_vendor.computed(() => {
-      var _a;
-      return ((_a = common_constants_closetOptions.CLOSET_COLOR_OPTIONS.find((item) => item.code === props.closet.color_code)) == null ? void 0 : _a.name) || "未知颜色";
-    });
-    const clothesCount = common_vendor.computed(() => {
-      return props.closet.clothes_count || 0;
-    });
-    const thumbStyleClass = common_vendor.computed(() => {
-      const code = props.closet.style_code || "modern-flat";
-      return `thumb-style-${code}`;
-    });
-    function goDetail() {
-      var _a, _b;
-      const targetClosetId = (_a = props.closet) == null ? void 0 : _a._id;
-      if (!targetClosetId)
-        return;
-      const targetScopeType = ((_b = props.closet) == null ? void 0 : _b.scope_type) === "family" ? "family" : "personal";
+  computed: {
+    colorOption() {
+      return common_constants_closetOptions.CLOSET_COLOR_OPTIONS.find((o) => o.code === this.closet.color_code) || common_constants_closetOptions.CLOSET_COLOR_OPTIONS[0];
+    },
+    styleOption() {
+      return common_constants_closetOptions.CLOSET_STYLE_OPTIONS.find((o) => o.code === this.closet.style_code) || common_constants_closetOptions.CLOSET_STYLE_OPTIONS[0];
+    },
+    isFamilyScope() {
+      return this.closet.scope_type === "family";
+    },
+    creatorName() {
+      return String(this.closet.creator_name || "").trim();
+    },
+    creatorInitial() {
+      const name = this.creatorName;
+      if (!name)
+        return "?";
+      return name.charAt(0).toUpperCase();
+    },
+    formatUpdateTime() {
+      const ts = this.closet.updated_at || this.closet.created_at;
+      if (!ts)
+        return "";
+      const date = new Date(ts);
+      if (Number.isNaN(date.getTime()))
+        return "";
+      const now = Date.now();
+      const diff = now - date.getTime();
+      const minute = 60 * 1e3;
+      const hour = 60 * minute;
+      const day = 24 * hour;
+      if (diff < minute)
+        return "刚刚";
+      if (diff < hour)
+        return `${Math.floor(diff / minute)}分钟前`;
+      if (diff < day)
+        return `${Math.floor(diff / hour)}小时前`;
+      if (diff < day * 7)
+        return `${Math.floor(diff / day)}天前`;
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+  },
+  methods: {
+    goDetail() {
       common_vendor.index.navigateTo({
-        url: `${common_constants_routes.ROUTES.closetDetail}?closetId=${targetClosetId}&scopeType=${targetScopeType}`
+        url: `${common_constants_routes.ROUTES.closetDetail}?id=${this.closet._id}`
       });
     }
-    return (_ctx, _cache) => {
-      return common_vendor.e({
-        a: __props.closet.style_code === "arched-vintage"
-      }, __props.closet.style_code === "arched-vintage" ? {
-        b: common_vendor.p({
-          d: "M3 21V10a9 9 0 0 1 18 0v11"
-        }),
-        c: common_vendor.p({
-          x1: "3",
-          y1: "21",
-          x2: "21",
-          y2: "21"
-        }),
-        d: common_vendor.p({
-          x1: "12",
-          y1: "10",
-          x2: "12",
-          y2: "21"
-        })
-      } : __props.closet.style_code === "open-rack" ? {
-        f: common_vendor.p({
-          x: "3",
-          y: "3",
-          width: "18",
-          height: "18",
-          rx: "2"
-        }),
-        g: common_vendor.p({
-          x1: "3",
-          y1: "9",
-          x2: "21",
-          y2: "9"
-        }),
-        h: common_vendor.p({
-          x1: "3",
-          y1: "15",
-          x2: "21",
-          y2: "15"
-        })
-      } : __props.closet.style_code === "drawer-mix" ? {
-        j: common_vendor.p({
-          x: "3",
-          y: "3",
-          width: "18",
-          height: "18",
-          rx: "2"
-        }),
-        k: common_vendor.p({
-          x1: "3",
-          y1: "8",
-          x2: "21",
-          y2: "8"
-        }),
-        l: common_vendor.p({
-          x1: "3",
-          y1: "13",
-          x2: "21",
-          y2: "13"
-        }),
-        m: common_vendor.p({
-          x1: "3",
-          y1: "18",
-          x2: "21",
-          y2: "18"
-        })
-      } : {
-        n: common_vendor.p({
-          x: "3",
-          y: "3",
-          width: "18",
-          height: "18",
-          rx: "2"
-        }),
-        o: common_vendor.p({
-          x1: "3",
-          y1: "12",
-          x2: "21",
-          y2: "12"
-        }),
-        p: common_vendor.p({
-          x1: "12",
-          y1: "3",
-          x2: "12",
-          y2: "21"
-        })
-      }, {
-        e: __props.closet.style_code === "open-rack",
-        i: __props.closet.style_code === "drawer-mix",
-        q: common_vendor.p({
-          viewBox: "0 0 24 24",
-          fill: "none",
-          ["stroke-width"]: "1.5",
-          ["stroke-linecap"]: "round",
-          ["stroke-linejoin"]: "round"
-        }),
-        r: common_vendor.n(thumbStyleClass.value),
-        s: common_vendor.t(__props.closet.name),
-        t: common_vendor.t(styleName.value),
-        v: common_vendor.t(colorName.value),
-        w: __props.closet.room_name
-      }, __props.closet.room_name ? {
-        x: common_vendor.t(__props.closet.room_name)
-      } : {}, {
-        y: common_vendor.t(clothesCount.value),
-        z: common_vendor.o(goDetail, "92")
-      });
-    };
   }
 };
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-35651610"]]);
+if (!Array) {
+  const _component_rect = common_vendor.resolveComponent("rect");
+  const _component_line = common_vendor.resolveComponent("line");
+  const _component_svg = common_vendor.resolveComponent("svg");
+  const _component_path = common_vendor.resolveComponent("path");
+  (_component_rect + _component_line + _component_svg + _component_path)();
+}
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return common_vendor.e({
+    a: $props.closet.style_code === "modern-flat"
+  }, $props.closet.style_code === "modern-flat" ? {
+    b: common_vendor.p({
+      x: "3",
+      y: "3",
+      width: "18",
+      height: "18",
+      rx: "1"
+    }),
+    c: common_vendor.p({
+      x1: "12",
+      y1: "3",
+      x2: "12",
+      y2: "21"
+    }),
+    d: common_vendor.p({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      ["stroke-width"]: "1.5",
+      ["stroke-linecap"]: "round",
+      ["stroke-linejoin"]: "round"
+    })
+  } : $props.closet.style_code === "arched-vintage" ? {
+    f: common_vendor.p({
+      d: "M3 20V10a9 9 0 0 1 18 0v10"
+    }),
+    g: common_vendor.p({
+      x1: "3",
+      y1: "20",
+      x2: "21",
+      y2: "20"
+    }),
+    h: common_vendor.p({
+      x1: "12",
+      y1: "20",
+      x2: "12",
+      y2: "10"
+    }),
+    i: common_vendor.p({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      ["stroke-width"]: "1.5",
+      ["stroke-linecap"]: "round",
+      ["stroke-linejoin"]: "round"
+    })
+  } : $props.closet.style_code === "open-rack" ? {
+    k: common_vendor.p({
+      x1: "4",
+      y1: "3",
+      x2: "4",
+      y2: "21"
+    }),
+    l: common_vendor.p({
+      x1: "20",
+      y1: "3",
+      x2: "20",
+      y2: "21"
+    }),
+    m: common_vendor.p({
+      x1: "4",
+      y1: "8",
+      x2: "20",
+      y2: "8"
+    }),
+    n: common_vendor.p({
+      x1: "4",
+      y1: "14",
+      x2: "20",
+      y2: "14"
+    }),
+    o: common_vendor.p({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      ["stroke-width"]: "1.5",
+      ["stroke-linecap"]: "round",
+      ["stroke-linejoin"]: "round"
+    })
+  } : $props.closet.style_code === "drawer-mix" ? {
+    q: common_vendor.p({
+      x: "3",
+      y: "3",
+      width: "18",
+      height: "18",
+      rx: "1"
+    }),
+    r: common_vendor.p({
+      x1: "3",
+      y1: "9",
+      x2: "21",
+      y2: "9"
+    }),
+    s: common_vendor.p({
+      x1: "3",
+      y1: "15",
+      x2: "21",
+      y2: "15"
+    }),
+    t: common_vendor.p({
+      x1: "8",
+      y1: "6",
+      x2: "8",
+      y2: "8"
+    }),
+    v: common_vendor.p({
+      x1: "16",
+      y1: "12",
+      x2: "16",
+      y2: "14"
+    }),
+    w: common_vendor.p({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      ["stroke-width"]: "1.5",
+      ["stroke-linecap"]: "round",
+      ["stroke-linejoin"]: "round"
+    })
+  } : {
+    x: common_vendor.p({
+      x: "4",
+      y: "2",
+      width: "16",
+      height: "20",
+      rx: "1"
+    }),
+    y: common_vendor.p({
+      x1: "12",
+      y1: "2",
+      x2: "12",
+      y2: "22"
+    }),
+    z: common_vendor.p({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      ["stroke-width"]: "1.5",
+      ["stroke-linecap"]: "round",
+      ["stroke-linejoin"]: "round"
+    })
+  }, {
+    e: $props.closet.style_code === "arched-vintage",
+    j: $props.closet.style_code === "open-rack",
+    p: $props.closet.style_code === "drawer-mix",
+    A: $options.colorOption.color,
+    B: common_vendor.t($props.closet.name),
+    C: common_vendor.t($options.styleOption.name),
+    D: $options.formatUpdateTime
+  }, $options.formatUpdateTime ? {
+    E: common_vendor.t($options.formatUpdateTime)
+  } : {}, {
+    F: $props.closet.room_name || $options.isFamilyScope
+  }, $props.closet.room_name || $options.isFamilyScope ? common_vendor.e({
+    G: $props.closet.room_name
+  }, $props.closet.room_name ? {
+    H: common_vendor.t($props.closet.room_name)
+  } : {}, {
+    I: $options.isFamilyScope && $options.creatorName
+  }, $options.isFamilyScope && $options.creatorName ? {
+    J: common_vendor.t($options.creatorInitial),
+    K: common_vendor.t($options.creatorName)
+  } : {}) : {}, {
+    L: common_vendor.t($props.closet.clothes_count || 0),
+    M: common_vendor.o((...args) => $options.goDetail && $options.goDetail(...args), "ad")
+  });
+}
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-35651610"]]);
 wx.createComponent(Component);
 //# sourceMappingURL=../../../../.sourcemap/mp-weixin/pages/closets/components/ClosetListCard.js.map

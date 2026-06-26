@@ -6,9 +6,9 @@ const common_services_auth = require("../../common/services/auth.js");
 if (!Array) {
   const _component_path = common_vendor.resolveComponent("path");
   const _component_svg = common_vendor.resolveComponent("svg");
-  const _component_circle = common_vendor.resolveComponent("circle");
   const _component_line = common_vendor.resolveComponent("line");
-  (_component_path + _component_svg + _component_circle + _component_line)();
+  const _component_polyline = common_vendor.resolveComponent("polyline");
+  (_component_path + _component_svg + _component_line + _component_polyline)();
 }
 const MAX_AUTO_RETRIES = 3;
 const _sfc_main = {
@@ -21,6 +21,18 @@ const _sfc_main = {
     let progressTimer = null;
     let retryTimer = null;
     let retryCount = 0;
+    const loadingTexts = [
+      "正在初始化...",
+      "加载配置中...",
+      "准备就绪"
+    ];
+    const loadingText = common_vendor.computed(() => {
+      if (progressPercent.value < 30)
+        return loadingTexts[0];
+      if (progressPercent.value < 70)
+        return loadingTexts[1];
+      return loadingTexts[2];
+    });
     function getRetryDelay(attempt) {
       return Math.min(1e3 * Math.pow(2, attempt), 4e3);
     }
@@ -85,7 +97,7 @@ const _sfc_main = {
         }
         return common_vendor.index.reLaunch({ url: result.url });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/entry/index.vue:163", "routeBySession failed", error);
+        common_vendor.index.__f__("error", "at pages/entry/index.vue:182", "routeBySession failed", error);
         resetProgress();
         retryCount++;
         if (retryCount >= MAX_AUTO_RETRIES) {
@@ -137,25 +149,25 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.p({
-          d: "M 0 180 Q 187 120 375 180",
+          d: "M 0 160 Q 187 110 375 160",
           fill: "none",
           stroke: "rgba(244,239,230,0.06)",
           ["stroke-width"]: "1"
         }),
         b: common_vendor.p({
-          d: "M 0 240 Q 187 180 375 240",
+          d: "M 0 220 Q 187 170 375 220",
           fill: "none",
           stroke: "rgba(244,239,230,0.04)",
           ["stroke-width"]: "1"
         }),
         c: common_vendor.p({
-          d: "M 0 600 Q 187 540 375 600",
+          d: "M 0 580 Q 187 530 375 580",
           fill: "none",
           stroke: "rgba(244,239,230,0.05)",
           ["stroke-width"]: "1"
         }),
         d: common_vendor.p({
-          d: "M 0 660 Q 187 600 375 660",
+          d: "M 0 640 Q 187 590 375 640",
           fill: "none",
           stroke: "rgba(244,239,230,0.03)",
           ["stroke-width"]: "1"
@@ -166,33 +178,48 @@ const _sfc_main = {
         }),
         f: statusBarHeight.value + 20 + "px",
         g: common_vendor.p({
-          d: "M100 30 Q90 10 80 30 Q70 50 100 60 L100 90 L40 110 L160 110 L100 90"
+          d: "M24 6 C24 6 22 4 20 4 C18 4 16 6 16 6"
         }),
         h: common_vendor.p({
-          cx: "100",
-          cy: "20",
-          r: "6"
+          x1: "24",
+          y1: "6",
+          x2: "24",
+          y2: "12"
         }),
         i: common_vendor.p({
-          x1: "40",
-          y1: "110",
-          x2: "160",
-          y2: "110"
+          d: "M24 12 L14 18 L8 16 L6 20 L14 24 L14 40 L34 40 L34 24 L42 20 L40 16 L34 18 Z"
         }),
         j: common_vendor.p({
-          viewBox: "0 0 200 120",
-          xmlns: "http://www.w3.org/2000/svg",
+          d: "M20 12 L24 18 L28 12"
+        }),
+        k: common_vendor.p({
+          viewBox: "0 0 48 48",
           fill: "none",
-          stroke: "rgba(244,239,230,0.22)",
-          ["stroke-width"]: "1.2",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        k: !showError.value
+        l: !showError.value
       }, !showError.value ? {
-        l: progressPercent.value + "%"
+        m: common_vendor.t(loadingText.value),
+        n: progressPercent.value + "%"
       } : {
-        m: common_vendor.o(manualRetry, "2d")
+        o: common_vendor.p({
+          points: "23 4 23 10 17 10"
+        }),
+        p: common_vendor.p({
+          d: "M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+        }),
+        q: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        r: common_vendor.o(manualRetry, "67")
       });
     };
   }

@@ -7378,9 +7378,9 @@ function isConsoleWritable() {
   return isWritable;
 }
 function initRuntimeSocketService() {
-  const hosts = "192.168.1.3,127.0.0.1,172.21.160.1";
+  const hosts = "172.21.160.1,192.168.1.3,127.0.0.1";
   const port = "8090";
-  const id = "mp-weixin_heUSWc";
+  const id = "mp-weixin_whrQe4";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -13763,6 +13763,24 @@ const pages = [
     }
   },
   {
+    path: "uni_modules/uni-id-pages/pages/userinfo/bind-mobile/bind-mobile",
+    style: {
+      navigationBarTitleText: "绑定手机号"
+    }
+  },
+  {
+    path: "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd",
+    style: {
+      navigationBarTitleText: "修改密码"
+    }
+  },
+  {
+    path: "uni_modules/uni-id-pages/pages/userinfo/set-pwd/set-pwd",
+    style: {
+      navigationBarTitleText: "设置密码"
+    }
+  },
+  {
     path: "pages/family-guide/index",
     style: {
       navigationBarTitleText: "家庭引导",
@@ -13808,6 +13826,7 @@ const pages = [
     path: "pages/closets/index",
     style: {
       navigationBarTitleText: "我的衣橱",
+      navigationStyle: "custom",
       enablePullDownRefresh: true
     }
   },
@@ -13822,6 +13841,13 @@ const pages = [
     path: "pages/home/index",
     style: {
       navigationBarTitleText: "Season Closet",
+      navigationStyle: "custom"
+    }
+  },
+  {
+    path: "pages/user-info/index",
+    style: {
+      navigationBarTitleText: "个人资料",
       navigationStyle: "custom"
     }
   },
@@ -14170,7 +14196,7 @@ class v {
 function I(e2) {
   return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
 }
-const S = true, b = "mp-weixin", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), T = b, C = I('{"address":["127.0.0.1","192.168.1.3","172.21.160.1"],"servePort":7000,"debugPort":9000,"initialLaunchType":"local","skipFiles":["<node_internals>/**","E:/HBuilderX.4.57.2025032507/HBuilderX/plugins/unicloud/**/*.js"]}'), P = I('[{"provider":"aliyun","spaceName":"my-closet-app","spaceId":"mp-da7724ea-3e73-4aec-af28-d255a2a4f62e","clientSecret":"eDqzGLPlr5+jFbHQlIcMVA==","endpoint":"https://api.next.bspapp.com","failoverEndpoint":""}]') || [];
+const S = true, b = "mp-weixin", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), T = b, C = I('{"address":["127.0.0.1","172.21.160.1","192.168.1.3"],"servePort":7000,"debugPort":9000,"initialLaunchType":"local","skipFiles":["<node_internals>/**","E:/HBuilderX.4.57.2025032507/HBuilderX/plugins/unicloud/**/*.js"]}'), P = I('[{"provider":"aliyun","spaceName":"my-closet-app","spaceId":"mp-da7724ea-3e73-4aec-af28-d255a2a4f62e","clientSecret":"eDqzGLPlr5+jFbHQlIcMVA==","endpoint":"https://api.next.bspapp.com","failoverEndpoint":""}]') || [];
 let E = "";
 try {
   E = "__UNI__3EC23B9";
@@ -18453,6 +18479,7 @@ exports.o = o$1;
 exports.onHide = onHide;
 exports.onLaunch = onLaunch;
 exports.onLoad = onLoad;
+exports.onMounted = onMounted;
 exports.onPageScroll = onPageScroll;
 exports.onPullDownRefresh = onPullDownRefresh;
 exports.onReachBottom = onReachBottom;

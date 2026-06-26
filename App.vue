@@ -86,12 +86,27 @@ view {
 .fade-up-delay-5 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.56s both; }
 .fade-up-delay-6 { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.66s both; }
 
+/* 快速淡入：用于状态切换，无延迟 */
+.fade-in {
+  animation: fadeUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
 /* ===== 隐藏滚动条 ===== */
 ::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;
 }
+
+/* ===== 隐藏原生 TabBar（使用自定义 H5TabBar 组件替代） ===== */
+/* #ifdef H5 */
+uni-tabbar {
+  display: none !important;
+}
+uni-page-wrapper {
+  padding-bottom: 0 !important;
+}
+/* #endif */
 
 /* ===== 噪点纹理工具类 ===== */
 .noise-texture::after {

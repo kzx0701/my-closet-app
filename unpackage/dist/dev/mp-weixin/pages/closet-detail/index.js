@@ -4,6 +4,7 @@ const common_constants_routes = require("../../common/constants/routes.js");
 const common_api_modules_closet = require("../../common/api/modules/closet.js");
 const common_api_modules_clothes = require("../../common/api/modules/clothes.js");
 const common_constants_closetOptions = require("../../common/constants/closet-options.js");
+const common_constants_clothesOptions = require("../../common/constants/clothes-options.js");
 const common_utils_navHelper = require("../../common/utils/nav-helper.js");
 const common_services_clothesWearRecord = require("../../common/services/clothes-wear-record.js");
 const common_services_auth = require("../../common/services/auth.js");
@@ -12,15 +13,15 @@ if (!Array) {
   const _component_svg = common_vendor.resolveComponent("svg");
   const _component_circle = common_vendor.resolveComponent("circle");
   const _component_line = common_vendor.resolveComponent("line");
+  const _component_polyline = common_vendor.resolveComponent("polyline");
   const _easycom_u_loadmore2 = common_vendor.resolveComponent("u-loadmore");
-  (_component_path + _component_svg + _component_circle + _component_line + _easycom_u_loadmore2)();
+  (_component_path + _component_svg + _component_circle + _component_line + _component_polyline + _easycom_u_loadmore2)();
 }
 const _easycom_u_loadmore = () => "../../node-modules/uview-plus/components/u-loadmore/u-loadmore.js";
 if (!Math) {
-  (ScopeBadge + ClothesListCard + _easycom_u_loadmore)();
+  (ScopeBadge + _easycom_u_loadmore)();
 }
 const ScopeBadge = () => "../../components/ScopeBadge.js";
-const ClothesListCard = () => "../clothes/components/ClothesListCard.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -48,7 +49,7 @@ const _sfc_main = {
       var _a;
       return ((_a = common_constants_closetOptions.CLOSET_COLOR_OPTIONS.find((item) => item.code === closet.value.color_code)) == null ? void 0 : _a.name) || "—";
     });
-    const heroDesc = common_vendor.computed(() => {
+    common_vendor.computed(() => {
       const parts = [styleName.value, colorName.value];
       if (closet.value.room_name) {
         parts.push(closet.value.room_name);
@@ -62,6 +63,31 @@ const _sfc_main = {
         return "nomore";
       return "loadmore";
     });
+    const tagPillStyle = common_vendor.computed(() => {
+      const colorOption = common_constants_closetOptions.CLOSET_COLOR_OPTIONS.find((item) => item.code === closet.value.color_code);
+      const bg = (colorOption == null ? void 0 : colorOption.color) || "#a8bcae";
+      return {
+        background: bg + "22",
+        borderColor: bg + "44"
+      };
+    });
+    function itemColorHex(item) {
+      const code = item.color;
+      if (!code)
+        return "#ccc";
+      const opt = common_constants_clothesOptions.CLOTHES_COLOR_OPTIONS.find((o) => o.code === code);
+      return (opt == null ? void 0 : opt.hex) || "#ccc";
+    }
+    function itemStyleName(item) {
+      var _a;
+      return ((_a = common_constants_clothesOptions.CLOTHES_CATEGORY_OPTIONS.find((o) => o.code === item.category)) == null ? void 0 : _a.name) || "未分类";
+    }
+    function goClothesDetail(item) {
+      const targetId = item == null ? void 0 : item._id;
+      if (!targetId)
+        return;
+      common_utils_navHelper.safeNavigateTo(`${common_constants_routes.ROUTES.clothesDetail}?clothesId=${targetId}`);
+    }
     async function loadClosetDetail(targetClosetId) {
       const result = await common_api_modules_closet.getClosetDetail({ closetId: targetClosetId });
       const closetData = result == null ? void 0 : result.closet;
@@ -88,7 +114,7 @@ const _sfc_main = {
         }
         total.value = (result == null ? void 0 : result.total) || 0;
       } catch (err) {
-        common_vendor.index.__f__("error", "at pages/closet-detail/index.vue:199", "loadClothes failed", err);
+        common_vendor.index.__f__("error", "at pages/closet-detail/index.vue:291", "loadClothes failed", err);
         if (!append) {
           clothes.value = [];
         }
@@ -114,7 +140,7 @@ const _sfc_main = {
         currentPage.value = 1;
         await loadClothes();
       } catch (err) {
-        common_vendor.index.__f__("error", "at pages/closet-detail/index.vue:230", "loadDetailData failed", err);
+        common_vendor.index.__f__("error", "at pages/closet-detail/index.vue:320", "loadDetailData failed", err);
         error.value = true;
         common_vendor.index.showToast({
           title: (err == null ? void 0 : err.message) || "衣橱详情加载失败",
@@ -184,95 +210,241 @@ const _sfc_main = {
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        c: common_vendor.o(goBack, "de"),
+        c: common_vendor.o(goBack, "55"),
         d: !loading.value && !error.value
       }, !loading.value && !error.value ? {
-        e: common_vendor.o(handleEdit, "49")
-      } : {}, {
-        f: statusBarHeight.value + "px",
+        e: common_vendor.p({
+          cx: "12",
+          cy: "5",
+          r: "1"
+        }),
+        f: common_vendor.p({
+          cx: "12",
+          cy: "12",
+          r: "1"
+        }),
         g: common_vendor.p({
+          cx: "12",
+          cy: "19",
+          r: "1"
+        }),
+        h: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "2",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        i: common_vendor.o(handleEdit, "72")
+      } : {}, {
+        j: statusBarHeight.value + "px",
+        k: common_vendor.p({
+          d: "M 0 40 Q 187 15 375 40",
+          fill: "none",
+          stroke: "rgba(244,239,230,0.05)",
+          ["stroke-width"]: "1"
+        }),
+        l: common_vendor.p({
+          d: "M 0 100 Q 187 75 375 100",
+          fill: "none",
+          stroke: "rgba(244,239,230,0.04)",
+          ["stroke-width"]: "1"
+        }),
+        m: common_vendor.p({
+          d: "M 0 160 Q 187 135 375 160",
+          fill: "none",
+          stroke: "rgba(244,239,230,0.03)",
+          ["stroke-width"]: "1"
+        }),
+        n: common_vendor.p({
+          viewBox: "0 0 375 200",
+          preserveAspectRatio: "none"
+        }),
+        o: common_vendor.p({
           text: scopeBadgeText.value
         }),
-        h: common_vendor.t(closet.value.name || "未命名衣橱"),
-        i: common_vendor.t(heroDesc.value),
-        j: common_vendor.t(clothes.value.length),
-        k: common_vendor.t(styleName.value),
-        l: common_vendor.t(colorName.value),
-        m: !loading.value && !error.value
-      }, !loading.value && !error.value ? {
-        n: common_vendor.t(clothes.value.length)
+        p: common_vendor.t(closet.value.name || "未命名衣橱"),
+        q: common_vendor.t(styleName.value),
+        r: common_vendor.s(tagPillStyle.value),
+        s: common_vendor.t(colorName.value),
+        t: common_vendor.s(tagPillStyle.value),
+        v: closet.value.room_name
+      }, closet.value.room_name ? {
+        w: common_vendor.t(closet.value.room_name),
+        x: common_vendor.s(tagPillStyle.value)
       } : {}, {
-        o: loading.value && clothes.value.length === 0
+        y: common_vendor.t(clothes.value.length),
+        z: loading.value && clothes.value.length === 0
       }, loading.value && clothes.value.length === 0 ? {
-        p: common_vendor.f(6, (n, k0, i0) => {
+        A: common_vendor.f(6, (n, k0, i0) => {
           return {
             a: n
           };
         })
       } : error.value ? {
-        r: common_vendor.p({
+        C: common_vendor.p({
           cx: "12",
           cy: "12",
           r: "10"
         }),
-        s: common_vendor.p({
+        D: common_vendor.p({
           x1: "12",
           y1: "8",
           x2: "12",
           y2: "12"
         }),
-        t: common_vendor.p({
+        E: common_vendor.p({
           x1: "12",
           y1: "16",
           x2: "12.01",
           y2: "16"
         }),
-        v: common_vendor.p({
+        F: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
+          stroke: "currentColor",
           ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        w: common_vendor.o(retryLoad, "f0")
-      } : clothes.value.length === 0 ? {
-        y: common_vendor.p({
-          d: "M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
+        G: common_vendor.p({
+          points: "23 4 23 10 17 10"
         }),
-        z: common_vendor.p({
+        H: common_vendor.p({
+          d: "M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+        }),
+        I: common_vendor.p({
           viewBox: "0 0 24 24",
           fill: "none",
-          ["stroke-width"]: "1.3",
+          stroke: "currentColor",
+          ["stroke-width"]: "1.5",
           ["stroke-linecap"]: "round",
           ["stroke-linejoin"]: "round"
         }),
-        A: common_vendor.o(goAddClothes, "a7")
-      } : {
-        B: common_vendor.f(clothes.value, (item, k0, i0) => {
+        J: common_vendor.o(retryLoad, "41")
+      } : clothes.value.length === 0 ? {
+        L: common_vendor.p({
+          d: "M40 10 C40 10 28 10 28 18 C28 22 34 24 40 24 C46 24 52 22 52 18 C52 10 40 10 40 10Z",
+          stroke: "#c8cebf",
+          ["stroke-width"]: "1.5",
+          fill: "none"
+        }),
+        M: common_vendor.p({
+          x1: "40",
+          y1: "10",
+          x2: "40",
+          y2: "4",
+          stroke: "#c8cebf",
+          ["stroke-width"]: "1.5"
+        }),
+        N: common_vendor.p({
+          cx: "40",
+          cy: "3",
+          r: "2",
+          stroke: "#c8cebf",
+          ["stroke-width"]: "1.5",
+          fill: "none"
+        }),
+        O: common_vendor.p({
+          x1: "40",
+          y1: "24",
+          x2: "40",
+          y2: "56",
+          stroke: "#c8cebf",
+          ["stroke-width"]: "1.5"
+        }),
+        P: common_vendor.p({
+          x1: "28",
+          y1: "56",
+          x2: "52",
+          y2: "56",
+          stroke: "#c8cebf",
+          ["stroke-width"]: "1.5"
+        }),
+        Q: common_vendor.p({
+          x1: "32",
+          y1: "24",
+          x2: "32",
+          y2: "40",
+          stroke: "#dce0d4",
+          ["stroke-width"]: "1",
+          ["stroke-dasharray"]: "3 3"
+        }),
+        R: common_vendor.p({
+          x1: "48",
+          y1: "24",
+          x2: "48",
+          y2: "40",
+          stroke: "#dce0d4",
+          ["stroke-width"]: "1",
+          ["stroke-dasharray"]: "3 3"
+        }),
+        S: common_vendor.p({
+          viewBox: "0 0 80 80",
+          fill: "none",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        T: common_vendor.o(goAddClothes, "53")
+      } : common_vendor.e({
+        U: common_vendor.f(clothes.value, (item, k0, i0) => {
           return common_vendor.e({
-            a: "4dc0e16e-9-" + i0,
-            b: common_vendor.p({
-              clothes: item
+            a: item.image_url
+          }, item.image_url ? {
+            b: item.image_url
+          } : {
+            c: "4dc0e16e-27-" + i0 + "," + ("4dc0e16e-26-" + i0),
+            d: common_vendor.p({
+              d: "M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
             }),
-            c: wearCountMap.value[item._id] > 0
-          }, wearCountMap.value[item._id] > 0 ? {
-            d: common_vendor.t(wearCountMap.value[item._id])
-          } : {}, {
-            e: item._id
+            e: "4dc0e16e-26-" + i0,
+            f: common_vendor.p({
+              viewBox: "0 0 24 24",
+              fill: "none",
+              ["stroke-width"]: "1.2",
+              ["stroke-linecap"]: "round",
+              ["stroke-linejoin"]: "round"
+            })
+          }, {
+            g: common_vendor.t(item.name),
+            h: itemColorHex(item),
+            i: common_vendor.t(itemStyleName(item)),
+            j: item._id,
+            k: common_vendor.o(($event) => goClothesDetail(item), item._id)
           });
-        })
-      }, {
-        q: error.value,
-        x: clothes.value.length === 0,
-        C: clothes.value.length > 0
+        }),
+        V: clothes.value.length > 0
       }, clothes.value.length > 0 ? {
-        D: common_vendor.p({
+        W: common_vendor.p({
           status: loadMoreStatus.value
         })
-      } : {}, {
-        E: !loading.value && !error.value
-      }, !loading.value && !error.value ? {
-        F: common_vendor.o(goAddClothes, "09")
+      } : {}), {
+        B: error.value,
+        K: clothes.value.length === 0,
+        X: !loading.value && !error.value && clothes.value.length >= 0
+      }, !loading.value && !error.value && clothes.value.length >= 0 ? {
+        Y: common_vendor.p({
+          x1: "12",
+          y1: "5",
+          x2: "12",
+          y2: "19"
+        }),
+        Z: common_vendor.p({
+          x1: "5",
+          y1: "12",
+          x2: "19",
+          y2: "12"
+        }),
+        aa: common_vendor.p({
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          ["stroke-width"]: "2",
+          ["stroke-linecap"]: "round",
+          ["stroke-linejoin"]: "round"
+        }),
+        ab: common_vendor.o(goAddClothes, "69")
       } : {});
     };
   }

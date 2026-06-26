@@ -1,46 +1,95 @@
-.h5-tabbar-wrap.data-v-dc680df8 {
+.tabbar-wrap.data-v-dc680df8 {
   display: block;
 }
-.h5-tabbar-safe.data-v-dc680df8 {
-  height: 132rpx;
+
+/* 占位高度，防止内容被 TabBar 遮挡 */
+.tabbar-safe.data-v-dc680df8 {
+  height: 76px;
 }
-.h5-tabbar.data-v-dc680df8 {
+
+/* TabBar 主体 */
+.tabbar.data-v-dc680df8 {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 999;
-  display: flex;
-  padding: 14rpx 18rpx calc(14rpx + env(safe-area-inset-bottom));
-  background: rgba(248, 244, 236, 0.95);
-  -webkit-backdrop-filter: blur(18rpx);
-          backdrop-filter: blur(18rpx);
-  box-shadow: 0 -10rpx 30rpx rgba(73, 81, 69, 0.08);
-  border-top: 1rpx solid rgba(107, 126, 99, 0.12);
+  padding: 0 20px calc(8px + env(safe-area-inset-bottom));
+  background: transparent;
 }
-.h5-tabbar-item.data-v-dc680df8 {
+.tabbar-inner.data-v-dc680df8 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 6px rgba(45, 67, 52, 0.03), 0 8px 28px rgba(45, 67, 52, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  padding: 4px 0;
+  overflow: hidden;
+}
+
+/* ===== 滑动指示器 ===== */
+.tabbar-slider.data-v-dc680df8 {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 16%;
+  border-radius: 16px;
+  background: rgba(58, 84, 67, 0.07);
+  pointer-events: none;
+  z-index: 0;
+  /* 初始不动画，通过 class 控制 */
+  transition: none;
+}
+
+/* 就绪后启用过渡 */
+.tabbar-slider-ready.data-v-dc680df8 {
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== 单个 Tab 项 ===== */
+.tabbar-item.data-v-dc680df8 {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8rpx;
-  padding: 8rpx 0;
-  transition: background 0.2s ease;
+  gap: 2px;
+  padding: 8px 0 6px;
+  position: relative;
+  z-index: 1;
 }
-.h5-tabbar-item-active .h5-tabbar-text.data-v-dc680df8 {
+.tabbar-item.data-v-dc680df8:active {
+  opacity: 0.7;
+}
+
+/* 图标区域 */
+.tabbar-icon-area.data-v-dc680df8 {
+  width: 40px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.tabbar-item-active .tabbar-icon-area.data-v-dc680df8 {
+  transform: translateY(-1px);
+}
+
+/* 文字标签 */
+.tabbar-label.data-v-dc680df8 {
+  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #8a8a7e;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+.tabbar-item-active .tabbar-label.data-v-dc680df8 {
   color: #3a5443;
   font-weight: 600;
-}
-.h5-tabbar-icon.data-v-dc680df8 {
-  width: 44rpx;
-  height: 44rpx;
-  transition: color 0.2s ease;
-}
-.h5-tabbar-text.data-v-dc680df8 {
-  font-family: "Manrope", "PingFang SC", "PingFangSC", "Microsoft YaHei", -apple-system, sans-serif;
-  font-size: 20rpx;
-  color: #7a8678;
-  line-height: 1;
-  transition: color 0.2s ease, font-weight 0.2s ease;
+  opacity: 1;
 }

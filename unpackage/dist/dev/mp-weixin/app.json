@@ -9,6 +9,9 @@
     "uni_modules/uni-id-pages/pages/register/register-by-email",
     "uni_modules/uni-id-pages/pages/retrieve/retrieve",
     "uni_modules/uni-id-pages/pages/userinfo/userinfo",
+    "uni_modules/uni-id-pages/pages/userinfo/bind-mobile/bind-mobile",
+    "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd",
+    "uni_modules/uni-id-pages/pages/userinfo/set-pwd/set-pwd",
     "pages/family-guide/index",
     "pages/family-create/index",
     "pages/clothes/index",
@@ -18,6 +21,7 @@
     "pages/closets/index",
     "pages/closet-create/index",
     "pages/home/index",
+    "pages/user-info/index",
     "pages/profile/index"
   ],
   "window": {

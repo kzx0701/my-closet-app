@@ -64,6 +64,24 @@
       }
     },
     {
+      "path": "uni_modules/uni-id-pages/pages/userinfo/bind-mobile/bind-mobile",
+      "style": {
+        "navigationBarTitleText": "绑定手机号"
+      }
+    },
+    {
+      "path": "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    {
+      "path": "uni_modules/uni-id-pages/pages/userinfo/set-pwd/set-pwd",
+      "style": {
+        "navigationBarTitleText": "设置密码"
+      }
+    },
+    {
       "path": "pages/family-guide/index",
       "style": {
         "navigationBarTitleText": "家庭引导",
@@ -109,6 +127,7 @@
       "path": "pages/closets/index",
       "style": {
         "navigationBarTitleText": "我的衣橱",
+        "navigationStyle": "custom",
         "enablePullDownRefresh": true
       }
     },
@@ -123,6 +142,13 @@
       "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "Season Closet",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user-info/index",
+      "style": {
+        "navigationBarTitleText": "个人资料",
         "navigationStyle": "custom"
       }
     },

@@ -129,6 +129,7 @@ const _sfc_main = {
           autoBack: false,
           uniIdRedirectUrl: uniIdRedirectUrl.value
         });
+        await tryUpdateWeixinUserProfile(result.uid);
         if (uniIdRedirectUrl.value) {
           common_vendor.index.reLaunch({ url: uniIdRedirectUrl.value });
         } else {
@@ -139,7 +140,7 @@ const _sfc_main = {
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/auth-login/index.vue:183", "weixin login failed", error);
+        common_vendor.index.__f__("error", "at pages/auth-login/index.vue:188", "weixin login failed", error);
         if (((_a = error == null ? void 0 : error.errMsg) == null ? void 0 : _a.includes("cancel")) || ((_b = error == null ? void 0 : error.errMsg) == null ? void 0 : _b.includes("deny"))) {
           common_vendor.index.showToast({ title: "已取消授权", icon: "none" });
         } else {
@@ -151,6 +152,29 @@ const _sfc_main = {
         }
       } finally {
         wxLoading.value = false;
+      }
+    }
+    async function tryUpdateWeixinUserProfile(uid) {
+      if (!uid)
+        return;
+      try {
+        const profileRes = await new Promise((resolve, reject) => {
+          common_vendor.index.getUserProfile({
+            desc: "用于完善个人资料",
+            success: (res) => resolve(res),
+            fail: (err) => reject(err)
+          });
+        });
+        const { nickName, avatarUrl } = profileRes.userInfo || {};
+        if (nickName || avatarUrl) {
+          const userCo = common_vendor._r.importObject("user-co", { customUI: true });
+          await userCo.updateMyProfile({
+            nickname: nickName || void 0,
+            avatarUrl: avatarUrl || void 0
+          });
+        }
+      } catch (e) {
+        common_vendor.index.__f__("log", "at pages/auth-login/index.vue:232", "getUserProfile skipped:", (e == null ? void 0 : e.errMsg) || e);
       }
     }
     function goRegister() {

@@ -98,6 +98,21 @@ function getUserInfoCache(uid) {
 function setUserInfoCache(uid, userInfo) {
   writeCache(uid, SCOPE_USER_INFO, userInfo);
 }
+function clearUserCache(uid) {
+  if (!uid)
+    return;
+  try {
+    const info = common_vendor.index.getStorageInfoSync();
+    const prefix = `${KEY_PREFIX}${uid}:`;
+    info.keys.forEach((key) => {
+      if (key.startsWith(prefix)) {
+        common_vendor.index.removeStorageSync(key);
+      }
+    });
+  } catch (e) {
+  }
+}
+exports.clearUserCache = clearUserCache;
 exports.getClosetListCache = getClosetListCache;
 exports.getClothesListCache = getClothesListCache;
 exports.getFamilyInfoCache = getFamilyInfoCache;

@@ -13,6 +13,7 @@ export const ROUTES = {
   clothesDetail: "/pages/clothes-detail/index",
   clothesEdit: "/pages/clothes-create/index",
   profile: "/pages/profile/index",
+  userInfo: "/pages/user-info/index",
 };
 
 export const ROUTE_TARGETS = {

@@ -51,7 +51,7 @@ const _sfc_main = {
           familyName.value = ((_a2 = membership.familyRecord) == null ? void 0 : _a2.name) || "家庭空间";
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:131", "loadFamilyName failed", error);
+        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:133", "loadFamilyName failed", error);
       }
     }
     async function loadClosetDetail(targetClosetId) {
@@ -122,7 +122,7 @@ const _sfc_main = {
           common_vendor.index.navigateBack();
         }, 300);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:214", "createCloset failed", error);
+        common_vendor.index.__f__("error", "at pages/closet-create/index.vue:216", "createCloset failed", error);
         common_vendor.index.showToast({
           title: (error == null ? void 0 : error.message) || "衣橱创建失败",
           icon: "none"
@@ -152,7 +152,7 @@ const _sfc_main = {
               common_vendor.index.navigateBack();
             }, 300);
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/closet-create/index.vue:247", "deleteCloset failed", error);
+            common_vendor.index.__f__("error", "at pages/closet-create/index.vue:249", "deleteCloset failed", error);
             common_vendor.index.showToast({
               title: (error == null ? void 0 : error.message) || "删除失败",
               icon: "none"
@@ -170,10 +170,14 @@ const _sfc_main = {
       }
       scopeType.value = (options == null ? void 0 : options.scopeType) === "family" ? "family" : "personal";
       closetId.value = String((options == null ? void 0 : options.closetId) || "").trim();
+      const presetName = String((options == null ? void 0 : options.name) || "").trim();
+      if (presetName && !closetId.value) {
+        name.value = presetName;
+      }
       loadFamilyName();
       if (closetId.value) {
         loadClosetDetail(closetId.value).catch((error) => {
-          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:272", "loadClosetDetail failed", error);
+          common_vendor.index.__f__("error", "at pages/closet-create/index.vue:279", "loadClosetDetail failed", error);
           common_vendor.index.showToast({
             title: (error == null ? void 0 : error.message) || "衣橱详情加载失败",
             icon: "none"
@@ -195,44 +199,45 @@ const _sfc_main = {
           ["stroke-linejoin"]: "round"
         }),
         c: common_vendor.o(goBack, "e6"),
-        d: statusBarHeight.value + "px",
-        e: common_vendor.p({
+        d: common_vendor.t(pageTitle.value),
+        e: statusBarHeight.value + "px",
+        f: common_vendor.p({
           text: "Add · 新建衣橱"
         }),
-        f: common_vendor.t(pageTitle.value),
-        g: common_vendor.t(pageDesc.value),
-        h: nameFocused.value ? 1 : "",
-        i: name.value,
-        j: common_vendor.o(($event) => nameFocused.value = true, "e7"),
-        k: common_vendor.o(($event) => nameFocused.value = false, "c9"),
-        l: common_vendor.o(($event) => name.value = $event.detail.value, "fa"),
-        m: common_vendor.o(($event) => styleCode.value = $event, "00"),
-        n: common_vendor.p({
+        g: common_vendor.t(pageTitle.value),
+        h: common_vendor.t(pageDesc.value),
+        i: nameFocused.value ? 1 : "",
+        j: name.value,
+        k: common_vendor.o(($event) => nameFocused.value = true, "27"),
+        l: common_vendor.o(($event) => nameFocused.value = false, "0e"),
+        m: common_vendor.o(($event) => name.value = $event.detail.value, "36"),
+        n: common_vendor.o(($event) => styleCode.value = $event, "1d"),
+        o: common_vendor.p({
           options: common_vendor.unref(styleOptions),
           modelValue: styleCode.value
         }),
-        o: common_vendor.o(($event) => colorCode.value = $event, "3f"),
-        p: common_vendor.p({
+        p: common_vendor.o(($event) => colorCode.value = $event, "ba"),
+        q: common_vendor.p({
           options: common_vendor.unref(colorOptions),
           modelValue: colorCode.value
         }),
-        q: common_vendor.o(($event) => roomName.value = $event, "66"),
-        r: common_vendor.o(($event) => scopeType.value = $event, "c2"),
-        s: common_vendor.p({
+        r: common_vendor.o(($event) => roomName.value = $event, "8e"),
+        s: common_vendor.o(($event) => scopeType.value = $event, "ec"),
+        t: common_vendor.p({
           ["room-name"]: roomName.value,
           ["scope-type"]: scopeType.value,
           ["family-name"]: familyName.value,
           ["hide-scope"]: isEditMode.value
         }),
-        t: common_vendor.t(submitButtonText.value),
-        v: isEditMode.value ? 1 : "",
-        w: submitting.value,
+        v: common_vendor.t(submitButtonText.value),
+        w: isEditMode.value ? 1 : "",
         x: submitting.value,
-        y: common_vendor.o(submitCloset, "32"),
-        z: isEditMode.value
+        y: submitting.value,
+        z: common_vendor.o(submitCloset, "df"),
+        A: isEditMode.value
       }, isEditMode.value ? {
-        A: submitting.value,
-        B: common_vendor.o(handleDelete, "d3")
+        B: submitting.value,
+        C: common_vendor.o(handleDelete, "53")
       } : {});
     };
   }

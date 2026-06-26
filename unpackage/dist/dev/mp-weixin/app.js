@@ -12,6 +12,9 @@ if (!Math) {
   "./uni_modules/uni-id-pages/pages/register/register-by-email.js";
   "./uni_modules/uni-id-pages/pages/retrieve/retrieve.js";
   "./uni_modules/uni-id-pages/pages/userinfo/userinfo.js";
+  "./uni_modules/uni-id-pages/pages/userinfo/bind-mobile/bind-mobile.js";
+  "./uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd.js";
+  "./uni_modules/uni-id-pages/pages/userinfo/set-pwd/set-pwd.js";
   "./pages/family-guide/index.js";
   "./pages/family-create/index.js";
   "./pages/clothes/index.js";
@@ -21,6 +24,7 @@ if (!Math) {
   "./pages/closets/index.js";
   "./pages/closet-create/index.js";
   "./pages/home/index.js";
+  "./pages/user-info/index.js";
   "./pages/profile/index.js";
 }
 if (!Array) {

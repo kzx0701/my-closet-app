@@ -170,6 +170,11 @@ async function loginByWeixin() {
       uniIdRedirectUrl: uniIdRedirectUrl.value,
     });
 
+    // 微信小程序登录后，尝试获取用户头像昵称并更新到数据库
+    // #ifdef MP-WEIXIN
+    await tryUpdateWeixinUserProfile(result.uid);
+    // #endif
+
     if (uniIdRedirectUrl.value) {
       uni.reLaunch({ url: uniIdRedirectUrl.value });
     } else {
@@ -193,6 +198,38 @@ async function loginByWeixin() {
     }
   } finally {
     wxLoading.value = false;
+  }
+}
+
+/**
+ * 微信小程序登录后，尝试获取用户头像和昵称并更新到数据库。
+ * 优先使用 getUserProfile（基础库 < 2.27.1 可用），
+ * 失败则静默跳过，用户后续可在个人资料页手动设置。
+ */
+async function tryUpdateWeixinUserProfile(uid) {
+  if (!uid) return;
+
+  try {
+    // 尝试通过 getUserProfile 获取用户信息
+    const profileRes = await new Promise((resolve, reject) => {
+      uni.getUserProfile({
+        desc: "用于完善个人资料",
+        success: (res) => resolve(res),
+        fail: (err) => reject(err),
+      });
+    });
+
+    const { nickName, avatarUrl } = profileRes.userInfo || {};
+    if (nickName || avatarUrl) {
+      const userCo = uniCloud.importObject("user-co", { customUI: true });
+      await userCo.updateMyProfile({
+        nickname: nickName || undefined,
+        avatarUrl: avatarUrl || undefined,
+      });
+    }
+  } catch (e) {
+    // getUserProfile 已废弃或用户拒绝，静默跳过
+    console.log("getUserProfile skipped:", e?.errMsg || e);
   }
 }
 

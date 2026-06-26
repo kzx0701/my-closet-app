@@ -13,7 +13,8 @@ const ROUTES = {
   clothesCreate: "/pages/clothes-create/index",
   clothesDetail: "/pages/clothes-detail/index",
   clothesEdit: "/pages/clothes-create/index",
-  profile: "/pages/profile/index"
+  profile: "/pages/profile/index",
+  userInfo: "/pages/user-info/index"
 };
 const ROUTE_TARGETS = {
   login: "login",

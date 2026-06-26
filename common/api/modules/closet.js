@@ -33,7 +33,7 @@ export function getClosetDetail(payload) {
 /**
  * 获取当前登录用户个人空间下的衣橱列表。
  *
- * @param {{page?: number, pageSize?: number}} [payload]
+ * @param {{page?: number, pageSize?: number, sortBy?: "default" | "created_at_asc" | "created_at_desc" | "name_asc" | "name_desc" | "sort_asc", roomName?: string}} [payload]
  * @returns {Promise<{list: object[], total: number, page: number, pageSize: number}>}
  */
 export function getPersonalClosetList(payload) {
@@ -43,11 +43,22 @@ export function getPersonalClosetList(payload) {
 /**
  * 获取当前登录用户所在家庭空间下的衣橱列表。
  *
- * @param {{page?: number, pageSize?: number}} [payload]
+ * @param {{page?: number, pageSize?: number, sortBy?: "default" | "created_at_asc" | "created_at_desc" | "name_asc" | "name_desc" | "sort_asc", roomName?: string}} [payload]
  * @returns {Promise<{list: object[], total: number, page: number, pageSize: number, familyId?: string}>}
  */
 export function getFamilyClosetList(payload) {
   return closetCloudObject.getFamilyClosetList(payload);
+}
+
+/**
+ * 一次性获取衣橱列表与首页摘要统计。
+ * 用于衣橱页面初始加载，减少一次网络请求。
+ *
+ * @param {{scopeType: "personal" | "family", page?: number, pageSize?: number, sortBy?: "default" | "created_at_asc" | "created_at_desc" | "name_asc" | "name_desc" | "sort_asc", roomName?: string}} [payload]
+ * @returns {Promise<{list: object[], total: number, page: number, pageSize: number, summary: {closetCount: number, clothesCount: number, unassignedClothesCount: number}}>}
+ */
+export function getClosetListWithSummary(payload) {
+  return closetCloudObject.getClosetListWithSummary(payload);
 }
 
 /**

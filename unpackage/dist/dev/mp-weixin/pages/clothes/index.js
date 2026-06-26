@@ -308,7 +308,11 @@ const _sfc_main = {
       currentPage.value += 1;
       loadClothes(true);
     });
+    common_vendor.onLoad(() => {
+      common_vendor.index.hideTabBar({ animation: false });
+    });
     common_vendor.onShow(async () => {
+      common_vendor.index.hideTabBar({ animation: false });
       const session = common_services_auth.getCurrentSession();
       if (!session.hasLogin) {
         common_vendor.index.showToast({ title: "请先登录", icon: "none", duration: 1500 });

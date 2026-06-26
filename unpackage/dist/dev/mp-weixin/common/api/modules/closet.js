@@ -13,6 +13,9 @@ function getPersonalClosetList(payload) {
 function getFamilyClosetList(payload) {
   return closetCloudObject.getFamilyClosetList(payload);
 }
+function getClosetListWithSummary(payload) {
+  return closetCloudObject.getClosetListWithSummary(payload);
+}
 function updateCloset(payload) {
   return closetCloudObject.updateCloset(payload);
 }
@@ -25,6 +28,7 @@ function getHomeSummary(payload) {
 exports.createCloset = createCloset;
 exports.deleteCloset = deleteCloset;
 exports.getClosetDetail = getClosetDetail;
+exports.getClosetListWithSummary = getClosetListWithSummary;
 exports.getFamilyClosetList = getFamilyClosetList;
 exports.getHomeSummary = getHomeSummary;
 exports.getPersonalClosetList = getPersonalClosetList;

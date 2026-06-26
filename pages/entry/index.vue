@@ -7,10 +7,10 @@
     <!-- 装饰性 SVG 线条 -->
     <view class="entry-deco">
       <svg viewBox="0 0 375 812" preserveAspectRatio="none" class="entry-deco-svg">
-        <path d="M 0 180 Q 187 120 375 180" fill="none" stroke="rgba(244,239,230,0.06)" stroke-width="1"/>
-        <path d="M 0 240 Q 187 180 375 240" fill="none" stroke="rgba(244,239,230,0.04)" stroke-width="1"/>
-        <path d="M 0 600 Q 187 540 375 600" fill="none" stroke="rgba(244,239,230,0.05)" stroke-width="1"/>
-        <path d="M 0 660 Q 187 600 375 660" fill="none" stroke="rgba(244,239,230,0.03)" stroke-width="1"/>
+        <path d="M 0 160 Q 187 110 375 160" fill="none" stroke="rgba(244,239,230,0.06)" stroke-width="1"/>
+        <path d="M 0 220 Q 187 170 375 220" fill="none" stroke="rgba(244,239,230,0.04)" stroke-width="1"/>
+        <path d="M 0 580 Q 187 530 375 580" fill="none" stroke="rgba(244,239,230,0.05)" stroke-width="1"/>
+        <path d="M 0 640 Q 187 590 375 640" fill="none" stroke="rgba(244,239,230,0.03)" stroke-width="1"/>
       </svg>
     </view>
 
@@ -24,6 +24,23 @@
 
     <!-- 主体内容 -->
     <view class="entry-content">
+      <!-- 品牌 Logo 图标 -->
+      <view class="entry-logo-wrap">
+        <view class="entry-logo">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- 衣架 -->
+            <path d="M24 6 C24 6 22 4 20 4 C18 4 16 6 16 6" />
+            <line x1="24" y1="6" x2="24" y2="12" />
+            <!-- 衣服轮廓 -->
+            <path d="M24 12 L14 18 L8 16 L6 20 L14 24 L14 40 L34 40 L34 24 L42 20 L40 16 L34 18 Z" />
+            <!-- 领口 -->
+            <path d="M20 12 L24 18 L28 12" />
+          </svg>
+        </view>
+        <!-- 光晕 -->
+        <view class="entry-logo-glow"></view>
+      </view>
+
       <!-- 英文大标题 -->
       <text class="entry-title-en">Season Closet</text>
 
@@ -39,37 +56,32 @@
       <!-- 简要介绍 -->
       <text class="entry-intro">把每一件衣物都安顿好</text>
       <text class="entry-intro-sub">Your Personal Wardrobe Manager</text>
-
-      <!-- 装饰性 SVG 衣架（浮动动画） -->
-      <view class="entry-hanger">
-        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(244,239,230,0.22)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="hanger-svg">
-          <path d="M100 30 Q90 10 80 30 Q70 50 100 60 L100 90 L40 110 L160 110 L100 90" />
-          <circle cx="100" cy="20" r="6" />
-          <line x1="40" y1="110" x2="160" y2="110" />
-        </svg>
-      </view>
     </view>
 
     <!-- 底部区域 -->
     <view class="entry-loader-area">
-      <!-- 正常加载：进度条 -->
+      <!-- 正常加载 -->
       <template v-if="!showError">
+        <text class="entry-loading-text">{{ loadingText }}</text>
         <view class="entry-progress-track">
           <view class="entry-progress-fill" :style="{ width: progressPercent + '%' }"></view>
         </view>
       </template>
 
-      <!-- 错误状态：提示 + 重试按钮 -->
+      <!-- 错误状态 -->
       <template v-else>
         <text class="entry-error-text">连接服务失败，请检查网络</text>
-        <button class="entry-retry-btn" @click="manualRetry">重试</button>
+        <view class="entry-retry-btn" hover-class="entry-retry-btn-hover" :hover-stay-time="100" @click="manualRetry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          <text class="entry-retry-text">重试</text>
+        </view>
       </template>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { ROUTE_TARGETS, ROUTES } from "@/common/constants/routes.js";
 import { resolveLaunchTarget } from "@/common/services/session-router.js";
@@ -85,12 +97,22 @@ let retryTimer = null;
 let retryCount = 0;
 const MAX_AUTO_RETRIES = 3;
 
-// 指数退避：1s → 2s → 4s
+const loadingTexts = [
+  "正在初始化...",
+  "加载配置中...",
+  "准备就绪",
+];
+
+const loadingText = computed(() => {
+  if (progressPercent.value < 30) return loadingTexts[0];
+  if (progressPercent.value < 70) return loadingTexts[1];
+  return loadingTexts[2];
+});
+
 function getRetryDelay(attempt) {
   return Math.min(1000 * Math.pow(2, attempt), 4000);
 }
 
-// 模拟进度推进（0 → 85%），真实完成后跳到 100%
 function startProgressSimulation() {
   progressPercent.value = 0;
   let current = 0;
@@ -135,13 +157,10 @@ async function routeBySession() {
       retryCount++;
 
       if (retryCount >= MAX_AUTO_RETRIES) {
-        // 超过最大重试次数，尝试降级进入首页
         if (tryDegradedEntry()) return;
-        // 降级失败，显示错误状态
         showError.value = true;
         isRouting.value = false;
       } else {
-        // 指数退避自动重试
         if (retryTimer) clearTimeout(retryTimer);
         retryTimer = setTimeout(() => {
           isRouting.value = false;
@@ -165,7 +184,6 @@ async function routeBySession() {
     retryCount++;
 
     if (retryCount >= MAX_AUTO_RETRIES) {
-      // 超过最大重试次数，尝试降级进入首页
       if (tryDegradedEntry()) return;
       showError.value = true;
       isRouting.value = false;
@@ -181,11 +199,6 @@ async function routeBySession() {
   }
 }
 
-/**
- * 降级进入首页：当所有重试都失败时，已登录用户直接进入首页（离线模式）。
- * 首页各区块独立加载并展示缓存或错误态，不阻塞用户。
- * @returns {boolean} 是否成功降级
- */
 function tryDegradedEntry() {
   const session = getCurrentSession();
   if (!session.hasLogin) return false;
@@ -331,30 +344,94 @@ onShow(() => {
   padding: 0 40px;
 }
 
+/* 品牌 Logo */
+.entry-logo-wrap {
+  position: relative;
+  margin-bottom: 28px;
+  animation: logoReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+}
+
+.entry-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: rgba(244, 239, 230, 0.08);
+  border: 1px solid rgba(244, 239, 230, 0.12);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $inverse-85;
+  position: relative;
+  z-index: 2;
+}
+
+.entry-logo svg {
+  width: 36px;
+  height: 36px;
+}
+
+.entry-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 128, 95, 0.15) 0%, transparent 70%);
+  z-index: 1;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+
+/* 英文大标题 */
 .entry-title-en {
   display: block;
   font-family: $font-serif;
-  font-size: 48px;
+  font-size: 44px;
   font-weight: 300;
   line-height: 1;
   letter-spacing: -1.5px;
   color: $color-text-inverse;
   margin-bottom: 8px;
-  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
 }
 
+/* 中文标题 */
 .entry-title-cn-wrap {
   display: flex;
   justify-content: center;
   align-items: baseline;
   gap: 4px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
+  margin-bottom: 20px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s both;
 }
 
 .entry-title-cn {
   font-family: $font-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   letter-spacing: 2px;
   color: $inverse-85;
@@ -367,76 +444,65 @@ onShow(() => {
   color: $color-sage-light;
 }
 
+/* 分隔线 */
 .entry-divider {
-  width: 40px;
+  width: 36px;
   height: 1px;
-  background: rgba(244, 239, 230, 0.25);
-  margin: 0 auto 24px;
+  background: rgba(244, 239, 230, 0.2);
+  margin: 0 auto 20px;
   animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s both;
 }
 
+/* 介绍文字 */
 .entry-intro {
   display: block;
   font-family: $font-sans;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: $inverse-85;
   letter-spacing: 1px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.65s both;
 }
 
 .entry-intro-sub {
   display: block;
   font-family: $font-mono;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 2px;
   color: $inverse-50;
   text-transform: uppercase;
   animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.75s both;
 }
 
-/* 装饰衣架 */
-.entry-hanger {
-  margin-top: 48px;
-  opacity: 0;
-  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s both, hangerFloat 4s ease-in-out 1.9s infinite;
-}
-
-.hanger-svg {
-  width: 160px;
-  height: 96px;
-  display: block;
-}
-
-@keyframes hangerFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 /* 底部区域 */
 .entry-loader-area {
   position: relative;
   z-index: 2;
-  padding: 0 80px;
+  padding: 0 60px;
   padding-bottom: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.1s both;
+  gap: 14px;
+  animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s both;
+}
+
+/* 加载状态文字 */
+.entry-loading-text {
+  font-family: $font-mono;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: $inverse-50;
+  text-transform: uppercase;
 }
 
 /* 进度条 */
 .entry-progress-track {
   width: 100%;
-  height: 2px;
-  background: rgba(244, 239, 230, 0.1);
-  border-radius: 1px;
+  height: 3px;
+  background: rgba(244, 239, 230, 0.08);
+  border-radius: 2px;
   overflow: hidden;
   position: relative;
 }
@@ -444,9 +510,9 @@ onShow(() => {
 .entry-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, $color-sage-light 0%, $color-terra-soft 100%);
-  border-radius: 1px;
+  border-radius: 2px;
   transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 0 8px rgba(212, 128, 95, 0.4);
+  box-shadow: 0 0 10px rgba(212, 128, 95, 0.4);
 }
 
 /* 错误状态 */
@@ -458,20 +524,31 @@ onShow(() => {
 }
 
 .entry-retry-btn {
-  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
   border-radius: $radius-btn;
-  background: rgba(244, 239, 230, 0.1);
-  border: 1px solid rgba(244, 239, 230, 0.15);
-  color: $color-text-inverse;
-  font-family: $font-sans;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.4;
+  background: rgba(244, 239, 230, 0.08);
+  border: 1px solid rgba(244, 239, 230, 0.12);
   transition: all 0.2s ease;
 }
 
-.entry-retry-btn:active {
-  background: rgba(244, 239, 230, 0.15);
+.entry-retry-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: $inverse-85;
+}
+
+.entry-retry-text {
+  font-family: $font-sans;
+  font-size: 13px;
+  font-weight: 500;
+  color: $inverse-85;
+}
+
+.entry-retry-btn-hover {
+  background: rgba(244, 239, 230, 0.14);
   transform: scale(0.97);
 }
 </style>
